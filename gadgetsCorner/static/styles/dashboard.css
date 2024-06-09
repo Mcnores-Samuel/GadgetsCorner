@@ -1,0 +1,278 @@
+.wrapper {
+    width: 170px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.5s ease-in-out;
+}
+
+
+body {
+    background: linear-gradient(90deg, black, grey);
+}
+
+.wrapper.resize {
+    width: 60px; /* Adjust the width as needed */
+}
+
+.wrapper .sidebar {
+    width: 170px;
+    height: 100%;
+    background: #2d3436;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.wrapper::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+#search_term {
+    background: transparent;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    color: white;
+    border: 1px solid #fe9a43;
+}
+.search-btn {
+    background: #fe9a43;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: 1px solid #fe9a43;
+    color: white;
+}
+
+.search-btn:hover {
+    background: rgb(254, 154, 67, 0.8);
+    color: black;
+}
+
+.wrapper.resize .sidebar {
+    width: 60px; /* Adjust the width as needed */
+}
+
+.wrapper .sidebar ul li {
+    padding: 5px 10px;
+}
+
+.wrapper .sidebar ul li:hover {
+    background: #636e72;
+}
+
+.wrapper .sidebar ul li a {
+    color: #fff;
+    display: block;
+    text-decoration: none;
+}
+
+.wrapper .sidebar ul li a span.text {
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.presentaion {
+    margin-left: 185px;
+    overflow-x: unset;
+    padding-top: 10px;
+    width: 85%;
+    transition: all 0.5s ease-in-out;
+}
+
+.presentaion-resize {
+    margin-left: 80px;
+    overflow-x: unset;
+    padding-top: 10px;
+    width: 93%;
+    transition: all 0.5s ease-in-out;
+}
+
+.top-display {
+    padding: 8px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    position: sticky;
+    top: -1px;
+    z-index: 1000;
+    background: #022842;
+    border-radius: 5px;
+}
+
+.search-form {
+    width: 50%;
+    margin-left: 10px;
+}
+
+.notify {
+    position: absolute;
+    right: 6rem;
+}
+
+.notify button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 6px;
+    width: 100px;
+    right: 0;
+}
+
+.profile:hover,
+.notify:hover {
+    color: white;
+}
+
+.profile {
+    position: absolute;
+    right: 0;
+    top: 4px;
+    border: 1px solid #fe9a43;
+}
+
+.custom-logo{
+    margin-top: 12px;
+}
+
+.card-data {
+    background: rgba(92, 49, 12, 0.8);
+}
+
+.wrapper .sidebar ul li.active {
+    background-color: #636e72; /* Background color for active section */
+}
+
+.bg-dark-card {
+    background: #2d3436;
+}
+
+.wrapper .sidebar ul li.active a {
+    color: #fff; /* Text color for active section */
+}
+
+
+.text-fs {
+    font-size: 10px;
+}
+
+.topbar {
+    background: transparent;
+}
+
+@media screen and (max-width: 50rem) {
+    .wrapper  {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        z-index: 9999;
+        transition: left 0.3s ease-in-out; /* Add transition property */
+    }
+
+    .wrapper.active {
+        left: 0; /* Slide in from left when active class is added */
+    }
+
+    .wrapper .sidebar {
+        background: linear-gradient(90deg, #23435c, #2d3436);
+        height: 100%;
+    }
+
+    .wrapper .sidebar ul li {
+        padding: 5px 15px;
+    }
+
+    .wrapper .sidebar ul li a {
+        color: #fff;
+        display: block;
+        text-decoration: none;
+    }
+
+    .wrapper .sidebar ul li a span.text {
+        font-weight: bold;
+        padding-left: 5px;
+    }
+
+    .container {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .text {
+        display: inline;
+    }
+
+    .presentaion {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .row {
+        padding: 0;
+        margin: 0;
+    }
+
+    .top-display {
+        padding: 8px;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .search-form {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .notify {
+        position: relative;
+        right: 0;
+    }
+
+    .notify button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        outline: none;
+        position: relative;
+        top: 0;
+        right: 0;
+        width: 100px;
+        border-radius: 50%;
+    }
+
+    .profile {
+        position: relative;
+        top: 0;
+    }
+
+    .text {
+        display: inline;
+    }
+
+    .wrapper.resize {
+        width: 100%;
+    }
+
+    .wrapper.resize .sidebar {
+        width: 100%;
+    }
+
+    .wrapper.resize .sidebar ul li {
+        padding: 5px 15px;
+    }
+}

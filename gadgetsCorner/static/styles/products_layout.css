@@ -1,0 +1,271 @@
+.products {
+    width: 100%;
+    display: flex;
+}
+
+.products .Categories {
+    width: 20%;
+    margin: 20px;
+    box-shadow: 3px 3px 3px 3px #80808066;
+    position: fixed;
+}
+
+.Categories {
+    display: none;
+}
+
+.category-btn {
+    position: fixed;
+    font-size: 2rem;
+    left: 1rem;
+    top: 4.3rem;
+    z-index: 1;
+}
+
+.category-btn:hover {
+    cursor: pointer;
+}
+
+.Categories > h2 {
+    background-color: #747a79;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.Categories > h2 > .Categories-icon {
+    display: none;
+    font-size: 2rem;
+}
+
+.Categories > ul {
+    list-style: none;
+    padding: 0px;
+}
+
+.Categories ul li {
+    width: 100%;
+    padding: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-bottom: 1px solid #80808066;
+}
+
+.Categories ul a {
+    text-decoration: none;
+    color: black;
+}
+
+.Categories ul li.active {
+    color: #ffffff;
+    background-color: #23435c;
+}
+
+.Categories ul li:hover {
+    background-color: #23435c;
+    color: white;
+}
+
+.products .Categories-extended {
+    width: 75%;
+    margin: 20px auto;
+    padding: 5px;
+}
+
+
+.products .resize-details {
+    margin-left: 23%;
+}
+
+
+.Categories-extended > article {
+    width: 100%;
+    margin: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Categories-extended > article > h1 {
+    width: 100%;
+    text-align: center;
+    background-color: #747a79;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 5px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    color: white;
+}
+
+article .items {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+
+article .items > div {
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #80808066;
+    border-top: 1px solid #80808066;
+    border-radius: 8px;
+    display: flex;
+    margin-top: 10px;
+}
+
+article .items > div .item-img {
+    width: 50%;
+    height: 100%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.item-img > img {
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.item-details {
+    width: 50%;
+    height: 100%;
+}
+
+.item-details h3 {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    background-color: #747a79;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-top-right-radius: 8px;
+    color: white;
+}
+
+.item-details p {
+    width: 100%;
+    margin: 0px;
+    padding: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.item-details p > .screen_d {
+    font-size: 1rem;
+}
+
+.item-details p > .price {
+    color: rgb(50, 127, 101)
+}
+
+@media screen and (max-width: 50rem) {
+    .products {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .Categories {
+        display: block;
+    }
+
+    .products .Categories {
+        width: 100%;
+        margin: 20px;
+        position: relative;
+        box-shadow: none;
+    }
+
+    .Categories > h2 {
+        width: 100%;
+        text-align: start;
+        padding: 5px;
+    }
+
+    .category-btn {
+        display: none;
+    }
+
+    .Categories > h2 > .Categories-icon {
+        display: block;
+        width: 50px;
+        font-weight: bold;
+        float: right;
+        text-align: center;
+    }
+
+    .products .Categories > .Categories-menu{
+        display: none;
+    }
+
+    .products .Categories > .Categories-menu-active {
+        display: block;
+    }    
+
+    .products .Categories-extended {
+        width: 100%;
+        margin: 10px;
+    }
+
+    .Categories-extended > article {
+        margin-left: 0px;
+        margin-right: 20px;
+        width: 100%;
+        position: relative;
+    }
+
+    article .items {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0px;
+    }
+
+    article .items > div {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    article .items > div .item-img {
+        max-width: 100%;
+        max-height: 100%;
+        width: 100%;
+    }
+
+    article .items > div > div {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .item-details h3 {
+        width: 150px;
+        margin-left: auto;
+        border-top-right-radius: 0px;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+
+    .item-details p {
+        width: 100%;
+        margin: 0px;
+        padding: 5px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .item-details p > .screen_d {
+        font-size: 1.2rem;
+    }
+
+    .item-details {
+        width: 100%;
+        height: 100%;
+    }
+}

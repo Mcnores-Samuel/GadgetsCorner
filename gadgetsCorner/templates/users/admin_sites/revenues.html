@@ -1,0 +1,38 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/loading-message.css' %}">
+<script src="{% static 'scripts/analysis_lib/credit_price_update.js' %}" defer></script>
+<script src="{% static 'scripts/analysis_lib/calculateCreditRevenue.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<section class="yearly_analysis">
+    <div class="row gy-3">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="fw-bold text-muted">Overall Yellow Revenue</h4>
+                </div>
+                <div class="card-body">
+                    <div class="yearly_revenue_chart_loader"></div>
+                    <canvas class="yearly_revenue_chart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="fw-bold text-muted">Agents Generated Revenue (Yellow)</h4>
+                </div>
+                <div class="card-body">
+                    <div class="yearly_sales_chart_loader_total"></div>
+                    <canvas class="yearly_sales_chart_total" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/data_table.css' %}">
+<link rel="stylesheet" href="{% static 'styles/agent_stock_mobile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% bootstrap_messages %}
+</div>
+<nav class="navbar navbar-light card-bg">
+    <div class="container">
+        <form action="{% url 'data_search' %}" method="post" class="d-flex w-100">
+            {% csrf_token %}
+            <input type="search" class="form-control me-2 card-bg" name="search_query"
+            id="search" placeholder="Device IMEI, category, model etc" autofocus>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <a href="" class="btn common-bg">Accessaries</a>
+    <a href="" class="btn common-bg">Appliances</a>
+</div>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        {% if data %}
+            {% for item in data %}
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header  text-center">
+                        <h4 class="card-title">{{ item.name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong class="text-info">Entry Date:</strong> <span>{{ item.entry_date }}</span></p>
+                        <p class="card-text"><strong class="text-info">Category:</strong> <span>{{ item.category }}</span></p>
+                        <p class="card-text"><strong class="text-info">Name:</strong> <span>{{ item.name }}</span></p>
+                        <p class="card-text"><strong class="text-info">Model:</strong> <span>{{ item.phone_type }}</span></p>
+                        <p class="card-text"><strong class="text-info">Device IMEI:</strong> <span>{{ item.device_imei }}</span></p>
+                        {% if item.device_imei_2 %}
+                            <p class="card-text"><strong class="text-info">Device IMEI 2:</strong> <span>{{ item.device_imei_2 }}</span></p>
+                        {% endif %}
+                        <p class="card-text"><strong class="text-info">Spec:</strong> <span>{{ item.spec }}</span></p>
+                        <p class="card-text"><strong class="text-info">In Stock:</strong>
+                            {% if item.in_stock %}
+                                <span class="material-icons text-success">
+                                    done
+                                </span>
+                            {% else %}
+                                <span class="material-icons text-danger">
+                                    close
+                                </span>
+                            {% endif %}
+                        </p>
+                        {% if not item.in_stock and item.sold %}
+                            <p class="card-text"><strong class="text-info">Sold:</strong>
+                                {% if item.sold %}
+                                    <span class="material-icons text-success">
+                                        done
+                                    </span>
+                                {% else %}
+                                    <span class="material-icons text-danger">
+                                        close
+                                    </span>
+                                {% endif %}
+                            <p class="card-text"><strong class="text-info">Sales Type:</strong> <span>{{ item.sales_type }}</span></p>
+                            {% if item.sales_type == 'Loan' %}
+                            <p class="card-text"><strong class="text-info">Contract No:</strong> <span>{{ item.contract_no }}</span></p>
+                            {% endif %}
+                            <p class="card-text"><strong class="text-info">Sold Date:</strong> <span>{{ item.stock_out_date }}</span></p>
+                            <p class="card-text"><strong class="text-info">Deployed:</strong>
+                                <span class="material-icons text-success">
+                                    done
+                                </span>
+                            </p>
+                        {% else %}
+                            <p class="card-text"><strong class="text-info">Deploy:</strong>
+                                <span>
+                                    <a href="{% url 'combinedData_collection' data_id=item.id %}">
+                                        <span class="material-icons">
+                                            send
+                                        </span>
+                                    </a>
+                                </span>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="text-center">
+            <h2 class="fs-6 text-center text-danger">Not Found</h2>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<div class="divider"></div>
+{% endblock %}

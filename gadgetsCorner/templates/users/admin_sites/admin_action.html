@@ -1,0 +1,16 @@
+{% extends 'users/admin_sites/main.html' %}
+{% block content %}
+<section class="sign_up_form">
+    <div class="form_container custom">
+        <h2>Dispatch</h2>
+        <form method="post" class="sign_up customer-form">
+            {% csrf_token %}
+            <div class="role">
+                <label for="{{ form.agent.id_for_label }}">Select Agent:</label>
+                {{ form.agent }}
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

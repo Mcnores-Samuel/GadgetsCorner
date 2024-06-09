@@ -1,0 +1,111 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/loading-message.css' %}">
+<script src="{% static 'scripts/add_to_stock.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<style>
+    .card {
+      height: 400px;
+      overflow-y: scroll;
+    }
+
+    .data_container {
+        width: 100%;
+        display: flex;
+    }
+
+    .data_container .form_container {
+        width: 50%;
+        margin-right: 10px;
+    }
+
+    .data_container #waiting-room {
+        width: 50%;
+    }
+
+    @media screen and (max-width: 768px) {
+        .data_container {
+            flex-direction: column;
+        }
+
+        .data_container .form_container {
+            width: 100%;
+        }
+
+        .data_container #waiting-room {
+            width: 100%;
+        }
+    }
+</style>
+<div class="container">
+    {% bootstrap_messages %}
+    <div class="loading-target"></div>
+    <h1 class="text-center fw-bold text-light">Add To Stock: Total Scanned: <span  id="total"></span></h1>
+    <p class="text-center fw-bold text-light">Please enter the Imei numbers and the phone name to add to stock</p>
+    <a href="" class="btn common-bg">Accessaries</a>
+    <a href="" class="btn common-bg">Appliances</a>
+    <hr>
+    <div class="data_container">
+        <div class="form_container">
+            <form action="" method="post" class="shadow-lg p-3 mb-5 rounded bg-dark" id="stock_form">
+                {% csrf_token %}
+                <p>
+                    <label for="id_device_imei">Device imei:</label>
+                    <input type="text" name="device_imei" class="form-control bg-dark text-light" placeholder="Enter IMEI number"
+                    required="" minlength="15" maxlength="15"
+                    autofocus="autofocus" id="id_device_imei">
+                </p>
+                <p>
+                    <label for="id_device_imei_2">Device imei 2:</label>
+                    <input type="text" name="device_imei_2" class="form-control bg-dark text-light" placeholder="Enter IMEI number 2"
+                    required="" minlength="15" maxlength="15" id="id_device_imei_2">
+                </p>
+                <hr class="text-danger" style="height: 15px;">
+                <p>
+                    <label for="id_cost_price">Cost price:</label>
+                    <input type="text" name="cost_price" class="form-control bg-dark text-light" placeholder="Enter cost price"
+                    id="id_cost_price">
+                </p>
+                <p>
+                    <label for="id_name">Name:</label>
+                    <input type="text" name="name" class="form-control bg-dark text-light" placeholder="Enter phone name"
+                    list="phone_list" id="id_name">   
+                </p>
+                <datalist id="phone_list">
+                    {% for phone in phone_names %}
+                    <option value="{{ phone }}">{{ phone }}</option>
+                    {% endfor %}
+                </datalist>
+                <p>
+                    <label for="id_supplier">Supplier:</label>
+                    <input type="text" name="supplier" class="form-control bg-dark text-light"
+                    placeholder="Enter supplier" id="id_supplier">
+                </p>
+                <button type="button" class="btn btn-primary" id="submit">submit</button>
+            </form>
+        </div>
+        <hr>
+        <div class="container" id="waiting-room">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card bg-dark">
+                    <div class="card-header">
+                        <h4 class="card-title text-center fw-bold">Scanned Items</h4>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered">
+                        </ol>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

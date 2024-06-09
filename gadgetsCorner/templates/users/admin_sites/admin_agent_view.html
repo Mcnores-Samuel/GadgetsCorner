@@ -1,0 +1,116 @@
+{% extends 'users/admin_sites/main.html' %}
+{% block content %}
+<section class="agents_stock">
+    <form method="get">
+        {{ filter.form.user }}
+        <input type="submit" />
+    </form>
+    {% for agent, agent_phones in data_by_agent.items %}
+        {% if agent.user.groups.name == agents and not agent.user.is_staff %}
+            <table class="stock-table">
+                <caption>{{ agent.user.username }}:::<span>Total Items: {{ agent_phones|length }}</span></caption>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Device imei</th>
+                        <th>In Stock</th>
+                        <th>Sales type</th>
+                        <th>Contract number</th>
+                        <th>Entry date</th>
+                        <th>Stock out date</th>
+                        <th>sold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for phone in agent_phones %}
+                    <tr>
+                        <td>{{ phone.phone_type }}</td>
+                        <td>{{ phone.device_imei }}</td>
+                        {% if phone.in_stock %}
+                            <td>
+                                <input type="checkbox" id="checkbox" checked disabled>
+                                <label for="checkbox" class="checkbox"></label>
+                            </td>
+                        {% else %}
+                            <td>
+                                <input type="checkbox" id="checkbox" checked disabled>
+                                <label for="checkbox" class="Notcheckbox"></label>
+                            </td>
+                        {% endif %}
+                        <td>{{ phone.sales_type }}</td>
+                        <td>{{ phone.contract_no }}</td>
+                        <td>{{ phone.entry_date }}</td>
+                        <td>{{ phone.stock_out_date }}</td>
+                        {% if phone.sold %}
+                            <td>
+                                <input type="checkbox" id="checkbox" checked disabled>
+                                <label for="checkbox" class="checkbox"></label>
+                            </td>
+                        {% else %}
+                            <td>
+                                <input type="checkbox" id="checkbox" checked disabled>
+                                <label for="checkbox" class="Notcheckbox"></label>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endfor %}
+</section>
+    {% for agent, agent_phones in data_by_agent.items %}
+        {% if agent.user.groups.name == agents and not agent.user.is_staff %}
+        <section class="mobile-display">
+            <div class="agent-details">
+                <h2>Agent</h2>
+                <div>
+                    <p>Name: <span>{{ agent.user.username }}</span></p>
+                    <p>Email: <span>{{ agent.user.email }}</span></p>
+                    <p>Contact: <span>{{ agent.phone_number }}</span></p>
+                </div>
+            <div class="in_stock">
+                <h2>Stock In</h2>
+                <div>
+                    <p>Total devices: <span>{{ agent_phones|length }}</span></p>
+                </div>
+                <button>View Details <i class='bx bx-chevrons-down'></i></button>
+                <section class="agent-data">
+                    {% for phone in agent_phones %}
+                        {% if phone.in_stock %}
+                            <div class="data-card">
+                                <p>Device Imei: <span>{{ phone.device_imei }}</span></p>
+                                <p>Model: <span>{{ phone.phone_type }}</span></p>
+                                <p>Sales type: <span>{{ phone.sales_type }}</span></p>
+                                <p>Contract number: <span>{{ phone.contract_no }}</span></p>
+                                <p>Entry date: <span>{{ phone.entry_date }}</span></p>
+                                <p>Stock out date: <span>{{ phone.stock_out_date }}</span></p>
+                                <p>Sold:
+                                    {% if phone.sold %}
+                                        <span>
+                                            <input type="checkbox" id="checkbox" checked disabled>
+                                            <label for="checkbox" class="checkbox"></label>
+                                        </span>
+                                    {% else %}
+                                        <span>
+                                            <input type="checkbox" id="checkbox" checked disabled>
+                                            <label for="checkbox" class="Notcheckbox"></label>
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            </div>
+            <div class="stock_out">
+                <h2>Stock out</h2>
+                <div>
+                    <p>Total sales: <span>{{ total_stock_out }}</span></p>
+                </div>
+                <a href="{% url 'stock_out' %}"><button>View Details</button></a>
+            </div>
+        </section>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

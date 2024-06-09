@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% if success %}
+{{ user.username }}, your account is confirmed!
+{% else %}
+Error, invalid token!
+{% endif %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+<div class="container">
+    {% bootstrap_messages %}
+</div>
+<section class="sign_up_form">
+    <div class="form_container">
+        <div class="writeInfo text-center"></div>
+        <h2 class="sign_up_h2">Sign up</h2>
+        {% for error in form.non_field_errors %}
+        <p class="text-center">{{ error }}</p>
+        {% endfor %}
+        <form method="post" class="sign_up">
+            {% csrf_token %}
+            <div class="form-group">
+                <span class="icon"><i class='bx bx-envelope'></i></span>
+                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}">Email:</label>
+            </div>
+            <div class="form-group">
+                <span class="icon"><i class='bx bxs-user'></i></span>
+                {{ form.username }}
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+            </div>
+            <div class="form-group">
+                <span class="icon"><i class='bx bx-lock-alt'></i></span>
+                {{ form.password1 }}
+                <label for="{{ form.password1.id_for_label }}">Password:</label>
+            </div>
+            <!-- Password2 -->
+            <div class="form-group">
+                <span class="icon"><i class='bx bx-lock-alt'></i></span>
+                {{ form.password2 }}
+                <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            </div>
+            <div class="form-group">
+                <span class="icon"><i class='bx bx-barcode'></i></span>
+                {{ form.agent_code }}
+                <label for="{{ form.agent_code.id_for_label }}">Agent Code:</label>
+            </div>
+            <button type="submit" class="btn common-bg fw-bold w-100">Sign up</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

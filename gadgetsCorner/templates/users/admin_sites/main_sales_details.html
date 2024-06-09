@@ -1,0 +1,198 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load plus_r %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<style>
+    label {
+        display: none;
+    }
+
+    form {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 10px;
+    }
+</style>
+<h1 class="text-center fs-3 fw-bold">Sales Summary | Total: {{ total }}</h1>
+<p class="text-center fs-5 fw-bold">Please select the user below</p>
+<hr>
+<div class="container">
+    <form method="get" id="filter_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+</div>
+<section class="charts_by_chartjs">
+    <div class="row gy-3">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="card-title">Sales Target Progress</h4>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        <div class="text-end">{{ target }} Devices</div>
+                        {% if progress < 50 %}
+                        <div class="progress">
+                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
+                            aria-valuemax="30">{{ progress }}%</div>
+                        </div>
+                        {% elif progress > 50 and progress < 100 %}
+                        <div class="progress">
+                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
+                            aria-valuemax="30">{{ progress }}%</div>
+                        </div>
+                        {% elif progress == 100 %}
+                        <div class="progress">
+                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
+                            aria-valuemax="30">{{ progress }}%</div>
+                        </div>  
+                        {% elif progress > 100 %}
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
+                            aria-valuemax="30" style="background-color: purple;">{{ progress }}%</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="card-title">Sales Commission</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        {% if commission %}
+                            <p class="text-center">Commission: MK{{ commission|format_price }}</p>
+                        {% else %}
+                            <p class="text-center">Commission: 0.00</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<br>
+<section class="charts_by_chartjs">
+    <div class="row gy-3">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>{{ user }} Sales</h4>
+                </div>
+                <div class="table-container" style="height: 430px; overflow-y: auto;">
+                    <table class="table table-striped">
+                        <thead style="position: sticky; top: 1px; background-color: azure;">
+                            <tr>
+                                <th scope="col">Model</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, value in stock %}
+                                <tr>
+                                    <td>{{ key }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Sales analytics</h4>
+                </div>
+                <div class="card-body">
+                    <div class="loading-message-main-stock"></div>
+                    <canvas class="main_sales_detailed_analysis" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    let ctx = $('.main_sales_detailed_analysis').get(0).getContext('2d');
+    var data = {
+        labels: [{% for item in stock %}"{{ item.0 }}", {% endfor %}],
+        datasets: [{
+            label: 'Sales',
+            data: [{% for item in stock %}{{ item.1 }}, {% endfor %}],
+            backgroundColor: ["#23435c"],
+            borderColor: ["#23435c"],
+            borderWidth: 1
+        }]
+    };
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            events: ["mousemove"],
+            interaction: {
+                mode: "nearest",
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'sales Analysis',
+                    color: 'navy',
+                    position: 'bottom',
+                    align: 'center',
+                    font: {
+                        weight: 'bold'
+                    },
+                    padding: 8,
+                    fullSize: true,
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        color: "navy",
+                        font: {
+                            weight: 'bold'
+                        },
+                    },
+                },
+                y: {
+                    grid: {
+                        display: false,
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        color: "navy",
+                        font: {
+                            weight: 'bold'
+                        },
+                    },
+                },
+            },
+
+        }
+    });
+
+    $(document).ready(function() {
+        $('.progress-bar').css('width', '{{ progress }}%');
+    })
+</script>
+
+{% endblock %}

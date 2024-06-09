@@ -1,0 +1,102 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load plus_r %}
+{% block head %}
+<script src="{% static 'scripts/upload_sales.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<style>
+  .card {
+    height: 400px;
+    overflow-y: scroll;
+  }
+
+  .container {
+    margin-top: 50px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .form_container {
+    width: 50%;
+  }
+
+  .row {
+    width: 50%;
+  }
+  .input-content {
+    width: 25%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    .form_container {
+      width: 100%;
+    }
+
+    .row {
+      width: 100%;
+    }
+
+    .input-content {
+      width: 100%;
+    }
+    
+  }
+</style>
+<div class="container">
+  <div class="form_container">
+    <h1 class="text-center fw-bold">Upload Sales: Total <span  id="total"></span></h1>
+    <p class="text-center">Scan or enter imei numbers to deploy, Choose Date and Sales Type</p>
+    <hr>
+    <form action="" method="post">
+      <p id="token" style="display: none;">{% csrf_token %}</p>
+      <div class="form-group custom-form-group">
+        <label for="data" class="fw-bold common-color">Enter Or scan imei Numbers Here</label>
+        <input type="text" name="data" id="data" class="form-control" autofocus required minlength="15" maxlength="15">
+        <br>
+        <h4 class="fw-bold common-color">Deployment Details</h4>
+        <div class="d-flex justify-content-between w-100">
+          <div class="input-content">
+            <label for="date" class="fw-bold common-color">Choose Date</label>
+            <input type="date" name="date" id="date" class="form-control w-100">
+          </div>
+          <div class="input-content">
+            <label class="fw-bold common-color">Select Sales Type</label>
+            <select name="sales_type" id="sales_type" class="form-control w-100">
+              <option value="">Select Sales Type</option>
+              <option value="Loan">Loan</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+          <div class="input-content">
+            <label class="fw-bold common-color">Click Here to upload</label>
+            <button type="button" class="btn common-bg" id="deploy">Upload</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row" id="waiting-room">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="loading"></div>
+        <div class="card-header">
+          <h4 class="card-title text-center fw-bold">Scanned Items</h4>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<hr>
+<div class="container" >
+</div>
+{% endblock %}

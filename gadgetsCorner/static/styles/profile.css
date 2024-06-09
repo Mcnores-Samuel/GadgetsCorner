@@ -1,0 +1,157 @@
+.controls {
+	border-right: 1px solid gainsboro;
+}
+.controls .profile-btn {
+	border-bottom: 1px solid gainsboro;
+}
+
+.controls > button:hover {
+	background: transparent;
+}
+
+.profile-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 10px;
+}
+
+.profile-container > .controls {
+	grid-column: 1/1;
+}
+
+.profile-container > .userprofile {
+	grid-column: 2/4;
+}
+
+.profile-container > .form_container {
+	grid-column: 2/4;
+}
+
+.profile-container > .danger-zone {
+	grid-column: 2/4;
+}
+
+.controls button {
+	width: 50%;
+	border: none;
+	padding: 5px;
+	background: transparent;
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+button:hover {
+	background-color: #23435c;
+	color: white;
+}
+
+button:active {
+	background-color: #23435c;
+}
+
+
+.controls a {
+	text-decoration: none;
+	width: 100%;
+}
+
+.userprofile h2 {
+	width: 100%;
+	text-align: center;
+	margin: 12px 0px;
+}
+
+.userprofile .user-data {
+	padding-left: 10px;
+	width: 100%;
+}
+
+.userprofile .user-data p {
+	width: 100%;
+	margin-bottom: 5px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.userprofile .user-data p span {
+	font-weight: bold;
+	font-size: 1rem;
+}
+
+.danger-zone {
+	box-shadow: 1px 6px 7px rgba(207, 14, 14, 0.4);
+	margin-left: 10px;
+	margin-top: 15px;
+	text-align: center;
+}
+
+.danger-zone button {
+	width: 100%;
+	margin-top: 10px;
+	border-radius: 0px;
+	background-color: #780a0a;
+}
+.profile-avatar {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	margin: 0 auto;
+	display: block;
+	border: 1px solid #fe9a43;
+}
+
+.upload-form {
+	position: relative;
+	border: 1px solid gainsboro;
+}
+
+.upload-form input {
+	display: none;
+}
+
+.upload-form label {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 2rem;
+	right: 1rem;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: #23435c;
+	color: white;
+	cursor: pointer;
+	font-size: 1.5rem;
+}
+
+.image-section {
+	background-color: #9fa5aa;
+	padding: 10px;
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+}
+
+@media screen and (max-width: 50rem) {
+	.controls {
+		border-right: none;
+	}
+
+	.danger-zone {
+		margin-left: 0px;
+	}
+
+	.profile-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.profile-container .controls {
+		width: 100%;
+	}
+
+	.controls .profile-btn {
+		width: 100%;
+	}
+}

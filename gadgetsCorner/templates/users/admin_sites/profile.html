@@ -1,0 +1,44 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container position-relative">
+    {% bootstrap_messages %}
+    <h1 class="text-center">Profile</h1>
+    <div class="container image-section d-flex justify-content-center align-items-center">
+        {% if avatar.image.url %}
+            <img src="{{ avatar.image.url }}" alt="" class="profile-avatar">
+        {% else %}
+            <img src="{% static 'images/employee.png' %}" alt="" class="profile-avatar">
+        {% endif %}
+        <form id="uploadForm" action="{% url 'upload_image' %}" method="post" enctype="multipart/form-data" class="upload-form position-relative">
+            {% csrf_token %}
+            <label for="image">
+                <span class="material-icons">
+                    image
+                </span>
+            </label>
+            <input type="file" name="image" id="image">
+        </form>
+    </div>
+    <br>
+    <form action="" method="post" class="shadow-lg p-3 mb-5 bg-body rounded">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#image').change(function() {
+            $('#uploadForm').submit();
+        });
+    });
+</script>
+{% endblock %}

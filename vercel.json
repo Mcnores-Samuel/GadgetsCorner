@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Hafeez_management_system/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.8"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "Hafeez_management_system/wsgi.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "Hafeez_management_system/wsgi.py"
+    }
+  ],
+  "env": {
+    "PYTHONUNBUFFERED": "1",
+    "DJANGO_SETTINGS_MODULE": "Hafeez_management_system.settings" 
+  }
+}

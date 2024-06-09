@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <p>Hello, {{ user.username }}!</p>
+    <p>You're just one step away from joining us.</p>
+    <p>We've sent you an email with instructions on how to confirm your email address.</p>
+    <p>Please check your inbox and follow the steps to complete your registration.</p>
+    <p>Didn't receive the email? <a href="{% url 'resend_confirmation_email' %}">Click here</a> to resend.</p>
+    <p>Already confirmed your email? <a href="{% url 'sign_in' %}">Sign in</a></p>
+</section>
+{% endblock %}

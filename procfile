@@ -1,0 +1,1 @@
+web: gunicorn 'Hafeez_management_system.wsgi'

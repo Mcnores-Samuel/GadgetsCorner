@@ -1,0 +1,17 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+<div class="container">
+    {% bootstrap_messages %}
+    <h1 class="text-center">Feedback</h1>
+    <form action="" method="post" class="shadow-lg p-3 mb-5 bg-body rounded">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</div>
+{% endblock %}

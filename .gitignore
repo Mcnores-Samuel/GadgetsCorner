@@ -1,0 +1,17 @@
+# Text backup files
+*.bak
+__pycache__/
+
+venv/
+
+media/
+
+# Database
+*.sqlite3
+.vercel
+data_api.py
+credentials.json
+data_api.py
+data_api_v2.py
+data_update_api.py
+staticfiles/
