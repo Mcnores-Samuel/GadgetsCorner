@@ -11,14 +11,19 @@
     <hr>
     <div class="shadow-lg p-3 mb-5 bg-body rounded d-flex justify-content-center">
         <button type="button" class="btn common-bg w-25 fw-bold"
-        data-bs-toggle="modal" data-bs-target="#viewJobModal">Cash</button>
+        data-bs-toggle="modal" data-bs-target="#viewCashModal">Cash</button>
     </div>
 
-    <div class="modal fade" id="viewJobModal" tabindex="-1" aria-labelledby="viewJobModalLabel" aria-hidden="true">
+    <div class="shadow-lg p-3 mb-5 bg-body rounded d-flex justify-content-center">
+        <button type="button" class="btn common-bg w-25 fw-bold"
+        data-bs-toggle="modal" data-bs-target="#viewCreditModal">Credit</button>
+    </div>
+
+    <div class="modal fade" id="viewCashModal" tabindex="-1" aria-labelledby="viewCashModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="viewJobModalLabel">Cash Payment</h5>
+                    <h5 class="modal-title" id="viewCashModalLabel">Cash Payment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -34,10 +39,28 @@
             </div>
         </div>
     </div>
-    <form action="" method="post" class="shadow-lg p-3 mb-5 bg-body rounded d-flex justify-content-center">
-        {% csrf_token %}
-        <input type="hidden" name="payment_method" value="Loan">
-        <button type="submit" class="btn common-bg w-25 fw-bold">Credit</button>
-    </form>
+
+    <div class="modal fade" id="viewCreditModal" tabindex="-1" aria-labelledby="viewCreditModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewCreditModalLabel">Credit Sales Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" class="shadow-lg p-3 mb-5 bg-body rounded">
+                        {% csrf_token %}
+                        <input type="hidden" name="payment_method" value="Loan">
+                        <br>
+                        <label for="contract-number">Add contract number</label>
+                        <input type="text" name="contract_number" id="contract-number" class="form-control"
+                        minlength="9" maxlength="9" pattern="[A]{1}[0-9]{8}" placeholder="Add contract number here" required>
+                        <br>
+                        <button type="submit" class="btn common-bg w-100 fw-bold">confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

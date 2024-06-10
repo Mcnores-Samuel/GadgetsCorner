@@ -1,4 +1,4 @@
-# Hafeez management system
+# GADGETS CORNER MANAGEMENT SYSTEM
 
 ## Technologies Used
 

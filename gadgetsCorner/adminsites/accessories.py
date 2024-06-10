@@ -1,6 +1,7 @@
 """This file is used to register the models in the admin site for the accessories app"""
 from django.contrib import admin
 
+
 class AdminAccessories(admin.ModelAdmin):
     """This class is used to register the models in the admin site for the accessories app"""
     list_display = ('held_by', 'item', 'model', 'total', 'previous_total', 'cost_per_item', 'date_added', 'date_modified')

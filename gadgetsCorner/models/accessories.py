@@ -44,7 +44,7 @@ class Accessories(models.Model):
     date_modified = models.DateTimeField(timezone.now())
 
     def __str__(self):
-        return self.device_name
+        return self.item
     
     class Meta:
         db_table = 'accessories'
@@ -52,7 +52,7 @@ class Accessories(models.Model):
         verbose_name_plural = 'Accessories'
 
 
-class Accessary_Sales(models.Model):
+class Accessory_Sales(models.Model):
     """The model for the refarbished devices table.
 
     Attributes:
@@ -79,6 +79,6 @@ class Accessary_Sales(models.Model):
         return self.device_name
     
     class Meta:
-        db_table = 'accessary_sales'
+        db_table = 'accessory_sales'
         verbose_name = 'Accessory Sales'
         verbose_name_plural = 'Accessory Sales'

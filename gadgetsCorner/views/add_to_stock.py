@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models.main_storage import MainStorage
+from ..models.accessories import Accessories   
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import Group
 from ..models.user_profile import UserProfile
@@ -37,29 +38,37 @@ def add_to_stock(request):
         user = request.user
         data = MainStorage.objects.all()
         phone_names = set()
+        model_names = set()
+        category_names = set()
+        spec_names = set()
         for phone in data:
             if phone.name is not None:
                 phone_names.add(phone.name)
+                model_names.add(phone.phone_type)
+                category_names.add(phone.category)
+                spec_names.add(phone.spec)
         sorted_phone_list = sorted(list(phone_names))
+        sorted_model_list = sorted(list(model_names))
+        sorted_category_list = sorted(list(category_names))
+        sorted_spec_list = sorted(list(spec_names))
         if request.method == 'POST':
             data = json.loads(request.POST.get('data'))
             name = request.POST.get('name')
             cost_price = request.POST.get('cost_price')
             supplier = request.POST.get('supplier')
-            instance = MainStorage.objects.filter(name=name).first()
-            main_shop_staff = Group.objects.get(name='main_shop')
-            representatives = UserProfile.objects.filter(groups=main_shop_staff)
-            agent = representatives.first()
+            category = request.POST.get('category')
+            spec = request.POST.get('spec')
+            phone_type = request.POST.get('model')
             already_exists = []
             for item in data:
                 try:
                     MainStorage.objects.create(
                         device_imei=item[0], device_imei_2=item[1], name=name,
-                        phone_type=instance.phone_type, category=instance.category,
-                        spec=instance.spec, in_stock=True, sales_type='##', contract_no='##',
+                        phone_type=phone_type, category=category,
+                        spec=spec, in_stock=True, sales_type='##', contract_no='##',
                         entry_date=timezone.now(), stock_out_date=timezone.now(),
                         collected_on=timezone.now(), assigned=True, sold=False,
-                        issue=False, paid=False, cost=cost_price, price=0.00, agent=agent,
+                        issue=False, paid=False, cost=cost_price, price=0.00, agent=request.user,
                         recieved=True, on_display=False, pending=False, missing=False,
                         supplier=supplier, faulty=False, assigned_from='Gadgets Corner',
                         updated_by=user.username, comment='##'
@@ -67,4 +76,38 @@ def add_to_stock(request):
                 except Exception as e:
                     already_exists.append(item)
             return JsonResponse({'status': 200, 'data': already_exists})
-    return render(request, 'users/admin_sites/add_to_stock.html', {'phone_names': sorted_phone_list})
+    return render(request, 'users/admin_sites/add_to_stock.html',
+                  {'phone_names': sorted_phone_list, 'models': sorted_model_list,
+                   'categories': sorted_category_list, 'specs': sorted_spec_list})
+
+
+@login_required
+def add_accessaries(request):
+    if request.user.is_staff and request.user.is_superuser:
+        data = Accessories.objects.all()
+        name_set = set()
+        model_set = set()
+        for item in data:
+            name_set.add(item.item)
+            model_set.add(item.model)
+        sorted_name_list = sorted(list(name_set))
+        sorted_model_list = sorted(list(model_set))
+        if request.method == 'POST':
+            item = request.POST.get('accessary_name')
+            model = request.POST.get('model')
+            total = request.POST.get('quantity')
+            cost = request.POST.get('cost_price')
+            instance = Accessories.objects.filter(item=item, model=model).first()
+            if instance is None:
+                Accessories.objects.create(
+                    held_by=request.user,
+                    item=item, model=model, total=total, previous_total=0, cost_per_item=cost,
+                    date_added=timezone.now(), date_modified=timezone.now())
+            else:
+                instance.previous_total = instance.total
+                instance.total += int(total)
+                instance.cost_per_item = cost
+                instance.date_modified = timezone.now()
+                instance.save()
+        return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})
+    return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})

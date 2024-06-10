@@ -16,79 +16,25 @@
         gap: 10px;
     }
 </style>
-<h1 class="text-center fs-3 fw-bold">Sales Summary | Total: {{ total }}</h1>
-<p class="text-center fs-5 fw-bold">Please select the user below</p>
+<h1 class="text-center fs-3 fw-bold text-light">Sales Summary | Total: {{ total }}</h1>
+<p class="text-center fs-5 fw-bold text-light">
+    Below is the summary of the sales made in the store.It shows sales for the current month by default.
+</p>
 <hr>
-<div class="container">
+<div class="container bg-info">
+    <br>
     <form method="get" id="filter_form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 </div>
-<section class="charts_by_chartjs">
-    <div class="row gy-3">
-        <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4 class="card-title">Sales Target Progress</h4>
-                </div>
-                <div class="card-body">
-                    <div class="">
-                        <div class="text-end">{{ target }} Devices</div>
-                        {% if progress < 50 %}
-                        <div class="progress">
-                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
-                            aria-valuemax="30">{{ progress }}%</div>
-                        </div>
-                        {% elif progress > 50 and progress < 100 %}
-                        <div class="progress">
-                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
-                            aria-valuemax="30">{{ progress }}%</div>
-                        </div>
-                        {% elif progress == 100 %}
-                        <div class="progress">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
-                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
-                            aria-valuemax="30">{{ progress }}%</div>
-                        </div>  
-                        {% elif progress > 100 %}
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
-                            aria-valuemax="30" style="background-color: purple;">{{ progress }}%</div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4 class="card-title">Sales Commission</h4>
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        {% if commission %}
-                            <p class="text-center">Commission: MK{{ commission|format_price }}</p>
-                        {% else %}
-                            <p class="text-center">Commission: 0.00</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <br>
 <section class="charts_by_chartjs">
     <div class="row gy-3">
         <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-header text-center">
+            <div class="card bg-dark">
+                <div class="card-header text-center common-color">
                     <h4>{{ user }} Sales</h4>
                 </div>
                 <div class="table-container" style="height: 430px; overflow-y: auto;">
@@ -96,14 +42,14 @@
                         <thead style="position: sticky; top: 1px; background-color: azure;">
                             <tr>
                                 <th scope="col">Model</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for key, value in stock %}
                                 <tr>
-                                    <td>{{ key }}</td>
-                                    <td>{{ value }}</td>
+                                    <td class="common-color">{{ key }}</td>
+                                    <td class="common-color">{{ value }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -112,8 +58,8 @@
             </div>
         </div>
         <div class="col-md-6 col-12">
-            <div class="card">
-                <div class="card-header text-center">
+            <div class="card bg-dark">
+                <div class="card-header text-center common-color">
                     <h4>Sales analytics</h4>
                 </div>
                 <div class="card-body">
@@ -131,9 +77,7 @@
         datasets: [{
             label: 'Sales',
             data: [{% for item in stock %}{{ item.1 }}, {% endfor %}],
-            backgroundColor: ["#23435c"],
-            borderColor: ["#23435c"],
-            borderWidth: 1
+            backgroundColor: ["rgba(54, 162, 235, 0.6)"],
         }]
     };
     var myChart = new Chart(ctx, {
@@ -150,7 +94,7 @@
                 title: {
                     display: true,
                     text: 'sales Analysis',
-                    color: 'navy',
+                    color: '#fe9a43',
                     position: 'bottom',
                     align: 'center',
                     font: {
@@ -167,7 +111,7 @@
                         drawBorder: false,
                     },
                     ticks: {
-                        color: "navy",
+                        color: "#fe9a43",
                         font: {
                             weight: 'bold'
                         },
@@ -179,7 +123,7 @@
                         drawBorder: false,
                     },
                     ticks: {
-                        color: "navy",
+                        color: "#fe9a43",
                         font: {
                             weight: 'bold'
                         },

@@ -3,6 +3,9 @@ const form = $('form');
 const imei_1 = $('#id_device_imei');
 const imei_2 = $('#id_device_imei_2');
 const name = $('#id_name');
+const model = $('#id_model');
+const category = $('#id_category');
+const spec = $('#id_spec');
 const cost_price = $('#id_cost_price');
 const supplier = $('#id_supplier');
 const waitRoom = $('#waiting-room');
@@ -90,7 +93,8 @@ send.on('click', () => {
     return;
   }
 
-  if (name.val().length === 0 || cost_price.val().length === 0 || supplier.val().length === 0) {
+  if (name.val().length === 0 || cost_price.val().length === 0 || supplier.val().length === 0 ||
+  model.val().length === 0 || category.val().length === 0 || spec.val().length === 0) {
     const note = '<div class="alert alert-warning alert-dismissible fade show" role="alert">Please enter the phone name, cost price and Suppllier\
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\
         </div>';
@@ -106,13 +110,16 @@ send.on('click', () => {
   load.addClass('loading-message');
 
   $.ajax({
-    url: '/system_core_1/add_to_stock/',
+    url: '/gadgetsCorner/add_to_stock/',
     type: 'POST',
     data: {
       data: JSON.stringify(container),
       name: name.val(),
       cost_price: cost_price.val(),
       supplier: supplier.val(),
+      model: model.val(),
+      category: category.val(),
+      spec: spec.val(),
     },
     success: (response) => {
       load.removeClass('loading-message');
@@ -126,6 +133,13 @@ send.on('click', () => {
             waitRoom.find('.list-group').append(
               `<li class="list-group-item text-danger fw-bold">IMEI 1: ${item[0]} <===> IMEI 2: ${item[1]}</li>`,
             );
+            const note = '<div class="alert alert-warning alert-dismissible fade show" role="alert">Some items already exist in the stock\
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\
+                        </div>';
+            $(note).insertBefore(form);
+            setTimeout(() => {
+              $('.alert').alert('close');
+            }, 5000);
           });
         } else {
           const note = '<div class="alert alert-success alert-dismissible fade show" role="alert">Successfully added to stock\

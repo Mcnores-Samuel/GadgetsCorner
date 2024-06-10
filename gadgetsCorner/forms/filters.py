@@ -35,16 +35,6 @@ class FilterAgentAndData(forms.Form):
 class FilterAgentAndDataSales(forms.Form):
 
     """Filter for the agent and data."""
-    user = forms.ModelChoiceField(
-        queryset=UserProfile.objects.all().order_by('id'),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control W-25',
-                'placeholder': 'Choose agent',
-                'required': 'required',
-            }
-        )
-    )
 
     month = forms.ChoiceField(
         choices=[('1', 'January'), ('2', 'February'), ('3', 'March'), ('4', 'April'),

@@ -11,7 +11,7 @@ function adminStockAnalysis() {
 
   function updateStockAnalysis() {
     $.ajax({
-      url: '/system_core_1/admin_stock_analysis',
+      url: '/gadgetsCorner/admin_stock_analysis',
       type: 'GET',
       dataType: 'json',
       beforeSend() {

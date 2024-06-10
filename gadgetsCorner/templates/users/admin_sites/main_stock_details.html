@@ -15,17 +15,13 @@
         gap: 10px;
     }
 </style>
-<h1 class="text-center fs-3 fw-bold">Stock Summary | Total: {{ total }}</h1>
-<p class="text-center fs-5 fw-bold">Please select the user below</p>
+<h1 class="text-center fs-3 fw-bold text-light">Stock Summary | Total: {{ total }}</h1>
+<p class="text-center fs-5 fw-bold text-light">
+    Below is the summary of the stock available in the store.
+</p>
+<a href="{{ data_url }}" class="btn common-bg">Manage</a>
 <hr>
-<div class="container">
-    <form method="get" id="filter_form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Filter</button>
-        <a href="{{ data_url }}" class="btn common-bg">Manage</a>
-    </form>
-</div>
+<br>
 <section class="charts_by_chartjs">
     <div class="row gy-3">
         <div class="col-md-6 col-12">
@@ -33,19 +29,19 @@
                 <div class="card-header text-center">
                     <h4>{{ user }} Stock</h4>
                 </div>
-                <div class="table-container" style="height: 430px; overflow-y: auto;">
+                <div class="table-container bg-dark" style="height: 335px; overflow-y: auto;">
                     <table class="table table-striped">
                         <thead style="position: sticky; top: 1px; background-color: azure;">
                             <tr>
                                 <th scope="col">Model</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for key, value in stock %}
                                 <tr>
-                                    <td>{{ key }}</td>
-                                    <td>{{ value }}</td>
+                                    <td class="common-color">{{ key }}</td>
+                                    <td class="common-color">{{ value }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -54,13 +50,13 @@
             </div>
         </div>
         <div class="col-md-6 col-12">
-            <div class="card">
+            <div class="card bg-dark">
                 <div class="card-header text-center">
                     <h4>Stock analytics</h4>
                 </div>
                 <div class="card-body">
                     <div class="loading-message-main-stock"></div>
-                    <canvas class="main_stock_detailed_analysis" width="400" height="400"></canvas>
+                    <canvas class="main_stock_detailed_analysis" width="400" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -73,9 +69,7 @@
         datasets: [{
             label: 'Stock',
             data: [{% for item in stock %}{{ item.1 }}, {% endfor %}],
-            backgroundColor: ["#23435c"],
-            borderColor: ["#23435c"],
-            borderWidth: 1
+            backgroundColor: ['rgba(54, 162, 235, 0.6)'],
         }]
     };
     var myChart = new Chart(ctx, {
@@ -92,7 +86,7 @@
                 title: {
                     display: true,
                     text: 'Stock Analysis',
-                    color: 'navy',
+                    color: '#fe9a43',
                     position: 'bottom',
                     align: 'center',
                     font: {
@@ -109,7 +103,7 @@
                         drawBorder: false,
                     },
                     ticks: {
-                        color: "navy",
+                        color: "#fe9a43",
                         font: {
                             weight: 'bold'
                         },
@@ -121,7 +115,7 @@
                         drawBorder: false,
                     },
                     ticks: {
-                        color: "navy",
+                        color: "#fe9a43",
                         font: {
                             weight: 'bold'
                         },

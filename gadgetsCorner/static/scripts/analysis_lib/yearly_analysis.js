@@ -45,8 +45,6 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                 label: date.toDateString(),
                 data: total,
                 backgroundColor: '#4285F4',
-                borderColor: '#4285F4',
-                borderWidth: 0.1,
               },
               {
                 label: 'Total Sales',
@@ -82,7 +80,7 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                 title: {
                   display: true,
                   text: `Yearly Sales Analysis: Total Sales: ${total.reduce((a, b) => a + b, 0)}`,
-                  color: '#333',
+                  color: '#fe9a43',
                   position: 'bottom',
                   align: 'center',
                   font: {
@@ -102,7 +100,7 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                     drawBorder: false,
                   },
                   ticks: {
-                    color: '#333',
+                    color: '#fe9a43',
                     font: {
                       weight: 'bold',
                     },
@@ -114,7 +112,7 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                     drawBorder: false,
                   },
                   ticks: {
-                    color: '#333',
+                    color: '#fe9a43',
                     font: {
                       weight: 'bold',
                     },
@@ -224,7 +222,7 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
                 title: {
                   display: true,
                   text: 'Yearly Sales Analysis by Product',
-                  color: '#333',
+                  color: '#fe9a43',
                   position: 'bottom',
                   align: 'center',
                   font: {
@@ -244,7 +242,7 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
                     drawBorder: false,
                   },
                   ticks: {
-                    color: '#333',
+                    color: '#fe9a43',
                     font: {
                       weight: 'bold',
                     },
@@ -256,7 +254,7 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
                     drawBorder: false,
                   },
                   ticks: {
-                    color: '#333',
+                    color: '#fe9a43',
                     font: {
                       weight: 'bold',
                     },
@@ -280,17 +278,17 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
   fetchAndUpdateDailyData();
 }
 
-const urlYearly = '/system_core_1/get_yearly_sales/';
+const urlYearly = '/gadgetsCorner/get_yearly_sales/';
 const destYearly = '.yearly_sales_chart';
 const chartTypeYearly = 'bar';
 const loaderYearly = '.yearly_sales_chart_loader';
 
-const productAnalysis = '/system_core_1/get_yearly_product_sales/';
+const productAnalysis = '/gadgetsCorner/get_yearly_product_sales/';
 const productDest = '.yearly_product_sales_chart';
 const productLoader = '.yearly_product_sales_chart_loader';
 const chartTypeProduct = 'bar';
 
-const urlYearlyOther = '/system_core_1/get_yearly_sales_total/';
+const urlYearlyOther = '/gadgetsCorner/get_yearly_sales_total/';
 const destYearlyOther = '.yearly_sales_chart_total';
 const chartTypeYearlyOther = 'bar';
 const loaderYearlyOther = '.yearly_sales_chart_loader_total';

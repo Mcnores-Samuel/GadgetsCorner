@@ -82,13 +82,14 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
                 title: {
                   display: true,
                   text: `Total overall stock ${overallTotal}`,
-                  color: 'navy',
+                  color: '#fe9a43',
                   position: 'bottom',
-                  align: 'center',
+                  align: 'left',
                   font: {
                     weight: 'bold',
+                    size: 16,
                   },
-                  padding: 8,
+                  padding: 10,
                   fullSize: true,
                 },
                 legend: {
@@ -96,7 +97,7 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
                   position: 'right',
                   align: 'center',
                   labels: {
-                    color: 'black',
+                    color: '#fe9a43',
                     font: {
                       size: 10,
                       weight: 'bold',
@@ -135,12 +136,12 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
   fetchAndUpdateDailyData();
 }
 
-const url_agents_stock = '/system_core_1/get_agents_stock_json/';
+const url_agents_stock = '/gadgetsCorner/get_agents_stock_json/';
 const dest_all_stock = '.all_agents_stock_chart';
 const chartType = 'doughnut';
 const loader_all_stock = '.loading-message-stock';
 
-const url_main_stock = '/system_core_1/get_main_stock_analysis/';
+const url_main_stock = '/gadgetsCorner/get_main_stock_analysis/';
 const dest_main_stock = '.main_stock_chart';
 const loader_main_stock = '.loading-message-shop';
 const chartType_main_stock = 'doughnut';

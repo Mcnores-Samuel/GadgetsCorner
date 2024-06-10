@@ -11,8 +11,18 @@
 {% block content %}
 <style>
     .card {
-      height: 400px;
+      height: 350px;
       overflow-y: scroll;
+      font-size: 14px;
+    }
+
+    .form_container {
+        height: 350px;
+    }
+
+    form {
+        height: 100%;
+        overflow-y: scroll;
     }
 
     .data_container {
@@ -47,8 +57,8 @@
     {% bootstrap_messages %}
     <div class="loading-target"></div>
     <h1 class="text-center fw-bold text-light">Add To Stock: Total Scanned: <span  id="total"></span></h1>
-    <p class="text-center fw-bold text-light">Please enter the Imei numbers and the phone name to add to stock</p>
-    <a href="" class="btn common-bg">Accessaries</a>
+    <p class="text-center fw-bold text-light">Please enter the Imei numbers and fill in the fields that follows with complete and accurate details</p>
+    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Accessaries</a>
     <a href="" class="btn common-bg">Appliances</a>
     <hr>
     <div class="data_container">
@@ -80,6 +90,36 @@
                 <datalist id="phone_list">
                     {% for phone in phone_names %}
                     <option value="{{ phone }}">{{ phone }}</option>
+                    {% endfor %}
+                </datalist>
+                <p>
+                    <label for="id_model">Model:</label>
+                    <input type="text" name="model" class="form-control bg-dark text-light" placeholder="Enter model"
+                    list="model_list" id="id_model">
+                </p>
+                <datalist id="model_list">
+                    {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </datalist>
+                <p>
+                    <label for="id_category">Category</label>
+                    <input type="text" name="category" class="form-control bg-dark text-light" placeholder="Enter category"
+                    id="id_category" list="category_list">
+                </p>
+                <datalist id="category_list">
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </datalist>
+                <p>
+                    <label for="id_spec">Spec</label>
+                    <input type="text" name="spec" class="form-control bg-dark text-light" placeholder="Enter spec"
+                    id="id_spec" list="spec_list">
+                </p>
+                <datalist id="spec_list">
+                    {% for spec in specs %}
+                    <option value="{{ spec }}">{{ spec }}</option>
                     {% endfor %}
                 </datalist>
                 <p>

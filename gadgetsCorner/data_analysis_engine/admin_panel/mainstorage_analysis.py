@@ -1,5 +1,6 @@
 """This model represent the entire stock available and sold in all posts."""
 from ...models.main_storage import MainStorage
+from ...models.accessories import Accessories, Accessory_Sales
 from ...models.user_profile import UserProfile
 from django.utils import timezone
 from django.contrib.auth.models import Group
@@ -38,6 +39,13 @@ class MainStorageAnalysis:
             stock_out_date__range=[monday, sunday],
             sold=True, in_stock=False,
             sales_type=sales_type)
+        if sales_type == 'Cash':
+            accessories = Accessory_Sales.objects.filter(
+                date_sold__range=[monday, sunday])
+            for accessory in accessories:
+                item = {f"{accessory.item}({accessory.model})": accessory.total}
+                days[week_days[accessory.date_sold.weekday()]].append(item)
+                item = {}
         for data in data_set:
             item = {'type': data.phone_type}
             days[week_days[data.stock_out_date.weekday()]].append(item)

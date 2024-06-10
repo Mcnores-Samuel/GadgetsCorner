@@ -1,9 +1,9 @@
 from ..models.main_storage import MainStorage
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
-from ..models.user_profile import UserProfile
 from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
+from ..models.accessories import Accessories, Accessory_Sales
+from django.utils import timezone
 
 
 @login_required
@@ -18,7 +18,14 @@ def get_daily_sales_json_loan(request):
 def get_daily_sales_json_cash(request):
     """Returns a JSON object containing the daily sales data."""
     if request.method == 'GET':
+        today = timezone.now().date()
         sales = MainStorageAnalysis().get_daily_sales('Cash')
+        accessories = Accessory_Sales.objects.filter(date_sold__date=today)
+        for item in accessories:
+            try:
+                sales[item.item + f"({item.model})"] += item.total
+            except KeyError:
+                sales[item.item + f"({item.model})"] = item.total
         return JsonResponse(sales)
     return JsonResponse({'error': 'Invalid request.'})
 
@@ -62,16 +69,18 @@ def get_sale_by_agent_monthy_cash(request):
 def get_main_stock_analysis(request):
     """Returns a JSON object containing the main stock analysis."""
     if request.method == 'GET':
-        main_shop_staff = Group.objects.get(name='main_shop')
-        representatives = UserProfile.objects.filter(groups=main_shop_staff)
         data_set = MainStorage.objects.filter(
-            agent__in=representatives, in_stock=True, sold=False,
-            missing=False, assigned=True, recieved=True, faulty=False,
+            in_stock=True, sold=False, missing=False, assigned=True, recieved=True, faulty=False,
             pending=False, issue=False)
+        accessaries = Accessories.objects.all()
+        total = 0
         stock = {}
-        stock[representatives[0].username] = data_set.count()
-        stock['Target Capacity'] = 1000
-        stock['Total'] = data_set.count()
+        for item in accessaries:
+            stock[item.item + f"({item.model})"] = item.total
+            total += item.total
+        stock['Phones'] = data_set.count()
+        total += data_set.count()
+        stock['Total'] = total
         return JsonResponse(stock)
     return JsonResponse({'error': 'Invalid request.'})
 
