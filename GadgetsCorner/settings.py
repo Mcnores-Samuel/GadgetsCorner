@@ -29,16 +29,13 @@ ICON_LINK = os.environ.get('ICON_LINK')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (bool(int(os.environ.get('DEBUG', 1))))
 
-MAIN_DOMAIN = os.environ.get('MAIN_DOMAIN')
-SUBDOMAIN_NAME = os.environ.get('SUBDOMAIN_NAME')
 SERVER_DOMAIN1 = os.environ.get('SERVER_DOMAIN', default=".vercel.app")
 SERVER_DOMAIN2 = os.environ.get('SERVER_DOMAIN2', default=".railway.app")
 OTHER_DOMAIN = os.environ.get('OTHER_DOMAIN')
-ALLOWED_HOSTS = [MAIN_DOMAIN, SUBDOMAIN_NAME, SERVER_DOMAIN1,
+ALLOWED_HOSTS = [SERVER_DOMAIN1,
                  SERVER_DOMAIN2, OTHER_DOMAIN, 'localhost']
 CRSF_COOKIE_SECURE = True
-CRSF_TRUSTED_ORIGINS = [MAIN_DOMAIN, SUBDOMAIN_NAME, SERVER_DOMAIN1,
-                        SERVER_DOMAIN2, OTHER_DOMAIN, 'localhost']
+CRSF_TRUSTED_ORIGINS = [SERVER_DOMAIN1, SERVER_DOMAIN2, OTHER_DOMAIN, 'localhost']
 
 SESSION_COOKIE_SECURE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
