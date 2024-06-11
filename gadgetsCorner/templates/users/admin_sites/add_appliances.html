@@ -11,17 +11,16 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <h1 class="text-center fw-bold text-light">Add Accessaries</h1>
-    <p class="text-center fw-bold text-light">Please enter the Accessary name and the quantity to add to stock</p>
+    <h1 class="text-center fw-bold text-light">Add Appliances</h1>
+    <p class="text-center fw-bold text-light">Please enter the Appliance name and the quantity to add to stock</p>
     <a href="{% url 'add_to_stock' %}" class="btn common-bg">Add Phones</a>
-    <a href="{% url 'add_appliances' %}" class="btn common-bg">Add Appliances</a>
-
+    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Add Accessaries</a>
     <hr>
     <form action="" method="post" class="bg-dark shadow-lg p-3 mb-5 rounded">
         {% csrf_token %}
         <p>
-            <label for="item" class="text-light fw-bold">Accessary Name:</label>
-            <input type="text" name="accessary_name" class="form-control bg-dark text-light" placeholder="Enter Accessary Name / item"
+            <label for="item" class="text-light fw-bold">Appliance Name:</label>
+            <input type="text" name="appliance_name" class="form-control bg-dark text-light" placeholder="Enter Appliance Name / item"
             list="name_list", id="item">
         </p>
         <datalist id="name_list">

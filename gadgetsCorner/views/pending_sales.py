@@ -99,6 +99,7 @@ def revert_to_stock(request):
                     main_storage.in_stock = True
                     main_storage.sold = False
                     main_storage.pending = False
+                    main_storage.price = 0
                     main_storage.stock_out_date = main_storage.entry_date
                     main_storage.sales_type = '##'
                     main_storage.contract_no = '##'

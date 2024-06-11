@@ -11,28 +11,27 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <h1 class="text-center fw-bold text-light">Add Accessaries</h1>
-    <p class="text-center fw-bold text-light">Please enter the Accessary name and the quantity to add to stock</p>
-    <a href="{% url 'add_to_stock' %}" class="btn common-bg">Add Phones</a>
-    <a href="{% url 'add_appliances' %}" class="btn common-bg">Add Appliances</a>
-
+    <h1 class="text-center fw-bold text-light">Appliances Sales</h1>
+    <p class="text-center fw-bold text-light">Please enter the Appliance name and the quantity to sell</p>
+    <a href="{% url 'add_to_stock' %}" class="btn common-bg">Phones</a>
+    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Accessaries</a>
     <hr>
     <form action="" method="post" class="bg-dark shadow-lg p-3 mb-5 rounded">
         {% csrf_token %}
         <p>
-            <label for="item" class="text-light fw-bold">Accessary Name:</label>
-            <input type="text" name="accessary_name" class="form-control bg-dark text-light" placeholder="Enter Accessary Name / item"
-            list="name_list", id="item">
+            <label for="item" class="text-light fw-bold">Appliance Name:</label>
+            <input type="text" name="item" class="form-control bg-dark text-light" placeholder="Enter Appliance name"
+            list="item_list" id="item" required>
         </p>
-        <datalist id="name_list">
-            {% for name in names %}
-            <option value="{{ name }}">{{ name }}</option>
+        <datalist id="item_list">
+            {% for item in names %}
+            <option value="{{ item }}">{{ item }}</option>
             {% endfor %}
         </datalist>
         <p>
             <label for="model" class="fw-bold text-light">Model:</label>
             <input type="text" name="model" class="form-control bg-dark text-light" placeholder="Enter model"
-            list="model_list" id="model">
+            list="model_list" id="model" required>
         </p>
         <datalist id="model_list">
             {% for model in models %}
@@ -42,12 +41,12 @@
         <p>
             <label for="quantity" class="fw-bold text-light">Quantity:</label>
             <input type="number" name="quantity" class="form-control bg-dark text-light" placeholder="Enter quantity"
-            min="0">
+            min="0" required>
         </p>
         <p>
-            <label for="id_cost_price" class="fw-bold text-light">Cost price:</label>
-            <input type="number" name="cost_price" class="form-control bg-dark text-light" placeholder="Enter cost price"
-            id="id_cost_price" min="0">
+            <label for="id_selling_price" class="fw-bold text-light">Selling price:</label>
+            <input type="number" name="selling_price" class="form-control bg-dark text-light" placeholder="Enter selling price"
+            id="id_selling_price" min="0" required>
         </p>
         <button type="submit" class="btn btn-primary" id="submit">submit</button>
     </form>

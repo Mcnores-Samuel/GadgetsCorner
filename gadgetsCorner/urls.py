@@ -4,7 +4,7 @@ from .views import (registration_view, data_updates, central_display, home_page,
                     user_dashboard, search_and_filters, data_for_charts)
 from .views.stock_analysis import (get_source_stock, get_yearly_product_sales, admin_stock_analysis)
 from .views.feedback import feedback
-from .views.add_to_stock import add_to_stock, add_accessaries
+from .views.add_to_stock import add_to_stock, add_accessaries, add_appliances
 from .views.pending_sales import total_pending_sales, revert_to_stock, pending_sales
 from .views.defects import defects
 from  .views import revenues
@@ -26,6 +26,7 @@ urlpatterns = [
     path('dispatch_stock/', home_page.dispatch_stock, name='dispatch_stock'),
     path('uploadBulkSales/', sales_register.uploadBulkSales, name='uploadBulkSales'),
     path('accessary_sales/', sales_register.accessary_sales, name='accessary_sales'),
+    path('appliance_sales/', sales_register.appliance_sales, name='appliance_sales'),
     path('revenues/', revenues.revenues, name='revenues'),
     path('revert_to_stock/', revert_to_stock, name='revert_to_stock'),
     path('pending_sales/', pending_sales, name='pending_sales'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('feedback/', feedback, name='feedback'),
     path('add_to_stock/', add_to_stock, name='add_to_stock'),
     path('add_accessaries/', add_accessaries, name='add_accessaries'),
+    path('add_appliances/', add_appliances, name='add_appliances'),
     path('data_search/', search_and_filters.data_search, name='data_search'),
     path('upload_image/', data_updates.upload_image, name='upload_image'),
     path('change_password/', data_updates.change_password, name='change_password'),

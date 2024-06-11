@@ -2,13 +2,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models.main_storage import MainStorage
-from ..models.accessories import Accessories   
+from ..models.accessories import Accessories
+from ..models.appliances import Appliances
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import Group
-from ..models.user_profile import UserProfile
 from django.utils import timezone
 from django.http import JsonResponse
 import json
+from django.contrib import messages
 
 
 @login_required
@@ -97,17 +97,57 @@ def add_accessaries(request):
             model = request.POST.get('model')
             total = request.POST.get('quantity')
             cost = request.POST.get('cost_price')
-            instance = Accessories.objects.filter(item=item, model=model).first()
-            if instance is None:
-                Accessories.objects.create(
-                    held_by=request.user,
-                    item=item, model=model, total=total, previous_total=0, cost_per_item=cost,
-                    date_added=timezone.now(), date_modified=timezone.now())
-            else:
-                instance.previous_total = instance.total
-                instance.total += int(total)
-                instance.cost_per_item = cost
-                instance.date_modified = timezone.now()
-                instance.save()
+            try:
+                instance = Accessories.objects.filter(item=item, model=model).first()
+                if instance is None:
+                    Accessories.objects.create(
+                        held_by=request.user,
+                        item=item, model=model, total=total, previous_total=0, cost_per_item=cost,
+                        date_added=timezone.now(), date_modified=timezone.now())
+                    messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
+                else:
+                    instance.previous_total = instance.total
+                    instance.total += int(total)
+                    instance.cost_per_item = cost
+                    instance.date_modified = timezone.now()
+                    instance.save()
+            except Exception as e:
+                messages.error(request, 'Something went wrong, please try again.')
+            messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
         return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})
     return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})
+
+
+@login_required
+def add_appliances(request):
+    if request.user.is_staff and request.user.is_superuser:
+        data = Appliances.objects.all()
+        name_set = set()
+        model_set = set()
+        for item in data:
+            name_set.add(item.name)
+            model_set.add(item.model)
+        sorted_name_list = sorted(list(name_set))
+        sorted_model_list = sorted(list(model_set))
+        if request.method == 'POST':
+            item = request.POST.get('appliance_name')
+            model = request.POST.get('model')
+            total = request.POST.get('quantity')
+            cost = request.POST.get('cost_price')
+            try:
+                instance = Appliances.objects.filter(name=item, model=model).first()
+                if instance is None:
+                    Appliances.objects.create(
+                        name=item, model=model, total=total, cost=cost,
+                        date_added=timezone.now(), date_modified=timezone.now())
+                    messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
+                else:
+                    instance.total += int(total)
+                    instance.cost = cost
+                    instance.date_modified = timezone.now()
+                    instance.save()
+                    messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
+            except Exception as e:
+                messages.error(request, 'Something went wrong, please try again.')
+        return render(request, 'users/admin_sites/add_appliances.html', {'names': sorted_name_list, 'models': sorted_model_list})
+    return render(request, 'users/admin_sites/add_appliances.html', {'names': sorted_name_list, 'models': sorted_model_list})

@@ -71,7 +71,7 @@
                             <button type="submit" class="btn btn-danger w-100" onclick="sold()">verify sold</button>
                         </form>
                         <br>
-                        <form action="/system_core_1/revert_to_stock/" method="post">
+                        <form action="/gadgetsCorner/revert_to_stock/" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="device_imei" value="{{ item.device_imei }}">
                             <button type="submit" class="btn btn-warning w-100">Revert To Stock</button>
