@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
 from ..models.accessories import Accessories, Accessory_Sales
+from ..models.appliances import Appliances, Appliance_Sales
 from django.utils import timezone
 
 
@@ -21,6 +22,16 @@ def get_daily_sales_json_cash(request):
         today = timezone.now().date()
         sales = MainStorageAnalysis().get_daily_sales('Cash')
         accessories = Accessory_Sales.objects.filter(date_sold__date=today)
+        appliances = Appliance_Sales.objects.filter(date_sold__date=today)
+
+        # Calculate the total sales for the day
+        for item in appliances:
+            try:
+                sales[item.item + f"({item.model})"] += item.total
+            except KeyError:
+                sales[item.item + f"({item.model})"] = item.total
+
+        # Calculate the total sales for the day
         for item in accessories:
             try:
                 sales[item.item + f"({item.model})"] += item.total
@@ -73,8 +84,14 @@ def get_main_stock_analysis(request):
             in_stock=True, sold=False, missing=False, assigned=True, recieved=True, faulty=False,
             pending=False, issue=False)
         accessaries = Accessories.objects.all()
+        appliances = Appliances.objects.all()
+
         total = 0
         stock = {}
+        for item in appliances:
+            stock[item.name + f"({item.model})"] = item.total
+            total += item.total
+            
         for item in accessaries:
             stock[item.item + f"({item.model})"] = item.total
             total += item.total

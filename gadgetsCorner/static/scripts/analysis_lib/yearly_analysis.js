@@ -170,10 +170,8 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
         load.removeClass('loading-message');
 
         for (let i = 0; i < data.length; i++) {
-          if (data[i][1] > 10 || data[i][1] === 10) {
-            modelList.push(data[i][0]);
-            total.push(data[i][1]);
-          }
+          modelList.push(data[i][0]);
+          total.push(data[i][1]);
         }
 
         if (salesAnalystChartPro === null) {

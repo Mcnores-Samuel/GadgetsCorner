@@ -189,6 +189,9 @@ def accessary_sales(request):
                 return redirect('accessary_sales')
             try:
                 item = Accessories.objects.filter(item=accessory_name, model=model).first()
+                if item is None:
+                    messages.error(request, 'Invalid accessory name or model, please check and try again')
+                    return redirect('accessary_sales')
                 if item.total >= int(quantity):
                     item.previous_total = item.total
                     item.total -= int(quantity)
@@ -258,6 +261,9 @@ def appliance_sales(request):
                 return redirect('appliance_sales')
             try:
                 item = Appliances.objects.filter(name=appliance_name, model=model).first()
+                if item is None:
+                    messages.error(request, 'Invalid appliance name or model, please check and try again')
+                    return redirect('appliance_sales')
                 if item.total >= int(quantity):
                     item.total -= int(quantity)
                     item.date_modified = timezone.now()

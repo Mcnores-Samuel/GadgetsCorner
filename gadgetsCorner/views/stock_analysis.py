@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from ..models.user_profile import UserProfile
 from ..models.main_storage import MainStorage
 from ..models.accessories import Accessory_Sales
+from ..models.appliances import Appliance_Sales
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
@@ -37,9 +38,15 @@ def get_yearly_product_sales(request):
             in_stock=False, assigned=True,
             sold=True, missing=False,
             pending=False, stock_out_date__year=year)
+        accessory = Accessory_Sales.objects.filter(date_sold__year=year)
+        appliance = Appliance_Sales.objects.filter(date_sold__year=year)
         products = {}
         for product in data_set:
             products[product.phone_type] = products.get(product.phone_type, 0) + 1
+        for product in accessory:
+            products[product.item + f"({product.model})"] = products.get(product.item + f"({product.model})", 0) + product.total
+        for product in appliance:
+            products[product.item + f"({product.model})"] = products.get(product.item + f"({product.model})", 0) + product.total
         products = sorted(products.items(), key=lambda x: x[1], reverse=True)
         return JsonResponse(products, safe=False)
     return JsonResponse({'error': 'Invalid request.'})

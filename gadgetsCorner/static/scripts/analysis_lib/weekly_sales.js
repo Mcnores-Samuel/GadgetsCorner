@@ -33,7 +33,12 @@ function updateWeeklyChart(url, dest, chartType = 'line', loader) {
 
         Object.keys(data).forEach((day) => {
           const salesData = data[day];
-          const total = salesData.length;
+          let total = 0;
+          salesData.forEach((sale) => {
+            Object.keys(sale).forEach((key) => {
+              total += sale[key];
+            });
+          });
           nums.push(total);
           overallTotal += total;
         });

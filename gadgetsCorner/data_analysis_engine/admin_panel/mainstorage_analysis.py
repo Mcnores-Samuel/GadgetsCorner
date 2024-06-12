@@ -1,9 +1,8 @@
 """This model represent the entire stock available and sold in all posts."""
 from ...models.main_storage import MainStorage
-from ...models.accessories import Accessories, Accessory_Sales
-from ...models.user_profile import UserProfile
+from ...models.accessories import Accessory_Sales
+from ...models.appliances import Appliance_Sales
 from django.utils import timezone
-from django.contrib.auth.models import Group
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -46,8 +45,14 @@ class MainStorageAnalysis:
                 item = {f"{accessory.item}({accessory.model})": accessory.total}
                 days[week_days[accessory.date_sold.weekday()]].append(item)
                 item = {}
+            appliances = Appliance_Sales.objects.filter(
+                date_sold__range=[monday, sunday])
+            for appliance in appliances:
+                item = {f"{appliance.item}({appliance.model})": appliance.total}
+                days[week_days[appliance.date_sold.weekday()]].append(item)
+                item = {}
         for data in data_set:
-            item = {'type': data.phone_type}
+            item = {data.phone_type: 1}
             days[week_days[data.stock_out_date.weekday()]].append(item)
             item = {}
         return days
@@ -105,49 +110,21 @@ class MainStorageAnalysis:
         stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)
         return stock
     
-    # def get_sales_for_all_months(self, agent):
-    #     """Returns a dictionary containing the agent's sales for all months."""
-    #     months = ['January', 'February', 'March', 'April', 'May',
-    #               'June', 'July', 'August', 'September', 'October',
-    #               'November', 'December']
-    #     if agent.groups.filter(name='agents').exists():
-    #         agent_profile = AgentProfile.objects.get(user=agent)
-    #         if agent_profile:
-    #             year = timezone.now().date().year
-    #             sales = {}
-    #             for month in months:
-    #                 sales[month] = MainStorage.objects.filter(
-    #                     agent=agent, in_stock=False,
-    #                     assigned=True,
-    #                     sold=True,
-    #                     stock_out_date__month=months.index(month)+1,
-    #                     stock_out_date__year=year,
-    #                     pending=False, issue=False,
-    #                     recieved=True, faulty=False).count()
-    #             overall = 0 #placeholder
-    #             return sales, overall
-    #     elif (agent.groups.filter(name='staff_members').exists() or
-    #           agent.is_superuser):
-    #         sales = {}
-    #         overall_sales = {}
-    #         main_shop_staff = Group.objects.get(name='main_shop')
-    #         representatives = UserProfile.objects.filter(groups=main_shop_staff)
-    #         for month in months:
-    #             total = MainStorage.objects.filter(
-    #                 agent__in=representatives, in_stock=False,
-    #                 assigned=True, sold=True, missing=False,
-    #                 pending=False, stock_out_date__month=months.index(month)+1,
-    #                 stock_out_date__year=timezone.now().date().year,
-    #                 issue=False, recieved=True, faulty=False).count()
-    #             main = MainStorage.objects.filter(in_stock=False,
-    #                 assigned=True, sold=True, missing=False,
-    #                 pending=False, stock_out_date__month=months.index(month)+1,
-    #                 stock_out_date__year=timezone.now().date().year,
-    #                 issue=False, recieved=True, faulty=False).count()
-    #             sales[month] = total
-    #             overall_sales[month] = main
-    #         return sales, overall_sales
-    #     return None
+    def get_sales_for_all_months(self, agent):
+        """Returns a dictionary containing the agent's sales for all months."""
+        months = ['January', 'February', 'March', 'April', 'May',
+                  'June', 'July', 'August', 'September', 'October',
+                  'November', 'December']
+        sales = {}
+        for month in months:
+            total = MainStorage.objects.filter(
+                in_stock=False,
+                assigned=True, sold=True, missing=False,
+                pending=False, stock_out_date__month=months.index(month)+1,
+                stock_out_date__year=timezone.now().date().year,
+                issue=False, recieved=True, faulty=False).count()
+            sales[month] = total
+        return sales
     
     # def overall_stock(self):
     #     """This function returns a JSON object containing
