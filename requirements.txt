@@ -20,12 +20,13 @@ django-storages==1.14.2
 django-webpush==0.3.6
 frozenlist==1.4.1
 gunicorn==21.2.0
-http_ece==1.2.0
+http-ece==1.2.0
 idna==3.7
 jmespath==1.0.1
 multidict==6.0.5
 packaging==23.2
 pillow==10.2.0
+pkg_resources==0.0.0
 psycopg2-binary==2.9.9
 py-vapid==1.9.0
 pycparser==2.22
