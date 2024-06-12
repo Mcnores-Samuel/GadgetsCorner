@@ -23,8 +23,5 @@
   "env": {
     "PYTHONUNBUFFERED": "1",
     "DJANGO_SETTINGS_MODULE": "GadgetsCorner.settings" 
-  },
-  "functions": {
-    "runtime": "python3.9"
   }
 }
