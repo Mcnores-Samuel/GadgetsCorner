@@ -180,3 +180,66 @@ class MainStorageAnalysis:
         except EmptyPage:
             all_pending_sales = all_pending_sales.page(all_pending_sales.num_pages)
         return all_pending_sales, total_pending_sales
+    
+    def estimated_revenue(self):
+        """This function returns the estimated revenue from all sales."""
+        current_month = timezone.now().date().month
+        current_year = timezone.now().date().year
+        phones = MainStorage.objects.filter(
+            in_stock=False, assigned=True,
+            sold=True, missing=False,
+            pending=False, stock_out_date__month=current_month,
+            stock_out_date__year=current_year)
+        accessories = Accessory_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        appliances = Appliance_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        total = 0
+        for phone in phones:
+            total += phone.price
+        for accessory in accessories:
+            total += accessory.price_sold
+        for appliance in appliances:
+            total += appliance.price_sold
+        return total
+    
+    def estimated_profit(self):
+        """This function returns the estimated profit from all sales."""
+        current_month = timezone.now().date().month
+        current_year = timezone.now().date().year
+        phones = MainStorage.objects.filter(
+            in_stock=False, assigned=True,
+            sold=True, missing=False,
+            pending=False, stock_out_date__month=current_month,
+            stock_out_date__year=current_year)
+        accessories = Accessory_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        appliances = Appliance_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        total = 0
+        for phone in phones:
+            total += phone.price - phone.cost
+        for accessory in accessories:
+            total += accessory.profit
+        for appliance in appliances:
+            total += appliance.profit
+        return total
+    
+    def estimated_loss(self):
+        """This function returns the estimated loss from all sales."""
+        current_month = timezone.now().date().month
+        current_year = timezone.now().date().year
+        phones = MainStorage.objects.filter(
+            in_stock=False, assigned=True,
+            sold=True, missing=False,
+            pending=False, stock_out_date__month=current_month,
+            stock_out_date__year=current_year)
+        total = 0
+        for phone in phones:
+            if phone.price < phone.cost:
+                total += phone.cost - phone.price
+        return total

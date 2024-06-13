@@ -27,5 +27,5 @@ $(document).ready(() => {
     } else {
       modal.modal('hide');
     }
-  }, 5000);
+  }, 20000);
 });

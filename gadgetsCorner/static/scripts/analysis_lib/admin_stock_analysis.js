@@ -3,11 +3,21 @@
  * @param {None} - None
  */
 function adminStockAnalysis() {
-  const overallStock = $('#overall_stock_analysis');
-  const overallSales = $('#overall_sales_analysis');
+  const estimated_revenue = $('#estimated_revenue_analysis');
+  const estimated_profit = $('#estimated_profit_analysis');
   const mainShopSales = $('#main_shop_sales_analysis');
   const progress = $('.progress-bar');
   const target = $('.text-end');
+
+  function formatRevenue(value) {
+    if (value >= 1000000) {
+      return (value / 1000000).toFixed(1) + 'M';
+    } else if (value >= 1000) {
+      return (value / 1000).toFixed(1) + 'K';
+    } else {
+      return value.toFixed(2);
+    }
+  }
 
   function updateStockAnalysis() {
     $.ajax({
@@ -15,32 +25,26 @@ function adminStockAnalysis() {
       type: 'GET',
       dataType: 'json',
       beforeSend() {
-        overallStock.html('Loading...');
-        overallSales.html('Loading...');
+        estimated_revenue.html('Loading...');
+        estimated_profit.html('Loading...');
         mainShopSales.html('Loading...');
         target.html('Loading...');
         progress.css('width', '100%');
         progress.html('0%');
       },
       success(data) {
-        overallStock.html(`${data.overall_stock} Devices`);
-        overallSales.html(`${data.overall_sales} Devices`);
-        mainShopSales.html(`${data.sales} Devices`);
-        target.html(`${data.target} Devices`);
-        if (data.progress < 50) {
-          progress.css('background-color', 'red');
-        }
-        if (data.progress >= 50 && data.progress < 75) {
-          progress.css('background-color', 'blue');
-        }
-        if (data.progress >= 75) {
-          progress.css('background-color', 'purple');
-        }
+        console.log(data);
+        estimated_revenue.html(`${formatRevenue(data.estimated_revenue)}`);
+        estimated_profit.html(`${formatRevenue(data.estimated_profit)}`);
+        mainShopSales.html(`${formatRevenue(data.main_shop_sales)}`);
+        target.html(`${formatRevenue(data.target)}`);
         progress.css('width', `${data.progress}%`);
         progress.html(`${data.progress}%`);
       },
     });
   }
+
   setTimeout(updateStockAnalysis, 3000);
 }
+
 adminStockAnalysis();

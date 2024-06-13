@@ -55,18 +55,13 @@ def get_yearly_product_sales(request):
 def admin_stock_analysis(request):
     """This function returns a JSON object containing the daily stock data."""
     if request.method == 'GET':
-        main_shop_staff = Group.objects.get(name='main_shop')
-        representatives = UserProfile.objects.filter(groups=main_shop_staff).first()
-        sales = MainStorageAnalysis().get_agent_stock_out(representatives)
-        overall_sales = MainStorageAnalysis().overall_sales()
-        overall_stock = MainStorageAnalysis().overall_stock()
-        total = 0
-        for value in sales:
-            total += value[1]
+        estimated_revenue = MainStorageAnalysis().estimated_revenue()
+        estimated_profit = MainStorageAnalysis().estimated_profit()
+        print(estimated_revenue)
+        print(estimated_profit)
         context = {
-            'sales': total,
-            'overall_sales': overall_sales,
-            'overall_stock': overall_stock,
+            'estimated_revenue': estimated_revenue,
+            'estimated_profit': estimated_profit
         }
         return JsonResponse(context, safe=False)
     return JsonResponse({'error': 'Invalid request.'})
