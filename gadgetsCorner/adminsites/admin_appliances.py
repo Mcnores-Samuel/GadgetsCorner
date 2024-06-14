@@ -18,7 +18,7 @@ class Appliance_SalesAdmin(admin.ModelAdmin):
     """This class represents the Appliance_SalesAdmin model.
     It is used to customize the admin interface for the Appliance_Sales model.
     """
-    list_display = ('sold_by', 'item', 'model', 'total', 'cost', 'date_sold')
+    list_display = ('sold_by', 'item', 'model', 'total', 'cost', 'price_sold', 'profit', 'date_sold')
     list_filter = ('sold_by', 'item', 'model', 'total', 'cost', 'date_sold')
     search_fields = ('sold_by', 'item', 'model', 'total', 'cost', 'date_sold')
     ordering = ('-id',)

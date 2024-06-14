@@ -8,16 +8,16 @@ from .adminsites.admin_contacts import ContactAdmin
 from .adminsites.admin_refarbished_phone import RefarbishedDevicesAdmin
 from .adminsites.accessories import AdminAccessories, AdminAccessary_Sales
 from .adminsites.admin_appliances import AppliancesAdmin, Appliance_SalesAdmin
+from .adminsites.admin_daily_expenses import DailyExpensesAdmin
 from .models.user_profile import UserProfile, UserAvatar
 from .models.main_storage import MainStorage
 from .models.feedback import Feedback
 from .models.notifications import Notifications
 from .models.contacts import Contact
+from .models.daily_expenses import DailyExpenses
 from .models.refarbished_devices import RefarbishedDevices
-from .models.prices import YellowPrices
 from .models.accessories import Accessories, Accessory_Sales
 from .models.appliances import Appliances, Appliance_Sales
-from .adminsites.admin_prices import AdminYellowPrices
 
 
 
@@ -32,9 +32,9 @@ admin.site.register(UserAvatar, UserAvatarAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Notifications, NotificationsAdmin)
 admin.site.register(Contact, ContactAdmin)
-admin.site.register(YellowPrices, AdminYellowPrices)
 admin.site.register(RefarbishedDevices, RefarbishedDevicesAdmin)
 admin.site.register(Accessories, AdminAccessories)
 admin.site.register(Accessory_Sales, AdminAccessary_Sales)
 admin.site.register(Appliances, AppliancesAdmin)
 admin.site.register(Appliance_Sales, Appliance_SalesAdmin)
+admin.site.register(DailyExpenses, DailyExpensesAdmin)

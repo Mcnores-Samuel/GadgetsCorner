@@ -47,6 +47,22 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+
+            .daily_expenses {
+                font-size: 12px;
+                color: #f00;
+                font-weight: bold;
+            }
+            .estimated_profit {
+                font-size: 12px;
+                color: #0f0;
+                font-weight: bold;
+            }
+            .profit {
+                font-size: 9px;
+                color: #0f0;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -328,7 +344,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="icon">
                                         <span class="material-icons">
-                                            inventory
+                                            attach_money
                                         </span>
                                     </div>
                                     <div class="">
@@ -342,13 +358,15 @@
                     <div class="col-md-3 col-12">
                         <div class="card card-bg text-light">
                             <div class="card-body">
+
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="material-icons">
-                                        credit_score
-                                    </span>
+                                    <div>
+                                        <p class="daily_expenses">Expenses: <span id="daily_expenses_analysis">0</span></p>
+                                        <p class="daily_expenses">Loss: <span id="loss_analysis">0</span></p>
+                                    </div>
                                     <div class="">
-                                        <p class="fw-bold">Estimated Profit</p>
-                                        <p id="estimated_profit_analysis" class="fw-bold">0</p>
+                                        <p class="estimated_profit">Estimated Profit</p>
+                                        <p id="estimated_profit_analysis" class="estimated_profit">0</p>
                                     </div>
                                 </div>
                             </div>
@@ -360,12 +378,12 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="icon ">
                                         <span class="material-icons">
-                                            outbound
+                                            trending_down
                                         </span>
                                     </div>
                                     <div class="">
                                         <p class="fw-bold">Estimated Loss</p>
-                                        <p id="main_shop_sales_analysis" class="fw-bold">0</p>
+                                        <p id="estimated_loss_analysis" class="fw-bold">0</p>
                                     </div>
                                 </div>
                             </div>

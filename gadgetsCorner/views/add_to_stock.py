@@ -111,9 +111,9 @@ def add_accessaries(request):
                     instance.cost_per_item = cost
                     instance.date_modified = timezone.now()
                     instance.save()
+                    messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
             except Exception as e:
                 messages.error(request, 'Something went wrong, please try again.')
-            messages.success(request, 'Successfully added {} {}(s)'.format(total, item))
         return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})
     return render(request, 'users/admin_sites/add_accessaries.html', {'names': sorted_name_list, 'models': sorted_model_list})
 

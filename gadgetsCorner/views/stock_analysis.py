@@ -4,6 +4,7 @@ from ..models.user_profile import UserProfile
 from ..models.main_storage import MainStorage
 from ..models.accessories import Accessory_Sales
 from ..models.appliances import Appliance_Sales
+from ..models.daily_expenses import DailyExpenses
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
@@ -57,11 +58,16 @@ def admin_stock_analysis(request):
     if request.method == 'GET':
         estimated_revenue = MainStorageAnalysis().estimated_revenue()
         estimated_profit = MainStorageAnalysis().estimated_profit()
-        print(estimated_revenue)
-        print(estimated_profit)
+        expenses = DailyExpenses.objects.filter(
+            date__year=timezone.now().year,
+            date__month=timezone.now().month)
+        total_expenses = sum([expense.amount for expense in expenses])
+        estimated_loss = MainStorageAnalysis().estimated_loss()
         context = {
             'estimated_revenue': estimated_revenue,
-            'estimated_profit': estimated_profit
+            'estimated_profit': estimated_profit,
+            'expenses': total_expenses,
+            'estimated_loss': estimated_loss
         }
         return JsonResponse(context, safe=False)
     return JsonResponse({'error': 'Invalid request.'})

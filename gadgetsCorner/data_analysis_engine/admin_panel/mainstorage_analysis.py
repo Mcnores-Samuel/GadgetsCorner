@@ -2,6 +2,7 @@
 from ...models.main_storage import MainStorage
 from ...models.accessories import Accessory_Sales
 from ...models.appliances import Appliance_Sales
+from ...models.daily_expenses import DailyExpenses
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -200,9 +201,9 @@ class MainStorageAnalysis:
         for phone in phones:
             total += phone.price
         for accessory in accessories:
-            total += accessory.price_sold
+            total += (accessory.price_sold * accessory.total)
         for appliance in appliances:
-            total += appliance.price_sold
+            total += (appliance.price_sold * appliance.total)
         return total
     
     def estimated_profit(self):
@@ -238,6 +239,9 @@ class MainStorageAnalysis:
             sold=True, missing=False,
             pending=False, stock_out_date__month=current_month,
             stock_out_date__year=current_year)
+        accessories = Accessory_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
         total = 0
         for phone in phones:
             if phone.price < phone.cost:
