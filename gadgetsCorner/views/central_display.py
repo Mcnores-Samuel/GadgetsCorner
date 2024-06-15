@@ -10,8 +10,8 @@ from ..models.appliances import Appliances, Appliance_Sales
 from ..forms.filters import FilterAgentAndDataSales
 from django.utils import timezone
 import os
-from django.db.models import Sum, F
-from django.shortcuts import render
+from django.db.models import Sum
+from django.shortcuts import redirect
 
 
 @login_required
@@ -94,8 +94,9 @@ def main_sales_details(request):
                 stock[data.name] = stock.get(data.name, 0) + 1
 
             stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)
+            data_url = '/' + os.environ.get('ADMIN_URL') + '/'
             context = {'stock': stock, 'user': request.user.username,
-                       'form': form, 'total': total}
+                       'form': form, 'total': total, 'data_url': data_url}
             return render(request, 'users/admin_sites/main_sales_details.html', context)
         else:
             form = FilterAgentAndDataSales()
@@ -122,8 +123,10 @@ def main_sales_details(request):
             for data in data_set:
                 stock[data.name] = stock.get(data.name, 0) + 1
             stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)
-    context = {'form': form, 'stock': stock,
-               'user': request.user.username,
-               'total': total}
-    return render(request, 'users/admin_sites/main_sales_details.html', context)
+            data_url = '/' + os.environ.get('ADMIN_URL') + '/'
+            context = {'form': form, 'stock': stock,
+                    'user': request.user.username,
+                    'total': total, 'data_url': data_url}
+            return render(request, 'users/admin_sites/main_sales_details.html', context)
+    return redirect('sign_in')
 

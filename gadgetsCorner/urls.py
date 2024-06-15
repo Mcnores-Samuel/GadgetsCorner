@@ -9,6 +9,7 @@ from .views.pending_sales import total_pending_sales, revert_to_stock, pending_s
 from .views.defects import defects
 from  .views import revenues
 from .views.system_routine_updates import (morning_update, afternoon_update, evening_update)
+from .views.daily_expenses import add_daily_expense
 
 
 urlpatterns = [
@@ -30,6 +31,7 @@ urlpatterns = [
     path('revenues/', revenues.revenues, name='revenues'),
     path('revert_to_stock/', revert_to_stock, name='revert_to_stock'),
     path('pending_sales/', pending_sales, name='pending_sales'),
+    path('add_daily_expense/', add_daily_expense, name='add_daily_expense'),
     path('defects/', defects, name='defects'),
     # General access points
     path('profile/', data_updates.profile, name='profile'),

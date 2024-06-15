@@ -58,32 +58,32 @@
     <div class="loading-target"></div>
     <h1 class="text-center fw-bold text-light">Add To Stock: Total Scanned: <span  id="total"></span></h1>
     <p class="text-center fw-bold text-light">Please enter the Imei numbers and fill in the fields that follows with complete and accurate details</p>
-    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Add Accessaries</a>
-    <a href="{% url 'add_appliances' %}" class="btn common-bg">Add Appliances</a>
+    <a href="{% url 'add_accessaries' %}" class="btn common-bg fw-bold">Add Accessaries</a>
+    <a href="{% url 'add_appliances' %}" class="btn common-bg fw-bold">Add Appliances</a>
     <hr>
     <div class="data_container">
         <div class="form_container">
             <form action="" method="post" class="shadow-lg p-3 mb-5 rounded bg-dark" id="stock_form">
                 {% csrf_token %}
                 <p>
-                    <label for="id_device_imei">Device imei:</label>
+                    <label for="id_device_imei" class="text-light">Device imei:</label>
                     <input type="text" name="device_imei" class="form-control bg-dark text-light" placeholder="Enter IMEI number"
                     required="" minlength="15" maxlength="15"
                     autofocus="autofocus" id="id_device_imei">
                 </p>
                 <p>
-                    <label for="id_device_imei_2">Device imei 2:</label>
+                    <label for="id_device_imei_2" class="text-light">Device imei 2:</label>
                     <input type="text" name="device_imei_2" class="form-control bg-dark text-light" placeholder="Enter IMEI number 2"
                     required="" minlength="15" maxlength="15" id="id_device_imei_2">
                 </p>
                 <hr class="text-danger" style="height: 15px;">
                 <p>
-                    <label for="id_cost_price">Cost price:</label>
+                    <label for="id_cost_price" class="text-light">Cost price:</label>
                     <input type="text" name="cost_price" class="form-control bg-dark text-light" placeholder="Enter cost price"
                     id="id_cost_price">
                 </p>
                 <p>
-                    <label for="id_name">Name:</label>
+                    <label for="id_name" class="text-light">Name:</label>
                     <input type="text" name="name" class="form-control bg-dark text-light" placeholder="Enter phone name"
                     list="phone_list" id="id_name">   
                 </p>
@@ -93,7 +93,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_model">Model:</label>
+                    <label for="id_model" class="text-light">Model:</label>
                     <input type="text" name="model" class="form-control bg-dark text-light" placeholder="Enter model"
                     list="model_list" id="id_model">
                 </p>
@@ -103,7 +103,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_category">Category</label>
+                    <label for="id_category" class="text-light">Category</label>
                     <input type="text" name="category" class="form-control bg-dark text-light" placeholder="Enter category"
                     id="id_category" list="category_list">
                 </p>
@@ -113,7 +113,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_spec">Spec</label>
+                    <label for="id_spec" class="text-light">Spec</label>
                     <input type="text" name="spec" class="form-control bg-dark text-light" placeholder="Enter spec"
                     id="id_spec" list="spec_list">
                 </p>
@@ -123,7 +123,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_supplier">Supplier:</label>
+                    <label for="id_supplier" class="text-light">Supplier:</label>
                     <input type="text" name="supplier" class="form-control bg-dark text-light"
                     placeholder="Enter supplier" id="id_supplier">
                 </p>
@@ -135,7 +135,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card bg-dark">
-                    <div class="card-header">
+                    <div class="card-header bg-light">
                         <h4 class="card-title text-center fw-bold">Scanned Items</h4>
                     </div>
                     <div class="card-body">

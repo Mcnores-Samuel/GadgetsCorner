@@ -13,8 +13,8 @@
     <div class="loading-target"></div>
     <h1 class="text-center fw-bold text-light">Appliances Sales</h1>
     <p class="text-center fw-bold text-light">Please enter the Appliance name and the quantity to sell</p>
-    <a href="{% url 'add_to_stock' %}" class="btn common-bg">Phones</a>
-    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Accessaries</a>
+    <a href="{% url 'data_search' %}" class="btn common-bg">Phones</a>
+    <a href="{% url 'accessary_sales' %}" class="btn common-bg">Accessaries</a>
     <hr>
     <form action="" method="post" class="bg-dark shadow-lg p-3 mb-5 rounded">
         {% csrf_token %}

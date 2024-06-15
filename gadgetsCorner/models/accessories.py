@@ -76,7 +76,7 @@ class Accessory_Sales(models.Model):
 
 
     def __str__(self):
-        return self.device_name
+        return self.item
     
     class Meta:
         db_table = 'accessory_sales'

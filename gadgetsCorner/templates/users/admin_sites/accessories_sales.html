@@ -11,9 +11,12 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <h1 class="text-center fw-bold text-light">Accessories Sales</h1>
-    <p class="text-center fw-bold text-light">Please enter the Accessary name and the quantity to sell</p>
-    <a href="http://">Phones</a>
+    <div class="info bg-info">
+        <h1 class="text-center fw-bold text-light">Accessories Sales</h1>
+        <p class="text-center fw-bold text-light">Please enter the Accessary name and the quantity to sell</p>
+        <a href="{% url 'data_search' %}" class="common-bg btn">Phones</a>
+        <a href="{% url 'appliance_sales' %}" class="common-bg btn">Appliances</a>
+    </div>
     <hr>
     <form action="" method="post" class="bg-dark shadow-lg p-3 mb-5 rounded">
         {% csrf_token %}
@@ -48,4 +51,31 @@
             id="id_selling_price" min="0" required>
         </p>
         <button type="submit" class="btn btn-primary" id="submit">submit</button>
+    </form>
+</div>
+<style>
+    form {
+        border: 1px solid red;
+    }
+    .info {
+        border: 2px solid black;
+        padding: 15px;
+    }
+
+    hr {
+        border: 2px solid white;
+    }
+</style>
+<script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', () => {
+        const submit = document.querySelector('#submit');
+        submit.disabled = true;
+        const loading = document.createElement('div');
+        loading.classList.add('loading-message');
+        loading.innerHTML = 'Loading...';
+        const target = document.querySelector('.loading-target');
+        target.appendChild(loading);
+    });
+</script>
 {% endblock %}

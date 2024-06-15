@@ -44,10 +44,10 @@ function adminStockAnalysis() {
       },
       success(data) {
         estimated_revenue.html(`${formatRevenue(data.estimated_revenue)}`);
-        estimated_profit.html(`${formatRevenue(data.estimated_profit)}`);
+        estimated_profit.html(`${formatRevenue(data.estimated_profit)} <span class="material-icons text-success" style="font-size: 12px">arrow_upward</span>`);
         daily_expenses.html(`${formatRevenue(data.expenses)}`);
-        loss.html(`${formatRevenue(data.estimated_loss)}`);
-        estimated_loss.html(`${formatRevenue(data.estimated_loss)}`);
+        loss.html(`- ${formatRevenue(data.estimated_loss)} <span class="material-icons text-danger" style="font-size: 12px">arrow_downward</span>`);
+        estimated_loss.html(`- ${formatRevenue(data.estimated_loss)} <span class="material-icons text-danger" style="font-size: 12px">arrow_downward</span>`);
         target.html(`${formatRevenue(data.target)}`);
         progress.css('width', `${data.progress}%`);
         progress.html(`${data.progress}%`);

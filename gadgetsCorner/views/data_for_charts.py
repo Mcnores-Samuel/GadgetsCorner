@@ -27,9 +27,9 @@ def get_daily_sales_json_cash(request):
         # Calculate the total sales for the day
         for item in appliances:
             try:
-                sales[item.item + f"({item.model})"] += item.total
+                sales[item.item] += item.total
             except KeyError:
-                sales[item.item + f"({item.model})"] = item.total
+                sales[item.item] = item.total
 
         # Calculate the total sales for the day
         for item in accessories:

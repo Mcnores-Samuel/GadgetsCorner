@@ -27,6 +27,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{{ data_url }}" class="btn common-bg">Manage</a>
     </form>
 </div>
 <br>

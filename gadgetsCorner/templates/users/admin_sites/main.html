@@ -63,6 +63,11 @@
                 color: #0f0;
                 font-weight: bold;
             }
+            .preview {
+                font-size: 12px;
+                color: #fff;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -266,6 +271,8 @@
                     <input type="search" id="search_term" name="search_query" class="form-control me-2"
                     placeholder="Search IMEI number or Contract number" aria-label="Search" aria-describedby="search-addon" />
                     <button type="submit" class="btn search-btn material-icons">search</button>
+                    <button type="button" class="btn common-bg" style="margin-left: 10px;"
+                    data-bs-toggle="modal" data-bs-target="#viewExpensesModal">Expenses</button>
                 </form>
                 <div class="notify">
                     <div class="dropdown">
@@ -348,8 +355,8 @@
                                         </span>
                                     </div>
                                     <div class="">
-                                        <p class="fw-bold">Estimated Revenue</p>
-                                        <p class="fw-bold" id="estimated_revenue_analysis">0</p>
+                                        <p class="preview">Estimated Revenue</p>
+                                        <p class="preview" id="estimated_revenue_analysis">0</p>
                                     </div>
                                 </div>
                             </div>
@@ -382,8 +389,8 @@
                                         </span>
                                     </div>
                                     <div class="">
-                                        <p class="fw-bold">Estimated Loss</p>
-                                        <p id="estimated_loss_analysis" class="fw-bold">0</p>
+                                        <p class="preview">Estimated Loss</p>
+                                        <p id="estimated_loss_analysis" class="preview text-danger">0</p>
                                     </div>
                                 </div>
                             </div>
@@ -393,11 +400,11 @@
                         <div class="card card-bg text-light">
                             <div class="card-body">
                                 <div class="">
-                                    <p class="fw-bold">Grand Sales Total</p>
+                                    <p class="preview">Grand Sales Total</p>
                                     <div class="">
-                                        <div class="text-end fw-bold"></div>
+                                        <div class="text-end preview"></div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated fw-bold"
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated preview"
                                             role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
                                             aria-valuemax="{{ terget }}"></div>
                                         </div>
@@ -575,6 +582,32 @@
                                 </p>
                                 {% webpush_button with_class="btn common-bg" %}
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="viewExpensesModal" tabindex="-1" aria-labelledby="viewExpensesModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="viewExpensesModalLabel">Expenses  
+                                <span><a href="{{ admin_url }}gadgetsCorner/dailyexpenses/" class="btn common-bg">View Expenses</a></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body bg-dark">
+                            <form action="{% url 'add_daily_expense' %}" method="post">
+                                {% csrf_token %}
+                                <label for="name" class="text-light">Description</label>
+                                <input type="text" name="name" id="name" class="form-control bg-dark text-light" required
+                                placeholder="Name or describe the money usage type">
+                                <br>
+                                <label for="amount" class="text-light">Amount</label>
+                                <input type="number" name="amount" id="amount" class="form-control bg-dark text-light" required
+                                placeholder="Enter the amount spent">
+                                <br>
+                                <button type="submit" class="btn common-bg w-100 fw-bold">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>

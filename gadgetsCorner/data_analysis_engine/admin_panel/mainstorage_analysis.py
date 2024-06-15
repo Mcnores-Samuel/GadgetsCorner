@@ -246,4 +246,7 @@ class MainStorageAnalysis:
         for phone in phones:
             if phone.price < phone.cost:
                 total += phone.cost - phone.price
+        for accessory in accessories:
+            if accessory.cost> accessory.price_sold:
+                total += (accessory.cost * accessory.total) - (accessory.price_sold * accessory.total)
         return total
