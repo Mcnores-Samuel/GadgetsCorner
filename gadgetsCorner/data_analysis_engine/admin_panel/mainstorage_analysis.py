@@ -125,6 +125,18 @@ class MainStorageAnalysis:
                 stock_out_date__year=timezone.now().date().year,
                 issue=False, recieved=True, faulty=False).count()
             sales[month] = total
+
+        for month in months:
+            data = Accessory_Sales.objects.filter(
+                date_sold__month=months.index(month)+1,
+                date_sold__year=timezone.now().date().year)
+            for item in data:
+                sales[month] += item.total
+            data = Appliance_Sales.objects.filter(
+                date_sold__month=months.index(month)+1,
+                date_sold__year=timezone.now().date().year)
+            for item in data:
+                sales[month] += item.total
         return sales
     
     # def overall_stock(self):
@@ -221,6 +233,10 @@ class MainStorageAnalysis:
         appliances = Appliance_Sales.objects.filter(
             date_sold__month=current_month,
             date_sold__year=current_year)
+        daily_expenses = DailyExpenses.objects.filter(
+            date__month=current_month,
+            date__year=current_year)
+        
         total = 0
         for phone in phones:
             total += phone.price - phone.cost
@@ -228,6 +244,8 @@ class MainStorageAnalysis:
             total += accessory.profit
         for appliance in appliances:
             total += appliance.profit
+        for expense in daily_expenses:
+            total -= expense.amount
         return total
     
     def estimated_loss(self):
