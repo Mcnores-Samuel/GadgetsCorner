@@ -6,9 +6,9 @@ function sendSalesUpdate() {
 
   // Define the update times
   const updateTimes = [
-    { hour: 8, minute: 0, endpoint: '/system_core_1/morning_update/' },
-    { hour: 12, minute: 0, endpoint: '/system_core_1/afternoon_update/' },
-    { hour: 17, minute: 0, endpoint: '/system_core_1/evening_update/' },
+    { hour: 6, minute: 0, endpoint: '/gadgetsCorner/system_routine_update' },
+    { hour: 12, minute: 0, endpoint: '/gadgetsCorner/system_routine_update' },
+    { hour: 18, minute: 0, endpoint: '/gadgetsCorner/system_routine_update' },
   ];
 
   // Check if the current time matches any update time

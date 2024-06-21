@@ -22,8 +22,8 @@ def main_stock_details(request):
     if request.method == 'GET' and request.user.is_staff:
         # Fetch data in one query
         data_set = MainStorage.objects.filter(
-            agent=request.user, in_stock=True, sold=False,
-            missing=False, assigned=True).order_by('id')
+            in_stock=True, sold=False,
+            missing=False, assigned=True, pending=False).order_by('id')
 
         # Fetch and aggregate total counts for accessories and appliances
         accessories = Accessories.objects.values('item', 'model').annotate(total_count=Sum('total'))
@@ -95,15 +95,13 @@ def main_sales_details(request):
 
             stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)
             data_url = '/' + os.environ.get('ADMIN_URL') + '/'
-            context = {'stock': stock, 'user': request.user.username,
-                       'form': form, 'total': total, 'data_url': data_url}
+            context = {'stock': stock, 'form': form, 'total': total, 'data_url': data_url}
             return render(request, 'users/admin_sites/main_sales_details.html', context)
         else:
             form = FilterAgentAndDataSales()
             year = timezone.now().date().year
             month = timezone.now().date().month
             data_set = MainStorage.objects.filter(
-                agent=request.user,
                 in_stock=False, sold=True,
                 missing=False, assigned=True, pending=False,
                 stock_out_date__month=month, stock_out_date__year=year)
@@ -115,11 +113,30 @@ def main_sales_details(request):
             stock = {}
 
             for data in appliances:
+                cost = data.total * data.cost
+                price = data.total * data.price_sold
+                profit = data.profit
                 stock[data.item + f"({data.model})"] = stock.get(data.item + f"({data.model})", 0) + data.total
+                stock['total_cost'] = stock.get('total_cost', 0) + cost
+                stock['total_price'] = stock.get('total_price', 0) + price
+                stock['total_profit'] = stock.get('total_profit', 0) + profit
                 total += data.total
+                cost = 0
+                price = 0
+                profit = 0
+            
             for data in accessories:
+                cost = data.total * data.cost
+                price = data.total * data.price_sold
+                profit = data.profit
                 stock[data.item + f"({data.model})"] = stock.get(data.item + f"({data.model})", 0) + data.total
+                stock['total_cost'] = stock.get('total_cost', 0) + cost
+                stock['total_price'] = stock.get('total_price', 0) + price
+                stock['total_profit'] = stock.get('total_profit', 0) + profit
                 total += data.total
+                cost = 0
+                price = 0
+                profit = 0
             for data in data_set:
                 stock[data.name] = stock.get(data.name, 0) + 1
             stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)

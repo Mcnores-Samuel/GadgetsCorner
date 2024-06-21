@@ -44,7 +44,9 @@ def data_search(request):
                 queryset = queryset.filter(
                         Q(device_imei__icontains=search_query) |
                         Q(device_imei_2__icontains=search_query) |
-                        Q(contract_no__icontains=search_query)
+                        Q(contract_no__icontains=search_query) |
+                        Q(sales_type__icontains=search_query) |
+                        Q(category__icontains=search_query)
                     )
                 return render(request, 'users/admin_sites/search.html', {'data': queryset})
         return render(request, 'users/admin_sites/search.html', {'data': queryset})

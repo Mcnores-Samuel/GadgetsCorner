@@ -15,7 +15,7 @@ function adminStockAnalysis() {
     if (value >= 1000000) {
       return (value / 1000000).toFixed(3) + 'M';
     } else if (value >= 1000) {
-      return (value / 1000).toFixed(1) + 'K';
+      return (value / 1000).toFixed(2) + 'K';
     } else {
       return value.toFixed(2);
     }
@@ -55,7 +55,7 @@ function adminStockAnalysis() {
     });
   }
 
-  setTimeout(updateStockAnalysis, 3000);
+  setTimeout(updateStockAnalysis, 1000);
 }
 
 adminStockAnalysis();

@@ -8,7 +8,7 @@ from .views.add_to_stock import add_to_stock, add_accessaries, add_appliances
 from .views.pending_sales import total_pending_sales, revert_to_stock, pending_sales
 from .views.defects import defects
 from  .views import revenues
-from .views.system_routine_updates import (morning_update, afternoon_update, evening_update)
+from .views.system_routine_updates import system_routine_update
 from .views.daily_expenses import add_daily_expense
 
 
@@ -61,9 +61,7 @@ urlpatterns = [
     path('get_yearly_sales/', data_for_charts.get_yearly_sales, name='get_yearly_sales'),
     path('get_yearly_sales_total/', data_for_charts.get_yearly_sales_total, name='get_yearly_sales_total'),
     #system email and notifications auto updates
-    path('morning_update/', morning_update, name='morning_update'),
-    path('afternoon_update/', afternoon_update, name='afternoon_update'),
-    path('evening_update/', evening_update, name='evening_update'),
+    path('system_routine_update/', system_routine_update, name='system_routine_update'),
     # Revenue analysis and concurent operations
     path('updateCreditPrices/', revenues.updateCreditPrices, name='updateCreditPrices'),
     path('calculateCreditRevenue/', revenues.calculateCreditRevenue, name='calculateCreditRevenue'),
