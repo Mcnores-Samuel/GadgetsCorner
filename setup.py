@@ -1,5 +1,6 @@
-import versioneer
-
+# setup.py
 setup(
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(), ...)
+    ...
+    version='1.0.0',
+    ...
+)
