@@ -98,8 +98,9 @@ def combinedData_collection(request, data_id):
                 messages.error(request, 'Invalid payment method')
             else:
                 messages.error(request, 'Phone out of stock')
-        return render(request, 'users/admin_sites/salespoint.html')
-    return render(request, 'users/admin_sites/salespoint.html')
+        return redirect('data_search')
+    messages.error(request, 'You are not authorized to access this page')
+    return redirect('dashboard')
 
 
 @login_required

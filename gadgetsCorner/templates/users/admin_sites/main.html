@@ -23,8 +23,8 @@
         <script src="{% static 'scripts/analysis_lib/weekly_sales.js' %}" defer></script>
         <script src="{% static 'scripts/analysis_lib/monthly_sales.js' %}" defer></script>
         <script src="{% static 'scripts/analysis_lib/yearly_analysis.js' %}" defer></script>
-        <script src="{% static 'scripts/analysis_lib/agent_overall_stock.js' %}" defer></script>
         <script src="{% static 'scripts/analysis_lib/overall_stock.js' %}" defer></script>
+        <script src="{% static 'scripts/analysis_lib/stock_overview.js' %}" defer></script>
         {% endblock %}
         <script src="{% static 'scripts/pending_sales.js' %}" defer></script>
         <script src="{% static 'scripts/web_push.js' %}" defer></script>
@@ -140,26 +140,6 @@
                                 <span class="text"> Point Of Sale</span>
                                 </a>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'dispatch_stock' %}"
-                                data-bs-toggle="tooltip"
-                                title="Deploy Stock">
-                                <span class="material-icons">
-                                    send_time_extension
-                                </span>
-                                <span class="text"> Deploy Stock</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'uploadBulkSales' %}"
-                                data-bs-toggle="tooltip"
-                                title="Upload Sales">
-                                <span class="material-icons">
-                                    upload
-                                </span>
-                                <span class="text"> Upload Sales</span>
-                                </a>
-                            </li> -->
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" href="{% url 'add_to_stock' %}"
                                 data-bs-toggle="tooltip"
@@ -421,49 +401,22 @@
                     <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
                             <div class="card-header text-center">
-                                <h4 class="text-muted fw-bold">Daily Sales on loan</h4>
+                                <h4 class="fw-bold text-muted">Daily Sales</h4>
                             </div>
                             <div class="card-body">
-                                <div class="daily_sales_loader_loan"></div>
-                                <canvas class="daily_sales_chart_loan" width="400" height="300"></canvas>
+                                <div class="daily_sales_loader"></div>
+                                <canvas class="daily_sales_chart" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Daily Sales on Cash</h4>
+                                <h4 class="fw-bold text-muted">Weekly Sales</h4>
                             </div>
                             <div class="card-body">
-                                <div class="daily_sales_loader_cash"></div>
-                                <canvas class="daily_sales_chart_cash" width="400" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <br>
-            <section class="charts_by_chartjs">
-                <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Weekly Sales on loan</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="weekly_sales_loader_loan"></div>
-                                <canvas class="Weekly_sales_chart_loan" width="400" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Weekly Sales on Cash</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="weekly_sales_loader_cash"></div>
-                                <canvas class="Weekly_sales_chart_cash" width="400" height="300"></canvas>
+                                <div class="weekly_sales_loader"></div>
+                                <canvas class="Weekly_sales_chart" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>
@@ -475,49 +428,22 @@
                     <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Monthly Sales on loan</h4>
+                                <h4 class="fw-bold text-muted">Monthly Sales</h4>
                             </div>
                             <div class="card-body">
-                                <div class="agent_sales_loan_chart_loader"></div>
-                                <canvas class="agent_sales_loan_chart" width="400" height="300"></canvas>
+                                <div class="monthly_sales_loader"></div>
+                                <canvas class="monthly_sales_chart" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Monthly Sales on Cash</h4>
+                            <div class="card-header text-center w-100">
+                                <h4 class="fw-bold text-muted">Stock OverView</h4>
                             </div>
                             <div class="card-body">
-                                <div class="agent_sales_cash_chart_loader"></div>
-                                <canvas class="agent_sales_cash_chart" width="400" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <br>
-            <section class="charts_by_chartjs">
-                <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Accumulated monthly sales</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="loading-message-stock"></div>
-                                <canvas class="all_agents_stock_chart" width="400" height="400"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Main Shop Stock</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="loading-message-shop"></div>
-                                <canvas class="main_stock_chart" width="400" height="400"></canvas>
+                                <div class="main_stock_chart_loader"></div>
+                                <canvas class="main_stock_overview_chart" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>
@@ -526,17 +452,6 @@
             <br>
             <section class="yearly_analysis">
                 <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Main Shop Yearly Sales</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="yearly_sales_chart_loader"></div>
-                                <canvas class="yearly_sales_chart" width="400" height="400"></canvas>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
                             <div class="card-header text-center">
@@ -544,23 +459,20 @@
                             </div>
                             <div class="card-body">
                                 <div class="yearly_sales_chart_loader_total"></div>
-                                <canvas class="yearly_sales_chart_total" width="400" height="400"></canvas>
+                                <canvas class="yearly_sales_chart_total" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <br>
-            <section class="yearly_analysis">
-                <div class="row">
-                    <div class="col-md-6 col-12 w-100">
+                    <div class="col-md-6 col-12">
                         <div class="card bg-dark-card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Product analytics</h4>
+                                <h4 class="fw-bold text-muted">
+                                    Hieghest Selling Products
+                                </h4>
                             </div>
                             <div class="card-body">
                                 <div class="yearly_product_sales_chart_loader"></div>
-                                <canvas class="yearly_product_sales_chart" width="400" height="400"></canvas>
+                                <canvas class="yearly_product_sales_chart" width="400" height="300"></canvas>
                             </div>
                         </div>
                     </div>

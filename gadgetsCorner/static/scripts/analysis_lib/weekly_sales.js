@@ -114,12 +114,8 @@ function updateWeeklyChart(url, dest, chartType = 'line', loader) {
 }
 
 
-const dest_1 = '.Weekly_sales_chart_loan';
-const url_1 = '/gadgetsCorner/get_weekly_sales_json_loan/';
-const loader_1 = '.weekly_sales_loader_loan';
-const dest_2 = '.Weekly_sales_chart_cash';
-const url_2 = '/gadgetsCorner/get_weekly_sales_json_cash/';
-const loader_2 = '.weekly_sales_loader_cash';
+const dest_1 = '.Weekly_sales_chart';
+const url_1 = '/gadgetsCorner/get_weekly_sales_json';
+const loader_1 = '.weekly_sales_loader';
 
 updateWeeklyChart(url_1, dest_1, 'bar', loader_1);
-updateWeeklyChart(url_2, dest_2, 'bar', loader_2);

@@ -13,18 +13,29 @@ class MainStorageAnalysis:
     def __init__(self, *args, **kwargs):
         pass
 
-    def get_daily_sales(self, sales_type, day=timezone.now().date()):
+    def get_daily_sales(self, day=timezone.now().date()):
         """Returns a dictionary containing the daily sales data."""
         data_set = MainStorage.objects.filter(
             stock_out_date=day,
-            sold=True, in_stock=False,
-            sales_type=sales_type)
+            sold=True, in_stock=False)
         sales = {}
         for data in data_set:
             sales[data.phone_type] = sales.get(data.phone_type, 0) + 1
+        
+        accessories = Accessory_Sales.objects.filter(
+            date_sold=day)
+        
+        for accessory in accessories:
+            sales[f"{accessory.item}({accessory.model})"] = accessory.total
+        
+        appliances = Appliance_Sales.objects.filter(
+            date_sold=day)
+        
+        for appliance in appliances:
+            sales[f"{appliance.item}({appliance.model})"] = appliance.total
         return sales
     
-    def get_weekly_sales(self, sales_type):
+    def get_weekly_sales(self):
         """Returns a dictionary containing the weekly sales data."""
         current_week = timezone.now().date()
         week_days = ['Monday', 'Tuesday', 'Wednesday',
@@ -37,80 +48,59 @@ class MainStorageAnalysis:
 
         data_set = MainStorage.objects.filter(
             stock_out_date__range=[monday, sunday],
-            sold=True, in_stock=False,
-            sales_type=sales_type)
-        if sales_type == 'Cash':
-            accessories = Accessory_Sales.objects.filter(
-                date_sold__range=[monday, sunday])
-            for accessory in accessories:
-                item = {f"{accessory.item}({accessory.model})": accessory.total}
-                days[week_days[accessory.date_sold.weekday()]].append(item)
-                item = {}
-            appliances = Appliance_Sales.objects.filter(
-                date_sold__range=[monday, sunday])
-            for appliance in appliances:
-                item = {f"{appliance.item}({appliance.model})": appliance.total}
-                days[week_days[appliance.date_sold.weekday()]].append(item)
-                item = {}
+            sold=True, in_stock=False)
+        
+        accessories = Accessory_Sales.objects.filter(
+            date_sold__range=[monday, sunday])
+        for accessory in accessories:
+            item = {f"{accessory.item}({accessory.model})": accessory.total}
+            days[week_days[accessory.date_sold.weekday()]].append(item)
+            item = {}
+
+        appliances = Appliance_Sales.objects.filter(
+            date_sold__range=[monday, sunday])
+        for appliance in appliances:
+            item = {f"{appliance.item}({appliance.model})": appliance.total}
+            days[week_days[appliance.date_sold.weekday()]].append(item)
+            item = {}
+
         for data in data_set:
             item = {data.phone_type: 1}
             days[week_days[data.stock_out_date.weekday()]].append(item)
             item = {}
         return days
     
-    # def get_monthly_sales_by_agents(self, sales_type):
-    #     """Returns a dictionary containing the monthly sales data."""
-    #     agents = AgentProfile.objects.all().order_by('user__username')
-    #     sales_by_agent = {}
-    #     current_month = timezone.now().date().month
-    #     current_year = timezone.now().date().year
-    #     total_sales = MainStorage.objects.filter(
-    #         stock_out_date__month=current_month,
-    #         stock_out_date__year=current_year,
-    #         sold=True, in_stock=False, sales_type=sales_type,
-    #         missing=False, pending=False, assigned=True,
-    #         recieved=True, issue=False, faulty=False)
-    #     for agent in agents:
-    #         sales_by_agent[str(agent.user.username).lower().capitalize()] = MainStorage.objects.filter(
-    #                 agent=agent.user,
-    #                 stock_out_date__month=current_month,
-    #                 stock_out_date__year=current_year,
-    #                 sold=True, in_stock=False, sales_type=sales_type,
-    #                 missing=False, pending=False, assigned=True,
-    #                 recieved=True, issue=False, faulty=False).count()
-    #     sales_by_agent['Total'] = total_sales.count()
-    #     sales_by_agent = sorted(sales_by_agent.items(), key=lambda x: x[1], reverse=True)
-    #     return sales_by_agent
-    
-    def get_agent_stock_in(self, agent):
-        """Returns a dictionary containing the agent's stock in data."""
-        stock_in = MainStorage.objects.filter(
-            agent=agent,
-            in_stock=True, assigned=True,
-            missing=False, sold=False, pending=False,
-            faulty=False, issue=False, recieved=True, paid=False)
-        stock = {}
-        for data in stock_in:
-            stock[data.phone_type] = stock.get(data.phone_type, 0) + 1
-        return stock
-    
-    def get_agent_stock_out(self, agent):
-        """Returns a dictionary containing the agent's stock out data."""
+    def get_monthly_sales(self):
+        """Returns a dictionary containing the monthly sales data."""
         current_month = timezone.now().date().month
         current_year = timezone.now().date().year
-        stock_out = MainStorage.objects.filter(
-            agent=agent, in_stock=False,
-            assigned=True, missing=False,
-            sold=True, pending=False, faulty=False,
+        data_set = MainStorage.objects.filter(
             stock_out_date__month=current_month,
             stock_out_date__year=current_year,
-            recieved=True, issue=False)
-        stock = {}
-        for data in stock_out:
-            stock[data.phone_type] = stock.get(data.phone_type, 0) + 1
-        stock = sorted(stock.items(), key=lambda x: x[1], reverse=True)
-        return stock
-    
+            sold=True, in_stock=False)
+        sales = {}
+        total = 0
+        for data in data_set:
+            total += 1
+            sales[f"{data.stock_out_date}"] = sales.get(f"{data.stock_out_date}", 0) + 1
+
+        accessories = Accessory_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        for accessory in accessories:
+            total += accessory.total
+            sales[f"{accessory.date_sold.date()}"] = sales.get(f"{accessory.date_sold.date()}", 0) + accessory.total
+
+        appliances = Appliance_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        for appliance in appliances:
+            total += appliance.total
+            sales[f"{appliance.date_sold.date()}"] = sales.get(f"{appliance.date_sold.date()}", 0) + appliance.total
+        sales['Total'] = total
+        sales = {key: value for key, value in sorted(sales.items(), key=lambda item: item[0])}
+        return sales
+
     def get_sales_for_all_months(self, agent):
         """Returns a dictionary containing the agent's sales for all months."""
         months = ['January', 'February', 'March', 'April', 'May',
@@ -138,40 +128,6 @@ class MainStorageAnalysis:
             for item in data:
                 sales[month] += item.total
         return sales
-    
-    # def overall_stock(self):
-    #     """This function returns a JSON object containing
-    #     the overall stock data.
-    #     """
-    #     agents = AgentProfile.objects.all().order_by('user__username')
-    #     stock = 0
-    #     for agent in agents:
-    #         stock += MainStorage.objects.filter(
-    #             agent=agent.user,
-    #             in_stock=True, assigned=True,
-    #             sold=False, missing=False,
-    #             pending=False, faulty=False, recieved=True,
-    #             issue=False).count()
-    #     return stock
-    
-    # def overall_sales(self):
-    #     """This function returns a JSON object containing
-    #     the overall sales data.
-    #     """
-    #     month = timezone.now().date().month
-    #     year = timezone.now().date().year
-
-    #     agents = AgentProfile.objects.all().order_by('user__username')
-    #     sales = 0
-    #     for agent in agents:
-    #         sales += MainStorage.objects.filter(
-    #             agent=agent.user,
-    #             in_stock=False, assigned=True,
-    #             sold=True, missing=False,
-    #             pending=False, faulty=False,
-    #             stock_out_date__month=month,
-    #             stock_out_date__year=year).count()
-    #     return sales
     
     def pending_sales(self, request):
         """This function returns a list of all pending sales.

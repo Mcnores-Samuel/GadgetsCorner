@@ -105,13 +105,8 @@ function updateDailyChart(url, dest, chartType, loader) {
   fetchAndUpdateDailyData();
 }
 
-const dest_daily = '.daily_sales_chart_loan';
-const url_daily = '/gadgetsCorner/get_daily_sales_json_loan/';
-const loader_daily = '.daily_sales_loader_loan';
-
-const dest_daily_2 = '.daily_sales_chart_cash';
-const url_daily_2 = '/gadgetsCorner/get_daily_sales_json_cash/';
-const loader_daily_2 = '.daily_sales_loader_cash';
+const dest_daily = '.daily_sales_chart';
+const url_daily = '/gadgetsCorner/get_daily_sales_json';
+const loader_daily = '.daily_sales_loader';
 
 updateDailyChart(url_daily, dest_daily, 'bar', loader_daily);
-updateDailyChart(url_daily_2, dest_daily_2, 'bar', loader_daily_2);

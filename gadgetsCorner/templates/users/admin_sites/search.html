@@ -28,7 +28,7 @@
     <div class="row d-flex justify-content-center">
         {% if data %}
             {% for item in data %}
-            <div class="col-md-6 col-12">
+            <div class="col-md-4 col-12">
                 <div class="card">
                     <div class="card-header  text-center">
                         <h4 class="card-title">{{ item.name }}</h4>
@@ -77,16 +77,60 @@
                                 </span>
                             </p>
                         {% else %}
-                            <p class="card-text"><strong class="text-info">Deploy:</strong>
-                                <span>
-                                    <a href="{% url 'combinedData_collection' data_id=item.id %}">
-                                        <span class="material-icons">
-                                            send
-                                        </span>
-                                    </a>
-                                </span>
-                            </p>
+                        <button type="button" class="btn common-bg w-100 fw-bold"
+                        data-bs-toggle="modal" data-bs-target="#viewCashModal{{ item.id }}">Cash</button>
+                        <br>
+                        <br>
+                        <button type="button" class="btn common-bg w-100 fw-bold"
+                        data-bs-toggle="modal" data-bs-target="#viewCreditModal{{ item.id }}">Credit</button>
                         {% endif %}
+                    </div>
+                </div>
+
+                <div class="modal fade" id="viewCashModal{{ item.id }}" tabindex="-1" aria-labelledby="viewCashModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewCashModalLabel">Cash Payment</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'combinedData_collection' data_id=item.id %}" method="post" class="shadow-lg p-3 mb-5 bg-body rounded d-flex flex-column justify-content-center">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="payment_method" value="Cash">
+                                    <label for="price" class="form-label">Enter the Price</label>
+                                    <input type="number" name="price" id="price" class="form-control">
+                                    <br>
+                                    <button type="submit" class="btn common-bg w-100 fw-bold">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="viewCreditModal{{ item.id }}" tabindex="-1" aria-labelledby="viewCreditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewCreditModalLabel">Credit Sales Register</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'combinedData_collection' data_id=item.id %}" method="post" class="shadow-lg p-3 mb-5 bg-body rounded">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="payment_method" value="Loan">
+                                    <br>
+                                    <label for="contract-number">Add contract number</label>
+                                    <input type="text" name="contract_number" id="contract-number" class="form-control"
+                                    minlength="9" maxlength="9" pattern="[A]{1}[0-9]{8}" placeholder="Add contract number here" required>
+                                    <br>
+                                    <label for="price" class="form-label">Enter the Price</label>
+                                    <input type="number" name="price" id="price" class="form-control" placeholder="Please! enter the merchant price" required>
+                                    <br>
+                                    <button type="submit" class="btn common-bg w-100 fw-bold">confirm</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +139,7 @@
         <div class="text-center bg-info">
             <p class="fw-bold text-center text-danger">
                 Search in the search bar above for the device you want to deploy or sell
-                You can search by device IMEI, category, model etc
+                You can search by device IMEI, category, model etc.
             </p>
             <p>
                 For accessaries sales, click on the Accessaries button
@@ -107,5 +151,28 @@
         {% endif %}
     </div>
 </div>
-<div class="divider"></div>
+<style>
+    .data-card {
+        display: block;
+        width: 100%;
+        box-shadow: 0px 0px 20px #80808066;
+        margin: 20px;
+        border-radius: 8px;
+    }
+
+    .data-card span,
+    .card span {
+        position: absolute;
+        right: 1rem;
+        font-size: 12px;
+    }
+
+    .data-card p,
+    .data-card div {
+        font-size: 12px;
+        margin: 12px auto;
+        font-weight: bold;
+        padding-left: 12px;
+    }
+</style>
 {% endblock %}

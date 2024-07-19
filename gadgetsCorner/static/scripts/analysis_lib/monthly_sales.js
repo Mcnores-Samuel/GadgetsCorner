@@ -31,11 +31,14 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
         const load = $(loader);
         load.removeClass('loading-message');
 
-        const totalData = data.find((item) => item[0] === 'Total');
-        const total = totalData ? totalData[1] : 0;
-        const filteredData = data.filter((item) => item[0] !== 'Total');
-        labelsList = filteredData.filter((item) => item[1] > 0).map((item) => item[0]);
-        nums = filteredData.filter((item) => item[1] > 0).map((item) => item[1]);
+        console.log(data);
+        const total = data.Total;
+        $.each(data, (date, value) => {
+          if (date !== 'Total') {
+            labelsList.push(date);
+            nums.push(value);
+          }
+        });
 
         if (salesByAgentChart === null) {
           salesByAgentChart = new Chart(salesByAgentCtx, {
@@ -45,8 +48,6 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
               datasets: [{
                 data: nums,
                 backgroundColor: '#2980B9', // Blue color
-                borderColor: '#2980B9', // Blue color
-                borderWidth: 2,
               }],
             },
             options: {
@@ -60,7 +61,7 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
                 title: {
                   display: true,
                   text: `${months[date.getMonth()]} Sales Analysis: total ${total}`,
-                  color: '#34495E', // Darker blue color
+                  color: '#fe9a43', // Darker blue color
                   position: 'bottom',
                   align: 'center',
                   font: {
@@ -74,20 +75,19 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
                   display: false,
                 },
               },
-              indexAxis: 'y', // Explicitly set y-axis as the index axis
+              indexAxis: 'x', // Explicitly set y-axis as the index axis
               barPercentage: 0.7, // Adjust bar width
               categoryPercentage: 0.7, // Adjust spacing between bars
               scales: {
                 x: {
                   grid: {
-                    color: '#ECF0F1', // Light gray grid lines
-                    lineWidth: 0.5, // Adjust grid line thickness
+                    display: false, // Hide grid lines
                   },
 
                   ticks: {
                     beginAtZero: true, // Start axis at 0
                     stepSize: 1, // Show values for each agent
-                    color: '#34495E', // Darker blue color
+                    color: '#fe9a43', // Darker blue color
                     font: {
                       weight: 'normal', // Regular font weight
                     },
@@ -95,11 +95,10 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
                 },
                 y: {
                   grid: {
-                    color: '#ECF0F1', // Light gray grid lines
-                    lineWidth: 0.5, // Adjust grid line thickness
+                    display: false, // Hide grid lines
                   },
                   ticks: {
-                    color: '#34495E', // Darker blue color
+                    color: '#fe9a43', // Darker blue color
                     font: {
                       weight: 'normal', // Regular font weight
                     },
@@ -124,13 +123,8 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
   fetchAndUpdateAgentMonthly();
 }
 
-const dest_monthly = '.agent_sales_loan_chart';
-const url_monthly = '/system_core_1/get_sale_by_agent_monthy_loan/';
-const loader_monthly = '.agent_sales_loan_chart_loader';
-const dest_monthly2 = '.agent_sales_cash_chart';
-const url_monthly2 = '/system_core_1/get_sale_by_agent_monthy_cash/';
-const loader_monthly2 = '.agent_sales_cash_chart_loader';
+const dest_monthly = '.monthly_sales_chart';
+const url_monthly = '/gadgetsCorner/get_monthly_sales/';
+const loader_monthly = '.monthly_sales_loader';
 
-updateSalesByAgentChart(url_monthly, dest_monthly,
-  'bar', loader_monthly);
-updateSalesByAgentChart(url_monthly2, dest_monthly2, 'bar', loader_monthly2);
+updateSalesByAgentChart(url_monthly, dest_monthly, 'bar', loader_monthly);

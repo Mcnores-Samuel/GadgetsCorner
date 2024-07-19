@@ -32,17 +32,15 @@ DEBUG = (bool(int(os.environ.get('DEBUG', 1))))
 SERVER_DOMAIN1 = os.environ.get('SERVER_DOMAIN', default=".vercel.app")
 SERVER_DOMAIN2 = os.environ.get('SERVER_DOMAIN2', default=".railway.app")
 OTHER_DOMAIN = os.environ.get('OTHER_DOMAIN')
-ALLOWED_HOSTS = [SERVER_DOMAIN1,
-                 SERVER_DOMAIN2, OTHER_DOMAIN, 'localhost']
+ALLOWED_HOSTS = [SERVER_DOMAIN1, SERVER_DOMAIN2, OTHER_DOMAIN]
 CRSF_COOKIE_SECURE = True
-CRSF_TRUSTED_ORIGINS = [SERVER_DOMAIN1, SERVER_DOMAIN2, OTHER_DOMAIN, 'localhost']
+CRSF_TRUSTED_ORIGINS = [SERVER_DOMAIN1, SERVER_DOMAIN2, OTHER_DOMAIN]
 
 SESSION_COOKIE_SECURE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 # Application definition
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',

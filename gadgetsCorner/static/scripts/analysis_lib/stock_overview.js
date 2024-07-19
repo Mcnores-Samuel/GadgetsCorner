@@ -93,8 +93,8 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
                   fullSize: true,
                 },
                 legend: {
-                  display: true,
-                  position: 'right',
+                  display: false,
+                  position: 'top',
                   align: 'center',
                   labels: {
                     color: '#fe9a43',
@@ -136,20 +136,10 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
   fetchAndUpdateDailyData();
 }
 
-const url_agents_stock = '/gadgetsCorner/get_agents_stock_json/';
-const dest_all_stock = '.all_agents_stock_chart';
-const chartType = 'doughnut';
-const loader_all_stock = '.loading-message-stock';
-
-const url_main_stock = '/gadgetsCorner/get_main_stock_analysis/';
-const dest_main_stock = '.main_stock_chart';
-const loader_main_stock = '.loading-message-shop';
+const url_main_stock = '/gadgetsCorner/get_main_stock_analysis';
+const dest_main_stock = '.main_stock_overview_chart';
+const loader_main_stock = '.main_stock_chart_loader';
 const chartType_main_stock = 'doughnut';
-
-agentsStockChartDetails(
-  url_agents_stock, dest_all_stock,
-  chartType, loader_all_stock,
-);
 
 agentsStockChartDetails(
   url_main_stock, dest_main_stock,
