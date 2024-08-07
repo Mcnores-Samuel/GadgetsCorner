@@ -11,7 +11,7 @@ charset-normalizer==3.3.2
 cryptography==42.0.6
 deprecation==2.1.0
 dj-database-url==2.1.0
-Django==4.2.7
+Django==4.2.15
 django-bootstrap5==23.3
 django-email-verification==0.3.3
 django-filter==23.3
