@@ -68,6 +68,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -177,28 +178,39 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 PASSWORD_RESET_TIMEOUT_DAYS = 1
 PASSWORD_RESET_EMAIL_SUBJECT = 'registration/reset_email_subject.txt'
 
-STATIC_SOURCE = os.environ.get('STATIC_SOURCE')
 
-if STATIC_SOURCE == 'local':
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
-    STATIC_URL = '/static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
-    MEDIA_URL = '/media/'
-else:
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_SIGNATURE_NAME = os.environ.get('AWS_S3_SIGNATURE_NAME')
-    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
-    AWS_S3_FILE_OVERWRITE = True
-    AWS_DEFAULT_ACL = None
-    AWS_S3_VERITY = True
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=2592000',
-    }
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    AWS_LOCATION = 'static'
-    STATIC_URL = 'https://%s/%s/' % (AWS_STORAGE_BUCKET_NAME, AWS_LOCATION)
-    MEDIA_URL = 'https://%s/%s/' % (AWS_STORAGE_BUCKET_NAME, AWS_LOCATION)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'LOCATION': os.path.join(BASE_DIR, 'media'),
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'django': {
+        'handlers': ['console'],
+        'level': 'ERROR',
+        'propagate': True,
+    },
+}

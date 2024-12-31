@@ -14,4 +14,3 @@ credentials.json
 data_api.py
 data_api_v2.py
 data_update_api.py
-staticfiles/
