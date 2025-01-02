@@ -118,11 +118,13 @@ def uploadBulkSales(request):
     if request.method == 'POST' and request.user.is_staff and request.user.is_superuser:
         data = request.POST.get('data', None)
         date = request.POST.get('date', None)
+        price = request.POST.get('price', None)
         sales_type = request.POST.get('sales_type', None)
         if data:
             scanned_items = json.loads(data)
             date = json.loads(date)
             sales_type = json.loads(sales_type)
+            price = json.loads(price)
             not_in_stock = []
             for item in scanned_items:
                 try:
@@ -132,10 +134,14 @@ def uploadBulkSales(request):
                     stock_item.in_stock = False
                     if sales_type == 'Loan':
                         stock_item.sales_type = sales_type
-                        stock_item.pending = True
+                        stock_item.sold = True
+                        stock_item.paid = True
+                        stock_item.price = price
                     else:
                         stock_item.sales_type = sales_type
-                        stock_item.pending = True
+                        stock_item.pending = False
+                        stock_item.price = price
+                        stock_item.sold = True
                         stock_item.paid = True
                     stock_item.save()
                 except MainStorage.DoesNotExist:
