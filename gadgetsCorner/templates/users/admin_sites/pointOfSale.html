@@ -1,0 +1,202 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load plus_r %}
+{% block head %}
+<script src="{% static 'scripts/upload_sales.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<style>
+  .card {
+    height: 400px;
+    overflow-y: scroll;
+  }
+
+  .container {
+    display: flex;
+    gap: 20px;
+  }
+
+  .form_container {
+    width: 50%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #022842;
+  }
+
+  .row {
+    width: 50%;
+  }
+  .input-content {
+    width: 20%;
+  }
+  
+  .waiting-room {
+    scrollbar-width: none;
+  }
+
+  .header {
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #f8f9fa;
+  }
+
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    .form_container {
+      width: 100%;
+    }
+
+    .row {
+      width: 100%;
+    }
+
+    .input-content {
+      width: 100%;
+    }
+    
+  }
+</style>
+<nav class="navbar navbar-light card-bg">
+    <div class="container">
+        <form action="{% url 'data_search' %}" method="post" class="d-flex w-50">
+            {% csrf_token %}
+            <input type="search" class="form-control me-2 card-bg" name="search_query"
+            id="search" placeholder="Device IMEI, category, model etc" autofocus>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <a href="{%url 'accessary_sales' %}" class="btn common-bg">Accessaries</a>
+        <a href="{% url 'appliance_sales' %}" class="btn common-bg">Appliances</a>
+        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#helpModal">
+          Help
+        </button>
+    </div>
+</nav>
+<br>
+<h3 class="text-center common-bg fw-bold">Upload one or more Sales</h3>
+<div class="d-flex justify-content-center">
+  <div class="spinner-border text-warning" role="status" id="loader">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div class="container">
+  <div class="form_container">
+    <div class="header">
+      <h4 class="text-center fw-bold">Upload Sales: Total <span  id="total"></span></h4>
+      <p class="text-center">Scan or enter imei numbers to deploy, Choose Date and Sales Type</p>
+    </div>
+    <hr>
+    <form action="" method="post" id="inputform">
+      <p id="token" style="display: none;">{% csrf_token %}</p>
+      <div class="form-group custom-form-group">
+        <label for="data" class="fw-bold common-color">Enter Or scan imei Numbers Here</label>
+        <input type="text" name="data" id="data" class="form-control" autofocus required minlength="15" maxlength="15">
+        <br>
+        <div class="d-flex justify-content-between w-100">
+          <div class="input-content">
+            <label for="price" class="fw-bold common-color">Price</label>
+            <input type="number" name="price" id="price" class="form-control w-100" placeholder="Price">
+          </div>
+          <div class="input-content">
+            <label for="date" class="fw-bold common-color">Choose Date</label>
+            <input type="date" name="date" id="date" class="form-control w-100">
+          </div>
+          <div class="input-content">
+            <label class="fw-bold common-color">Sales Type</label>
+            <select name="sales_type" id="sales_type" class="form-control w-100">
+              <option value="">Select Sales Type</option>
+              <option value="Loan">Loan</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+          <div class="input-content">
+            <label class="fw-bold common-color">Upload Sales</label>
+            <button type="button" class="btn common-bg" id="deploy">Upload</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row" id="waiting-room">
+    <div class="col-md-12">
+      <div class="card waiting-room">
+        <div class="card-header bg-success">
+          <h4 class="card-title text-center fw-bold">Scanned Items</h4>
+        </div>
+        <div class="card-body">
+          <ol class="list-group">
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<hr>
+<div class="container" >
+</div>
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="helpModalLabel">How to Use the Multiple Sales Feature</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">This feature allows you to upload sales for multiple items of the same model and price in an efficient way.</p>
+        <ol>
+          <li>
+            <strong>Enter or Scan IMEI Numbers:</strong> 
+            - Use the input box labeled <em>"Enter or scan IMEI Numbers Here"</em> to type or scan the IMEI for each item. 
+            - Ensure the IMEI is exactly <strong>15 digits</strong> long before pressing "Enter" or clicking "Upload".
+          </li>
+          <li>
+            <strong>Group by Price and Model:</strong>
+            - Add all IMEIs for items with the same price and model to the list one by one.
+            - Each item must belong to the same group (price, model) as this feature handles batches.
+          </li>
+          <li>
+            <strong>Set Price:</strong>
+            - After adding all items with the same model and price, enter the <strong>price</strong> in the "Price" field.
+          </li>
+          <li>
+            <strong>Select Date:</strong>
+            - Choose the sales date using the date picker in the "Choose Date" field.
+          </li>
+          <li>
+            <strong>Select Sales Type:</strong>
+            - Use the dropdown menu to choose the sales type, either "Loan" or "Cash".
+          </li>
+          <li>
+            <strong>Upload Sales:</strong>
+            - Click the "Upload" button to save the IMEIs and associated details.
+          </li>
+          <li>
+            <strong>Review and Deploy:</strong>
+            - Review all scanned items in the "Scanned Items" list.
+            - Once you are satisfied, click the <strong>"upload"</strong> button to submit the data.
+          </li>
+          <li>
+            <strong>Important Notes:</strong>
+            <ul>
+              <li>IMEIs must be <strong>15 digits long</strong>. Non-compliant entries will show an error message.</li>
+              <li>Duplicate IMEIs will not be added to the list.</li>
+              <li>All fields (Price, Date, Sales Type) are required before deployment.</li>
+              <li>Ensure you group items correctly by price and model before deploying.</li>
+            </ul>
+          </li>
+        </ol>
+        <p class="text-muted">Tip: Use a barcode scanner to speed up the process for large batches.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

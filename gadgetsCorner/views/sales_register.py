@@ -143,7 +143,7 @@ def uploadBulkSales(request):
             return JsonResponse({'status': 200, 'not_in_stock': not_in_stock})
         else:
             return JsonResponse({'status': 400, 'error': 'No data received'})
-    return render(request, 'users/admin_sites/upload_sales.html')
+    return render(request, 'users/admin_sites/pointOfSale.html')
 
 
 @login_required

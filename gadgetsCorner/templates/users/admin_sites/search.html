@@ -134,18 +134,9 @@
             </div>
             {% endfor %}
         {% else %}
-        <div class="text-center bg-info">
-            <p class="fw-bold text-center text-danger">
-                Search in the search bar above for the device you want to deploy or sell
-                You can search by device IMEI, category, model etc.
-            </p>
-            <p>
-                For accessaries sales, click on the Accessaries button
-            </p>
-            <p>
-                For appliances sales, click on the Appliances button
-            </p>
-        </div>
+            <div class="alert alert-danger text-center" role="alert">
+                No data found
+            </div>
         {% endif %}
     </div>
 </div>
