@@ -170,10 +170,10 @@ EMAIL_MULTI_USER = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = (bool(int(os.environ.get('EMAIL_USE_TLS', 1))))
-EMAIL_USE_SSL = (bool(int(os.environ.get('EMAIL_USE_SSL', 0))))
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = "cokkvmbopywkmkkr"
 
 print("EMAIL_HOST_USER:", os.environ.get('EMAIL_HOST_USER'))
 print("EMAIL_HOST_PASSWORD:", os.environ.get('EMAIL_HOST_PASSWORD'))
