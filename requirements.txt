@@ -18,7 +18,7 @@ django-filter==23.3
 django-storages==1.14.2
 django-webpush==0.3.6
 frozenlist==1.4.1
-gunicorn==21.2.0
+gunicorn==23.0.0
 http-ece==1.2.0
 idna==3.7
 jmespath==1.0.1
