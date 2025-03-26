@@ -8,7 +8,7 @@ from ..models.user_profile import UserProfile
 from webpush import send_user_notification
 from django.http import JsonResponse
 from django.core.mail import send_mail
-from os import environ
+from django.conf import settings
 
 
 def system_routine_update(request):
@@ -287,9 +287,9 @@ def system_routine_update(request):
                 </body>
             </html>
         """
-        from_email = 'system.gadgetscorner@gmail.com'
-        send_mail(subject, '', from_email, users,
-                  html_message=html_message, fail_silently=True)
-        return JsonResponse({'status': 'Evening update sent successfully.'})
+        from_email = "system.gadgetscorner@gmail.com"
+        send_mail(subject, '', from_email, recipient_list=users,
+                  html_message=html_message, fail_silently=False)
+        return JsonResponse({'status': html_message})
     return JsonResponse({'status': 'Invalid request method.'})
     
