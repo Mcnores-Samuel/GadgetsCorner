@@ -172,7 +172,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_USER = "system.gadgetscorner@gmail.com"
 EMAIL_HOST_PASSWORD = "cokkvmbopywkmkkr"
 
 print("EMAIL_HOST_USER:", os.environ.get('EMAIL_HOST_USER'))
