@@ -20,7 +20,7 @@ html {
 body {
     position: relative;
     font-size: 14px;
-    background: linear-gradient(135deg, black, grey);
+    background: white;
 }
 
 .content {
@@ -46,7 +46,7 @@ header {
 
 footer {
     width: 100%;
-    background-color: #022842;
+    background-color: #1a97fb;
     padding: 10px;
     margin-top: auto;
 }
@@ -67,7 +67,7 @@ input {
     right: 20px;
     font-size: 1.5rem;
     z-index: 1;
-    background-color: #23435c;
+    background-color: #1a97fb;
     color: white;
     padding: 10px;
     border-radius: 50%;

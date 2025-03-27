@@ -57,7 +57,7 @@ function mainStockChartDetails() {
                   align: 'center',
                   font: {
                     weight: 'bold',
-                    size: 16, // Font size
+                    size: 10, // Font size
                   },
                   padding: 10, // Adjust padding for spacing
                   fullSize: true,

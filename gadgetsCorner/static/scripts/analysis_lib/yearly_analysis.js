@@ -85,9 +85,9 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                   align: 'center',
                   font: {
                     weight: 'bold',
-                    size: 16,
+                    size: 10,
                   },
-                  padding: 20,
+                  padding: 5,
                 },
                 legend: {
                   display: false,
@@ -227,9 +227,9 @@ function yearlySalesAnalysisProduct(url, dest, chartType, loader) {
                   align: 'center',
                   font: {
                     weight: 'bold',
-                    size: 16,
+                    size: 10,
                   },
-                  padding: 20,
+                  padding: 5,
                 },
                 legend: {
                   display: false,

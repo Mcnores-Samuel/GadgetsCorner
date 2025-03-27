@@ -87,7 +87,7 @@ function agentsStockChartDetails(url, dest, chartType, loader) {
                   align: 'left',
                   font: {
                     weight: 'bold',
-                    size: 16,
+                    size: 10,
                   },
                   padding: 10,
                   fullSize: true,

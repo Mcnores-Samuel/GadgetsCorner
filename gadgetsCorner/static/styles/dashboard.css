@@ -10,7 +10,7 @@
 
 
 body {
-    background: linear-gradient(90deg, black, grey);
+    background: white;
 }
 
 .wrapper.resize {
@@ -20,7 +20,7 @@ body {
 .wrapper .sidebar {
     width: 170px;
     height: 100%;
-    background: #2d3436;
+    background: #1a97fb;
     position: fixed;
     top: 0;
     left: 0;
@@ -107,7 +107,7 @@ body {
     position: sticky;
     top: -1px;
     z-index: 1000;
-    background: #022842;
+    background: #1a97fb;
     border-radius: 5px;
 }
 

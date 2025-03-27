@@ -175,11 +175,6 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-print("EMAIL_HOST_USER:", os.environ.get('EMAIL_HOST_USER'))
-print("EMAIL_HOST_PASSWORD:", os.environ.get('EMAIL_HOST_PASSWORD'))
-print("EMAIL_USE_TLS:", os.environ.get('EMAIL_USE_TLS'))
-print("EMAIL_USE_SSL:", os.environ.get('EMAIL_USE_SSL'))
-
 
 PASSWORD_RESET_TIMEOUT_DAYS = 1
 PASSWORD_RESET_EMAIL_SUBJECT = 'registration/reset_email_subject.txt'

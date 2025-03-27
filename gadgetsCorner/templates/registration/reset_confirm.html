@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}Enter new password{% endblock %}
 {% block content %}
+<div class="container d-flex justify-content-center text-light w-50 p-3" style="background: #1a97fb;">
 {% if validlink %}
-<h1>Set a new password!</h1>
-<form method="POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Change my password">
-</form>
-{% else %}
-<p>The password reset link was invalid, possibly because it has already been used. Please request a new password reset.</p>
-{% endif %}
+  <form method="POST" class="w-100">
+    <h1 class="text-center">Set a new password!</h1>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Change my password" class="btn btn-sm common-bg">
+  </form>
+  {% else %}
+  <p>The password reset link was invalid, possibly because it has already been used. Please request a new password reset.</p>
+  {% endif %}
+</div>
 {% endblock %}

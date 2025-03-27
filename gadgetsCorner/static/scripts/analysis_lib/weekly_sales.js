@@ -64,9 +64,9 @@ function updateWeeklyChart(url, dest, chartType = 'line', loader) {
                   color: '#fe9a43',
                   font: {
                     weight: 'bold',
-                    size: 16,
+                    size: 10,
                   },
-                  padding: 20,
+                  padding: 10,
                 },
                 legend: {
                   display: false,

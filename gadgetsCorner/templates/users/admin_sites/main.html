@@ -147,27 +147,7 @@
                                 <span class="material-icons">
                                     add_circle
                                 </span>
-                                <span class="text"> Add To Stock</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'revenues' %}"
-                                data-bs-toggle="tooltip"
-                                title="Revenue">
-                                <span class="material-icons">
-                                    paid
-                                </span>
-                                <span class="text"> Revenue</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'defects' %}"
-                                data-bs-toggle="tooltip" 
-                                title="Defective Devices">
-                                <span class="material-icons">
-                                    report_problem
-                                </span>
-                                <span class="text"> Defects</span>
+                                <span class="text"> Add Stock</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -398,25 +378,36 @@
             <br>
             <section class="charts_by_chartjs">
                 <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
+                    <div class="col-md-4 col-12">
+                        <div class="card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Daily Sales</h4>
+                                <p class="fw-bold text-muted">Daily Sales</p>
                             </div>
                             <div class="card-body">
                                 <div class="daily_sales_loader"></div>
-                                <canvas class="daily_sales_chart" width="400" height="300"></canvas>
+                                <canvas class="daily_sales_chart" width="300" height="250"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
+                    <div class="col-md-4 col-12">
+                        <div class="card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Weekly Sales</h4>
+                                <p class="fw-bold text-muted">Weekly Sales</p>
                             </div>
                             <div class="card-body">
                                 <div class="weekly_sales_loader"></div>
-                                <canvas class="Weekly_sales_chart" width="400" height="300"></canvas>
+                                <canvas class="Weekly_sales_chart" width="300" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <p class="fw-bold text-muted">Monthly Sales</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="monthly_sales_loader"></div>
+                                <canvas class="monthly_sales_chart" width="300" height="250"></canvas>
                             </div>
                         </div>
                     </div>
@@ -425,46 +416,30 @@
             <br>
             <section class="charts_by_chartjs">
                 <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
-                            <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Monthly Sales</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="monthly_sales_loader"></div>
-                                <canvas class="monthly_sales_chart" width="400" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
+                    <div class="col-md-4 col-12">
+                        <div class="card">
                             <div class="card-header text-center w-100">
-                                <h4 class="fw-bold text-muted">Stock OverView</h4>
+                                <p class="fw-bold text-muted">Stock OverView</p>
                             </div>
                             <div class="card-body">
                                 <div class="main_stock_chart_loader"></div>
-                                <canvas class="main_stock_overview_chart" width="400" height="300"></canvas>
+                                <canvas class="main_stock_overview_chart" width="300" height="250"></canvas>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <br>
-            <section class="yearly_analysis">
-                <div class="row gy-3">
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
+                    <div class="col-md-4 col-12">
+                        <div class="card">
                             <div class="card-header text-center">
-                                <h4 class="fw-bold text-muted">Overall Yearly Sales</h4>
+                                <p class="fw-bold text-muted">Overall Yearly Sales</p>
                             </div>
                             <div class="card-body">
                                 <div class="yearly_sales_chart_loader_total"></div>
-                                <canvas class="yearly_sales_chart_total" width="400" height="300"></canvas>
+                                <canvas class="yearly_sales_chart_total" width="300" height="250"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-12">
-                        <div class="card bg-dark-card">
+                    <div class="col-md-4 col-12">
+                        <div class="card">
                             <div class="card-header text-center">
                                 <h4 class="fw-bold text-muted">
                                     Hieghest Selling Products
@@ -472,13 +447,13 @@
                             </div>
                             <div class="card-body">
                                 <div class="yearly_product_sales_chart_loader"></div>
-                                <canvas class="yearly_product_sales_chart" width="400" height="300"></canvas>
+                                <canvas class="yearly_product_sales_chart" width="300" height="250"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            
+            <br>
             <div class="modal fade" id="web_push_request" tabindex="-1" aria-labelledby="web_push_request" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
@@ -527,14 +502,6 @@
             {% endblock %}
         </section>
         <br>
-        <br>
-        <footer>
-            {% block footer %}
-            <div>
-                <p class="text-light">&copy; 2024 Gadgets Corner. All rights reserved.</p>
-            </div>
-            {% endblock %}
-        </footer>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const sections = document.querySelectorAll('.animated-section');

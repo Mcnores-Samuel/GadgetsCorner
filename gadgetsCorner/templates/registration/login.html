@@ -1,98 +1,45 @@
+{% extends 'base.html' %}
 {% load static %}
-{% load plus_r %}
 {% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{% static 'styles/common.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/base_header.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/forms.css' %}">
-    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
-    <script src="{% static 'scripts/navigation.js' %}" defer></script>
-    <script src="{% static 'scripts/placeholders.js' %}" defer></script>
-    <script src="{% static 'scripts/data_intake_guide.js' %}" defer></script>
-    <title>{% block title %}Hafeez{% endblock %}</title>
-    <!-- Common CSS and JavaScript files -->
-    {% block head %}
-    <script src="{% static 'scripts/sign_up_guide.js' %}" defer></script>
-    {% endblock %}
-</head>
-<body>
-    <button class="scroll-back"><i class='bx bxs-up-arrow-square'></i></button>
-    <div class="loader"></i></div>
-    <div id="notification" class="notification alert alert-success" role="alert"></div>
-    <header>
-        {% block header %}
-        <!-- Custom header content for Template 1 -->
-        <div class="topbar">
-            <div class="logo">HE</div>
-            <div class="brandname">Hafeez Enterprise</div>
-            <span class="menu"><i class='bx bx-menu'></i></span>
+{% block content %}
+<div class="container">
+    {% bootstrap_messages %}
+</div>
+<section class="sign_up_form">
+    <div class="form_container">
+        <div class="d-flex justify-content-center">
+            <div class="logo">GC</div>
+            <div class="brandname text-light" >Gadgets Corner</div>
         </div>
-        <nav class="heading">
-            <div class="logo">HE</div>
-            <div class="brandname">Hafeez Enterprise</div>
-            <ul>
-                <li><a href="{% url 'sign_in' %}"><i class='bx bx-log-in'></i> Log In</a></li>
-                <li><a href="{% url 'sign_up' %}"><i class='bx bx-log-in-circle'></i> Sign Up</a></li>
-            </ul>
-        {% endblock %}
-    </header>
-    <div class="content">
-        {% block content %}
-        <section class="sign_up_form">
-            <div class="form_container">
-                <div class="d-flex justify-content-center">
-                    <div class="logo">HE</div>
-                    <div class="brandname">Hafeez Enterprise</div>
-                </div>
-                <br>
-                <h2>Login</h2>
-                <form method="post" class="sign_in">
-                    {% csrf_token %}
-                    <div class="form-group sign_in_group">
-                        <span class="icon"><i class='bx bx-envelope'></i></span>
-                        {{ form.email }}
-                        <label for="{{ form.email.id_for_label }}">Email:</label>
-                    </div>
-                    <div class="form-group sign_in_group">
-                        <span class="icon"><i class='bx bx-lock-alt'></i></span>
-                        {{ form.password }}
-                        <label for="{{ form.password.id_for_label }}">Password:</label>
-                    </div>
-                    {% for error in form.non_field_errors %}
-                    <p class="error_message">{{ error }}</p>
-                    {% endfor %}
-                    <div class="form-check">
-                        {{ form.remember_me }}
-                        <label class="form-check-label" for="{{ form.remember_me.id_for_label }}">Remember Me</label>
-                    </div>
-                    <button type="submit" class="btn common-bg w-100 fw-bold">Login</button>
-                    <div class="text-center fs-6 fw-bold">OR</div>
-                    <a href="{% url 'sign_up' %}" class="btn common-bg w-100 fw-bold">Sign Up</a>
-                    <div class="forget"><a href="{% url 'password_reset' %}" class="fw-bold">Forgot Password?</a>
-                    </div>
-                </form>
+        <br>
+        <h2 class="text-light">Login</h2>
+        <form method="post" class="sign_in">
+            {% csrf_token %}
+            <div class="form-group sign_in_group">
+                <span class="icon"><i class='bx bx-envelope'></i></span>
+                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}" class="text-light">Email:</label>
             </div>
-        </section>
-        {% endblock %}
+            <div class="form-group sign_in_group">
+                <span class="icon"><i class='bx bx-lock-alt'></i></span>
+                {{ form.password }}
+                <label for="{{ form.password.id_for_label }}" class="text-light">Password:</label>
+            </div>
+            {% for error in form.non_field_errors %}
+            <p class="error_message">{{ error }}</p>
+            {% endfor %}
+            <div class="form-check">
+                {{ form.remember_me }}
+                <label class="form-check-label" for="{{ form.remember_me.id_for_label }}" class="text-light">Remember Me</label>
+            </div>
+            <button type="submit" class="btn common-bg w-100 fw-bold">Login</button>
+            <div class="text-center fs-6 fw-bold">OR</div>
+            <a href="{% url 'sign_up' %}" class="btn common-bg w-100 fw-bold">Sign Up</a>
+            <div class="forget"><a href="{% url 'password_reset' %}" class="fw-bold">Forgot Password?</a>
+            </div>
+        </form>
     </div>
-    <footer>
-        {% block footer %}
-        <div>
-            <p>&copy; 2023 Hafeez Enterprise. All rights reserved.</p>
-        </div>
-        {% endblock %}
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>   
-</body>
-</html>
+</section>
+{% endblock %}

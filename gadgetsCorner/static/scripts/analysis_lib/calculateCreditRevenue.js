@@ -80,9 +80,9 @@ function yearlySalesAnalysis(url, dest, chartType, loader) {
                   align: 'center',
                   font: {
                     weight: 'bold',
-                    size: 16,
+                    size: 10,
                   },
-                  padding: 20,
+                  padding: 10,
                 },
                 legend: {
                   display: false,

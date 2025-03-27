@@ -66,7 +66,7 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
                   align: 'center',
                   font: {
                     weight: 'bold',
-                    size: 16, // Adjust font size
+                    size: 10, // Adjust font size
                   },
                   padding: 10, // Adjust padding for spacing
                   fullSize: true,
