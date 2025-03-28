@@ -104,3 +104,11 @@ class MainStorage(models.Model):
     def __str__(self):
         """String representation of the phone data model"""
         return "Device: {}, Imei: {}".format(self.name, self.device_imei)
+    
+    @classmethod
+    def get_total_sold(cls, month, year):
+        """Get the total number of phones sold in a given month and year."""
+        return cls.objects.filter(
+            stock_out_date__month=month, stock_out_date__year=year,
+            in_stock=False, sold=True, pending=False, missing=False,
+            assigned=True).count()

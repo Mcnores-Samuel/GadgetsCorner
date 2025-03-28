@@ -224,3 +224,11 @@ class MainStorageAnalysis:
             if accessory.cost> accessory.price_sold:
                 total += (accessory.cost * accessory.total) - (accessory.price_sold * accessory.total)
         return total
+    
+    def total_sold(self, month, year):
+        """This function returns the sales for a given month and year."""
+        phones = MainStorage.get_total_sold(month, year)
+        accessories = Accessory_Sales.get_total_sold(month, year)
+        appliances = Appliance_Sales.get_total_sold(month, year)
+        total = phones + accessories + appliances
+        return total

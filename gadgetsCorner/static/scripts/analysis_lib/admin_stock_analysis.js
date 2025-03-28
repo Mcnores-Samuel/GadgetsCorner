@@ -48,7 +48,16 @@ function adminStockAnalysis() {
         daily_expenses.html(`${formatRevenue(data.expenses)} <span class="material-icons text-danger" style="font-size: 12px">arrow_downward</span>`);
         loss.html(`- ${formatRevenue(data.estimated_loss)} <span class="material-icons text-danger" style="font-size: 12px">arrow_downward</span>`);
         estimated_loss.html(`- ${formatRevenue(data.estimated_loss)} <span class="material-icons text-danger" style="font-size: 12px">arrow_downward</span>`);
-        target.html(`${formatRevenue(data.target)}`);
+        if (data.progress < 50) {
+          progress.css('background-color', 'red');
+        }
+        if (data.progress >= 50 && data.progress < 80) {
+          progress.css('background-color', 'yellow');
+        }
+        if (data.progress >= 80) {
+          progress.css('background-color', 'purple');
+        }
+        target.html(`Target:  ${data.target}`);
         progress.css('width', `${data.progress}%`);
         progress.html(`${data.progress}%`);
       },

@@ -85,7 +85,7 @@
                 <br>
                 <div class="collapse d-md-block wrapper" id="sidebarCollapse">
                     <div class="sidebar">
-                        <div class="topbar-wrapper heading">
+                        <div class="topbar-wrapper heading bg-secondary">
                             <div class="logo">GC</div>
                             <div class="text-center text-fs text-light brandname text">Gadgets Corner</div>
                         </div>
@@ -108,26 +108,6 @@
                                     home
                                     </span>
                                     <span class="text"> Manage</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'main_stock_details' %}"
-                                data-bs-toggle="tooltip"
-                                title="Stock">
-                                <span class="material-icons">
-                                    inventory
-                                </span>
-                                <span class="text"> Stock</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{% url 'main_sales_details' %}"
-                                data-bs-toggle="tooltip"
-                                title="Sales">
-                                <span class="material-icons">
-                                outbound
-                                </span>
-                                <span class="text"> Sales</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -159,6 +139,26 @@
                                 </span>
                                 <span class="badge bg-danger pending-sales-notice"></span>
                                 <span class="text"> Pending Sales</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{% url 'main_stock_details' %}"
+                                data-bs-toggle="tooltip"
+                                title="Stock">
+                                <span class="material-icons">
+                                    inventory
+                                </span>
+                                <span class="text"> Stock</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{% url 'main_sales_details' %}"
+                                data-bs-toggle="tooltip"
+                                title="Sales">
+                                <span class="material-icons">
+                                outbound
+                                </span>
+                                <span class="text"> Sales</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -360,13 +360,13 @@
                         <div class="card card-bg text-light">
                             <div class="card-body">
                                 <div class="">
-                                    <p class="preview">Grand Sales Total</p>
+                                    <p class="preview">Sales Target</p>
                                     <div class="">
                                         <div class="text-end preview"></div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated preview"
-                                            role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0"
-                                            aria-valuemax="{{ terget }}"></div>
+                                            role="progressbar" aria-valuenow="" aria-valuemin="0"
+                                            aria-valuemax=""></div>
                                         </div>
                                     </div>
                                 </div>

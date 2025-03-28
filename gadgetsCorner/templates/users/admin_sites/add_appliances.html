@@ -11,16 +11,18 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <h1 class="text-center fw-bold text-light">Add Appliances</h1>
-    <p class="text-center fw-bold text-light">Please enter the Appliance name and the quantity to add to stock</p>
-    <a href="{% url 'add_to_stock' %}" class="btn common-bg">Add Phones</a>
-    <a href="{% url 'add_accessaries' %}" class="btn common-bg">Add Accessaries</a>
+    <div class="container common-bg p-2 rounded">
+        <h1 class="text-center fw-bold">Add Appliances</h1>
+        <p class="text-center fw-bold">Please enter the Appliance name and the quantity to add to stock</p>
+        <a href="{% url 'add_to_stock' %}" class="btn bg-secondary">Add Phones</a>
+        <a href="{% url 'add_accessaries' %}" class="btn bg-secondary">Add Accessaries</a>
+    </div>
     <hr>
-    <form action="" method="post" class="bg-dark shadow-lg p-3 mb-5 rounded">
+    <form action="" method="post" class="shadow-lg p-3 mb-5 rounded w-50 mx-auto">
         {% csrf_token %}
         <p>
-            <label for="item" class="text-light fw-bold">Appliance Name:</label>
-            <input type="text" name="appliance_name" class="form-control bg-dark text-light" placeholder="Enter Appliance Name / item"
+            <label for="item" class="fw-bold">Appliance Name:</label>
+            <input type="text" name="appliance_name" class="form-control" placeholder="Enter Appliance Name / item"
             list="name_list", id="item">
         </p>
         <datalist id="name_list">
@@ -29,8 +31,8 @@
             {% endfor %}
         </datalist>
         <p>
-            <label for="model" class="fw-bold text-light">Model:</label>
-            <input type="text" name="model" class="form-control bg-dark text-light" placeholder="Enter model"
+            <label for="model" class="fw-bold">Model:</label>
+            <input type="text" name="model" class="form-control" placeholder="Enter model"
             list="model_list" id="model">
         </p>
         <datalist id="model_list">
@@ -39,16 +41,16 @@
             {% endfor %}
         </datalist>
         <p>
-            <label for="quantity" class="fw-bold text-light">Quantity:</label>
-            <input type="number" name="quantity" class="form-control bg-dark text-light" placeholder="Enter quantity"
+            <label for="quantity" class="fw-bold">Quantity:</label>
+            <input type="number" name="quantity" class="form-control" placeholder="Enter quantity"
             min="0">
         </p>
         <p>
-            <label for="id_cost_price" class="fw-bold text-light">Cost price:</label>
-            <input type="number" name="cost_price" class="form-control bg-dark text-light" placeholder="Enter cost price"
+            <label for="id_cost_price" class="fw-bold">Cost price:</label>
+            <input type="number" name="cost_price" class="form-control" placeholder="Enter cost price"
             id="id_cost_price" min="0">
         </p>
-        <button type="submit" class="btn btn-primary" id="submit">submit</button>
+        <button type="submit" class="btn common-bg w-100 btn-sm fw-bold" id="submit">submit</button>
     </form>
 </div>
 {% endblock %}

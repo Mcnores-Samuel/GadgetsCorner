@@ -8,6 +8,7 @@ from ..models.daily_expenses import DailyExpenses
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
+from gadgetsCorner.models.sales_target import SalesTarget
 
 
 @login_required
@@ -55,7 +56,11 @@ def get_yearly_product_sales(request):
 
 def admin_stock_analysis(request):
     """This function returns a JSON object containing the daily stock data."""
+    current_target = None
+    progress = None
     if request.method == 'GET':
+        current_month = timezone.now().date().month
+        current_year = timezone.now().date().year
         estimated_revenue = MainStorageAnalysis().estimated_revenue()
         estimated_profit = MainStorageAnalysis().estimated_profit()
         expenses = DailyExpenses.objects.filter(
@@ -63,7 +68,31 @@ def admin_stock_analysis(request):
             date__month=timezone.now().month)
         total_expenses = sum([expense.amount for expense in expenses])
         estimated_loss = MainStorageAnalysis().estimated_loss()
+        last_month_achieved = MainStorageAnalysis().total_sold(
+            month=current_month - 1, year=current_year)
+        current_sales = MainStorageAnalysis().total_sold(
+            month=current_month, year=current_year)
+        if last_month_achieved:
+            last_month_achieved = last_month_achieved.achieved
+            target = SalesTarget.create_sales_target(target=last_month_achieved,
+                                                      month=current_month,
+                                                      year=current_year)
+            if target:
+                SalesTarget.add_sales_achieved(
+                    month=current_month, year=current_year, amount=current_sales)
+                current_target = target.target
+                progress = SalesTarget.progress(month=current_month, year=current_year)
+        else:
+            target = SalesTarget.create_sales_target(month=current_month, year=current_year)
+            if target:
+                SalesTarget.add_sales_achieved(
+                    month=current_month, year=current_year, amount=current_sales)
+                current_target = target.target
+                progress = SalesTarget.progress(month=current_month, year=current_year)
+
         context = {
+            'target': current_target,
+            'progress': progress,
             'estimated_revenue': estimated_revenue,
             'estimated_profit': estimated_profit,
             'expenses': total_expenses,

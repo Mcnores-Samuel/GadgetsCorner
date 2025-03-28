@@ -82,3 +82,9 @@ class Accessory_Sales(models.Model):
         db_table = 'accessory_sales'
         verbose_name = 'Accessory Sales'
         verbose_name_plural = 'Accessory Sales'
+
+    @classmethod
+    def get_total_sold(cls, month, year):
+        """Get the total number of accessories sold in a specific month and year."""
+        total = cls.objects.filter(date_sold__month=month, date_sold__year=year).aggregate(models.Sum('total'))['total__sum'] or 0
+        return total

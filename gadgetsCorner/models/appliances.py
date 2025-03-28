@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.db.models import Sum
 
 
 class Appliances(models.Model):
@@ -64,3 +65,12 @@ class Appliance_Sales(models.Model):
     class Meta:
         ordering = ['-id']
         verbose_name_plural = 'Appliance Sales'
+
+    @classmethod
+    def get_total_sold(cls, month, year):
+        """Get the total appliances sold for a specific month and year."""
+        try:
+            return cls.objects.filter(
+                date_sold__month=month, date_sold__year=year).aggregate(Sum('total'))['total__sum'] or 0
+        except cls.DoesNotExist:
+            return None

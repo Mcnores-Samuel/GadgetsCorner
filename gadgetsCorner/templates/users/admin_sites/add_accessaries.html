@@ -11,12 +11,12 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <div class="container common-bg p-3 mb-5 rounded">
+    <div class="container common-bg p-2 rounded">
         <p class="text-center fw-bold">Add Accessaries</p>
         <p class="text-center fw-bold">Please enter the Accessary name and the quantity to add to stock</p>
+        <a href="{% url 'add_to_stock' %}" class="btn bg-secondary">Add Phones</a>
+        <a href="{% url 'add_appliances' %}" class="btn bg-secondary">Add Appliances</a>
     </div>
-    <a href="{% url 'add_to_stock' %}" class="btn common-bg">Add Phones</a>
-    <a href="{% url 'add_appliances' %}" class="btn common-bg">Add Appliances</a>
     <hr>
     <form action="" method="post" class=" shadow-lg p-3 mb-5 rounded w-50 mx-auto">
         {% csrf_token %}
@@ -27,7 +27,7 @@
         </p>
         <datalist id="name_list">
             {% for name in names %}
-            <option value="{{ name }}">{{ name }}</option>
+            <option>{{ name }}</option>
             {% endfor %}
         </datalist>
         <p>
@@ -37,7 +37,7 @@
         </p>
         <datalist id="model_list">
             {% for model in models %}
-            <option value="{{ model }}">{{ model }}</option>
+            <option>{{ model }}</option>
             {% endfor %}
         </datalist>
         <p>

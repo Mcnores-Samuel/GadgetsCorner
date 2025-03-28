@@ -95,7 +95,7 @@ def sign_in(request):
                         if remember_me:
                             request.session.set_expiry(604800)
                         else:
-                            request.session.set_expiry(0)
+                            request.session.set_expiry(604800)
                         if user.is_staff:
                             if user.last_login:
                                 messages.success(request, 'Welcome back, {}'.format(user.username))

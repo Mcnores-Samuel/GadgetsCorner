@@ -56,12 +56,13 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <div class="container common-bg p-3 mb-5 rounded">
+    <div class="container common-bg p-2 rounded">
         <p class="text-center fw-bold">Add Stock: Total Scanned: <span  id="total"></span></p>
         <p class="text-center fw-bold">Please enter the Imei numbers and fill in the fields that follows with complete and accurate details</p>
+        <a href="{% url 'add_accessaries' %}" class="btn bg-secondary fw-bold">Add Accessaries</a>
+        <a href="{% url 'add_appliances' %}" class="btn bg-secondary fw-bold">Add Appliances</a>
     </div>
-    <a href="{% url 'add_accessaries' %}" class="btn common-bg fw-bold">Add Accessaries</a>
-    <a href="{% url 'add_appliances' %}" class="btn common-bg fw-bold">Add Appliances</a>
+
     <hr>
     <div class="data_container">
         <div class="form_container">
