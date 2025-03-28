@@ -40,6 +40,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 # Application definition
 
 INSTALLED_APPS = [

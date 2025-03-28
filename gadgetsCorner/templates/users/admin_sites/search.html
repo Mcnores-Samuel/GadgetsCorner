@@ -15,10 +15,12 @@
             {% csrf_token %}
             <input type="search" class="form-control me-2 card-bg" name="search_query"
             id="search" placeholder="Device IMEI, category, model etc" autofocus>
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-sm common-bg" type="submit">Search</button>
         </form>
-        <a href="{%url 'accessary_sales' %}" class="btn common-bg">Accessaries</a>
-        <a href="{% url 'appliance_sales' %}" class="btn common-bg">Appliances</a>
+        <div>
+            <button type="button" class="btn common-bg" data-bs-toggle="modal" data-bs-target="#AccessariesModal">Accessories</button>
+            <button type="button" class="btn common-bg" data-bs-toggle="modal" data-bs-target="#applianceSalesModal">Appliances</button>
+        </div>
     </div>
 </nav>
 <br>
@@ -140,6 +142,81 @@
         {% endif %}
     </div>
 </div>
+<!-- Accessories Modal -->
+<div class="modal fade" id="AccessariesModal" tabindex="-1" aria-labelledby="accessoriesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="accessoriesModalLabel">Accessories Sales</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{%url 'accessary_sales' %}" method="post" class=" shadow-lg p-3 mb-5 rounded">
+              {% csrf_token %}
+              <p>
+                  <label for="item" class=" fw-bold">Accessary Name:</label>
+                  <input type="text" name="item" class="form-control " placeholder="Enter Accessary name"
+                  list="accessory_list" id="item" required>
+              </p>
+              <datalist id="accessory_list">
+                  {% for accessory in accessories %}
+                  <option>{{ accessory }}</option>
+                  {% endfor %}
+              </datalist>
+              <p>
+                  <label for="quantity" class="fw-bold ">Quantity:</label>
+                  <input type="number" name="quantity" class="form-control " placeholder="Enter quantity"
+                  min="0" required>
+              </p>
+              <p>
+                  <label for="id_selling_price" class="fw-bold ">Selling price:</label>
+                  <input type="number" name="selling_price" class="form-control  " placeholder="Enter selling price"
+                  id="id_selling_price" min="0" required>
+              </p>
+              <button type="submit" class="btn btn-sm common-bg w-100" id="submit">submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!-- Appliances Modal -->
+<div class="modal fade" id="applianceSalesModal" tabindex="-1" aria-labelledby="applianceSalesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="applianceSalesModalLabel">Appliance Sales</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'appliance_sales' %}" method="post" class="shadow-lg p-3 mb-5 rounded">
+            {% csrf_token %}
+            <p>
+                <label for="item" class=" fw-bold">Appliance Name:</label>
+                <input type="text" name="appliance_name" class="form-control  " placeholder="Enter Appliance Name / item"
+                list="appliance_list", id="item">
+            </p>
+            <datalist id="appliance_list">
+                {% for appliance in appliances %}
+                  <option>{{ appliance }}</option>
+                {% endfor %}
+            </datalist>
+            <p>
+                <label for="quantity" class="fw-bold ">Quantity:</label>
+                <input type="number" name="quantity" class="form-control  " placeholder="Enter quantity"
+                min="0">
+            </p>
+            <p>
+                <label for="id_selling_price" class="fw-bold ">Selling Price:</label>
+                <input type="number" name="selling_price" class="form-control  " placeholder="Enter selling price per item"
+                id="id_selling_price" min="0">
+            </p>
+            <button type="submit" class="btn btn-sm common-bg w-100" id="submit">submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 <style>
     .data-card {
         display: block;

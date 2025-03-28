@@ -1,5 +1,5 @@
 """This module contains a view function for adding daily expenses."""
-from ..models.daily_expenses import DailyExpenses
+from ...models.daily_expenses import DailyExpenses
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils import timezone

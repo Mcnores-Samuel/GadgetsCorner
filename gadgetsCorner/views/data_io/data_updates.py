@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from ..forms.user_profile_update_form import UserProfileForm
-from ..forms.users import UserAvatarForm
-from ..models.main_storage import MainStorage
+from ...forms.user_profile_update_form import UserProfileForm
+from ...forms.users import UserAvatarForm
+from ...models.main_storage import MainStorage
 from django.http import JsonResponse
-from ..models.user_profile import UserAvatar
+from ...models.user_profile import UserAvatar
 
 
 @login_required

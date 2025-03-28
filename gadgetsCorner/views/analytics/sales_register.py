@@ -7,15 +7,15 @@ process by agents.
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from ..models.main_storage import MainStorage
+from ...models.main_storage import MainStorage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.utils import timezone
 from webpush import send_user_notification
 from os import environ
-from ..models.accessories import Accessories, Accessory_Sales
-from ..models.appliances import Appliances, Appliance_Sales
+from ...models.accessories import Accessories, Accessory_Sales
+from ...models.appliances import Appliances, Appliance_Sales
 
 
 @login_required
@@ -115,6 +115,16 @@ def uploadBulkSales(request):
       to access this view.
     - Verifies if the agent has available stock of phones.
     """
+    acceessories = Accessories.objects.all()
+    appliances = Appliances.objects.all()
+    acceessories_set = set()
+    appliances_set = set()
+    for accessory in acceessories:
+        acceessories_set.add(f"{accessory.item}({accessory.model})")
+    for appliance in appliances:
+        appliances_set.add(f"{appliance.name}({appliance.model})")
+    acceessories_list = sorted(list(acceessories_set))
+    appliances_list = sorted(list(appliances_set))
     if request.method == 'POST' and request.user.is_staff and request.user.is_superuser:
         data = request.POST.get('data', None)
         date = request.POST.get('date', None)
@@ -149,7 +159,7 @@ def uploadBulkSales(request):
             return JsonResponse({'status': 200, 'not_in_stock': not_in_stock})
         else:
             return JsonResponse({'status': 400, 'error': 'No data received'})
-    return render(request, 'users/admin_sites/pointOfSale.html')
+    return render(request, 'users/admin_sites/pointOfSale.html', {'accessories': acceessories_list, 'appliances': appliances_list})
 
 
 @login_required
@@ -178,22 +188,15 @@ def accessary_sales(request):
     It ensures that agents with available stock can proceed with accessory sales.
     """
     if request.user.is_staff and request.user.is_superuser:
-        data_list = Accessories.objects.all()
-        name_set = set()
-        model_set = set()
-        for data in data_list:
-            name_set.add(data.item)
-            model_set.add(data.model)
-        sorted_name_list = sorted(list(name_set))
-        sorted_model_list = sorted(list(model_set))
         if request.method == 'POST':
             accessory_name = request.POST.get('item')
-            model = request.POST.get('model')
+            model = str(accessory_name).split('(')[1].replace(')', '')
+            accessory_name = str(accessory_name).split('(')[0]
             quantity = int(request.POST.get('quantity'))
             price_sold = request.POST.get('selling_price')
             if quantity <= 0:
                 messages.error(request, 'Quantity must be greater than 0, please check and try again')
-                return redirect('accessary_sales')
+                return redirect('uploadBulkSales')
             try:
                 item = Accessories.objects.filter(item=accessory_name, model=model).first()
                 if item is None:
@@ -215,13 +218,13 @@ def accessary_sales(request):
                     sales.save()
                     item.save()
                     messages.success(request, 'Successfully sold {} of {}(s)'.format(quantity, item.item))
-                    return redirect('accessary_sales')
+                    return redirect('uploadBulkSales')
                 messages.error(request, 'Insufficient stock, please check the quantity and try again')
             except Accessories.DoesNotExist:
                 messages.error(request, 'Invalid accessory name or model, please check and try again')
-                return redirect('accessary_sales')
-        return render(request, 'users/admin_sites/accessories_sales.html', {'names': sorted_name_list, 'models': sorted_model_list})
-    return render(request, 'users/admin_sites/accessories_sales.html', {'names': sorted_name_list, 'models': sorted_model_list})
+                return redirect('uploadBulkSales')
+        return redirect('uploadBulkSales')
+    return redirect('uploadBulkSales')
 
 
 @login_required
@@ -250,27 +253,20 @@ def appliance_sales(request):
     It ensures that agents with available stock can proceed with appliance sales.
     """
     if request.user.is_staff and request.user.is_superuser:
-        data_list = Appliances.objects.all()
-        name_set = set()
-        model_set = set()
-        for data in data_list:
-            name_set.add(data.name)
-            model_set.add(data.model)
-        sorted_name_list = sorted(list(name_set))
-        sorted_model_list = sorted(list(model_set))
         if request.method == 'POST':
-            appliance_name = request.POST.get('item')
-            model = request.POST.get('model')
+            appliance_name = request.POST.get('appliance_name')
+            model = str(appliance_name).split('(')[1].replace(')', '')
+            appliance_name = str(appliance_name).split('(')[0]
             quantity = int(request.POST.get('quantity'))
             price_sold = request.POST.get('selling_price')
             if quantity <= 0:
                 messages.error(request, 'Quantity must be greater than 0, please check and try again')
-                return redirect('appliance_sales')
+                return redirect('uploadBulkSales')
             try:
                 item = Appliances.objects.filter(name=appliance_name, model=model).first()
                 if item is None:
                     messages.error(request, 'Invalid appliance name or model, please check and try again')
-                    return redirect('appliance_sales')
+                    return redirect('uploadBulkSales')
                 if item.total >= int(quantity):
                     item.total -= int(quantity)
                     item.date_modified = timezone.now()
@@ -286,10 +282,10 @@ def appliance_sales(request):
                     sales.save()
                     item.save()
                     messages.success(request, 'Successfully sold {} of {}(s)'.format(quantity, item.name))
-                    return redirect('appliance_sales')
+                    return redirect('uploadBulkSales')
                 messages.error(request, 'Insufficient stock, please check the quantity and try again')
             except Appliances.DoesNotExist:
                 messages.error(request, 'Invalid appliance name or model, please check and try again')
-                return redirect('appliance_sales')
-        return render(request, 'users/admin_sites/appliances_sales.html', {'names': sorted_name_list, 'models': sorted_model_list})
-    return render(request, 'users/admin_sites/appliances_sales.html', {'names': sorted_name_list, 'models': sorted_model_list})
+                return redirect('uploadBulkSales')
+        return redirect('uploadBulkSales')
+    return redirect('uploadBulkSales')

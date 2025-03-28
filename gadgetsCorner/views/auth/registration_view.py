@@ -1,7 +1,7 @@
 
 
-from ..forms.sign_up_form import SignUpForm
-from ..forms.sign_in_form import SignInForm
+from ...forms.sign_up_form import SignUpForm
+from ...forms.sign_in_form import SignInForm
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
@@ -97,24 +97,6 @@ def sign_in(request):
                         else:
                             request.session.set_expiry(0)
                         if user.is_staff:
-                            if user.last_login:
-                                messages.success(request, 'Welcome back, {}'.format(user.username))
-                            else:
-                                messages.success(request, 'Welcome, {}'.format(user.username))
-                            return redirect(reverse('dashboard'))
-                        elif user.groups.filter(name='staff_members').exists():
-                            if user.last_login:
-                                messages.success(request, 'Welcome back, {}'.format(user.username))
-                            else:
-                                messages.success(request, 'Welcome, {}'.format(user.username))
-                            return redirect(reverse('dashboard'))
-                        elif user.groups.filter(name='agents').exists():
-                            if user.last_login:
-                                messages.success(request, 'Welcome back, {}'.format(user.username))
-                            else:
-                                messages.success(request, 'Welcome, {}'.format(user.username))
-                            return redirect(reverse('dashboard'))
-                        else:
                             if user.last_login:
                                 messages.success(request, 'Welcome back, {}'.format(user.username))
                             else:

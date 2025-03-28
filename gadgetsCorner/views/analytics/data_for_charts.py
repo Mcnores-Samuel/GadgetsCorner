@@ -1,9 +1,9 @@
-from ..models.main_storage import MainStorage
+from ...models.main_storage import MainStorage
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
-from ..models.accessories import Accessories
-from ..models.appliances import Appliances
+from ...data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
+from ...models.accessories import Accessories
+from ...models.appliances import Appliances
 
 
 def get_daily_sales_json(request):

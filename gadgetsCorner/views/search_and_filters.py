@@ -13,6 +13,8 @@ where gadgetsCorner is the name of the Django application.
 all data is returned in JSON format.
 """
 from ..models.main_storage import MainStorage
+from ..models.accessories import Accessories
+from ..models.appliances import Appliances
 from django.db.models import Q
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -36,6 +38,16 @@ def data_search(request):
     """
     if request.user.is_staff and request.user.is_superuser:
         queryset = []
+        acceessories = Accessories.objects.all()
+        appliances = Appliances.objects.all()
+        acceessories_set = set()
+        appliances_set = set()
+        for accessory in acceessories:
+            acceessories_set.add(f"{accessory.item}({accessory.model})")
+        for appliance in appliances:
+            appliances_set.add(f"{appliance.name}({appliance.model})")
+        acceessories_list = sorted(list(acceessories_set))
+        appliances_list = sorted(list(appliances_set))
         if request.method == 'POST':
             search_query = request.POST.get('search_query', None)
             queryset = []
@@ -48,8 +60,8 @@ def data_search(request):
                         Q(sales_type__icontains=search_query) |
                         Q(category__icontains=search_query)
                     )
-                return render(request, 'users/admin_sites/search.html', {'data': queryset})
-        return render(request, 'users/admin_sites/search.html', {'data': queryset})
+                return render(request, 'users/admin_sites/search.html', {'data': queryset, 'accessories': acceessories_list, 'appliances': appliances_list})
+        return render(request, 'users/admin_sites/search.html', {'data': queryset, 'accessories': acceessories_list, 'appliances': appliances_list})
     return redirect('dashboard')
 
 
