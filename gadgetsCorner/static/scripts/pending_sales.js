@@ -19,26 +19,3 @@ const get_pending_sales = () => {
 };
 
 get_pending_sales();
-
-
-const getUnverifiedStock = () => {
-  $('document').ready(() => {
-    const note = $('.unverified-stock-notice');
-    function getUnverifiedStock() {
-      $.ajax({
-        url: '/system_core_1/verify_stock_recieved/',
-        method: 'GET',
-        contentTpe: 'application/json',
-        success(data) {
-          if (data) {
-            note.text(`${data.total}`);
-          }
-        },
-      });
-    }
-    getUnverifiedStock();
-    setInterval(getUnverifiedStock, 5 * 60 * 1000);
-  });
-};
-
-getUnverifiedStock();

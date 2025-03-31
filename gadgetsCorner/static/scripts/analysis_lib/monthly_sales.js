@@ -31,7 +31,6 @@ function updateSalesByAgentChart(url, dest, chartType, loader) {
         const load = $(loader);
         load.removeClass('loading-message');
 
-        console.log(data);
         const total = data.Total;
         $.each(data, (date, value) => {
           if (date !== 'Total') {

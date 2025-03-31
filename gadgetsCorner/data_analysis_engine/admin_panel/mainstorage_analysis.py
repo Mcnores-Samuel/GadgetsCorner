@@ -20,19 +20,21 @@ class MainStorageAnalysis:
             sold=True, in_stock=False)
         sales = {}
         for data in data_set:
-            sales[data.phone_type] = sales.get(data.phone_type, 0) + 1
+            sales[data.phone_type.lower().capitalize()] = sales.get(data.phone_type, 0) + 1
         
         accessories = Accessory_Sales.objects.filter(
-            date_sold=day)
-        
+            date_sold__date=day)
+
         for accessory in accessories:
-            sales[f"{accessory.item}({accessory.model})"] = accessory.total
+            sales[f"{accessory.item}({accessory.model})".lower().capitalize()] = sales.get(
+                f"{accessory.item}({accessory.model})".lower().capitalize(), 0) + accessory.total
         
         appliances = Appliance_Sales.objects.filter(
-            date_sold=day)
-        
+            date_sold__date=day)
+
         for appliance in appliances:
-            sales[f"{appliance.item}({appliance.model})"] = appliance.total
+            sales[f"{appliance.item}({appliance.model})".lower().capitalize()] = sales.get(
+                f"{appliance.item}({appliance.model})".lower().capitalize(), 0) + appliance.total
         return sales
     
     def get_weekly_sales(self):
