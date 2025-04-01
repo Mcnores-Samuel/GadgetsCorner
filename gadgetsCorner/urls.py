@@ -7,7 +7,7 @@ from .views.auth import registration_view
 
 from .views.analytics import data_for_charts, sales_register
 from .views import (central_display, home_page, user_dashboard, search_and_filters)
-from .views.stock_analysis import (get_source_stock, get_yearly_product_sales, admin_stock_analysis)
+from .views.analytics.stock_analysis import (get_source_stock, get_yearly_product_sales, admin_stock_analysis)
 from .views.feedback import feedback
 from .views.data_io.add_to_stock import add_to_stock, add_accessaries, add_appliances
 from .views.pending_sales import total_pending_sales, revert_to_stock, pending_sales
@@ -15,9 +15,14 @@ from .views.defects import defects
 from  .views import revenues
 from .views.system_routine_updates import system_routine_update
 from .views.data_io.daily_expenses import add_daily_expense
+from gadgetsCorner.views.accounting.urls import urlpatterns as accounting_urls
+import itertools
 
 
-urlpatterns = [
+urlpatterns = list(itertools.chain(accounting_urls))
+
+
+urlpatterns += [
     # home page
     path('', home_page.home_page, name='home_page'),
     # registration

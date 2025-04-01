@@ -1,0 +1,262 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<script src="{% static 'scripts/accounting/revenueOverview.js' %}" defer></script>
+<script src="{% static 'scripts/accounting/revCostByCategory.js' %}" defer></script>
+<script src="{% static 'scripts/accounting/previous_revenue.js' %}" defer></script>
+<script src="{% static 'scripts/accounting/indicators.js' %}" defer></script>
+<script src="{% static 'scripts/accounting/revenueBySalesType.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <br>
+    <button class="btn btn-sm bg-info d-md-none mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
+        <span class="material-icons">menu</span>
+    </button>
+    <br>
+    <div class="collapse d-md-block" id="mobileNav">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+            <a class="nav-link active fw-bold" aria-current="page" href="{% url 'accounting' %}">Sales and Revenue</a>
+            </li>
+            <!-- <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'cost_and_expenses' %}">Cost and Expenses</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link fw-bold" href="">Profit Metrics</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fw-bold" href="">Performance and Efficiency</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fw-bold" href="">Cash Flow Metrics</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fw-bold" href="">Debt and Equity</a>
+            </li> -->
+        </ul>
+    </div>
+    <br>
+    <div class="row gy-3">
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Year</h3>
+                <p id="year"></p>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Total Items</h3>
+                <p id="total"></p>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Revenue</h3>
+                <p id="revenueId"></p>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Cost</h3>
+                <p id="costId"></p>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Sales Growth</h3>
+                <p id="sales_growth"></p>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card">
+                <h3>Avg price/sales</h3>
+                <p id="avg_order_value"></p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-warning" role="status" id="loader">
+        <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <section class="yearly_analysis">
+        <div class="row gy-3">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Revenue Parameters</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="yearly_revenue_chart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Cost And Revenue Distribution</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="revenue_distribution_chart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Total Items calculated</th>
+                    <th>Revenue</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>With Both Price & Cost</td>
+                    <td id="both_price_and_cost"></td>
+                    <td id="revenue"></td>
+                    <td id="cost"></td>
+                </tr>
+                <tr>
+                    <td>With Cost Only</td>
+                    <td id="cost_only"></td>
+                    <td id="revenue_for_itwco"></td>
+                    <td id="cost_for_itwco"></td>
+                </tr>
+                <tr>
+                    <td>With Price Only</td>
+                    <td id="price_only"></td>
+                    <td id="revenue_for_itwpo"></td>
+                    <td id="cost_for_itwpo"></td>
+                </tr>
+                <tr>
+                    <td>With No Price or Cost</td>
+                    <td id="no_price_or_cost"></td>
+                    <td id="revenue_for_itwnps"></td>
+                    <td id="cost_for_itwnps"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <br>
+    <section class="yearly_analysis">
+        <div class="row gy-3">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Revenue and Cost By Category</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="revCostByCategoryChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Same Period Last year</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="last_revenue_chart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br>
+    <section class="sales_type_analysis">
+        <div class="row gy-3">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Revenue By Yellow Sales</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="revByYellowSalesChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="fw-bold text-muted">Revenue By Cash Sales</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas class="revByCashSalesChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<style>
+    .stat-cards {
+        display: flex;
+        gap: 20px;
+        justify-content: space-around;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #666;
+    }
+
+    .stat-card p {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 5px 0 0;
+        color: #333;
+    }
+
+    .charts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        justify-content: center;
+    }
+
+    .chart-container {
+        width: 45%;
+        min-width: 400px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 40px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}

@@ -18,6 +18,7 @@ Attributes:
 from django.db import models
 from .user_profile import UserProfile
 from django.utils import timezone
+from django.db.models import Sum, F
 
 
 class Accessories(models.Model):
@@ -84,7 +85,56 @@ class Accessory_Sales(models.Model):
         verbose_name_plural = 'Accessory Sales'
 
     @classmethod
-    def get_total_sold(cls, month, year):
+    def get_total_sold(cls, month=None, year=None):
         """Get the total number of accessories sold in a specific month and year."""
-        total = cls.objects.filter(date_sold__month=month, date_sold__year=year).aggregate(models.Sum('total'))['total__sum'] or 0
+        total = 0
+        if month:
+            total = cls.objects.filter(
+                date_sold__month=month, date_sold__year=year).aggregate(
+                    models.Sum('total'))['total__sum'] or 0
+        else:
+            total = cls.objects.filter(date_sold__year=year).aggregate(
+                models.Sum('total'))['total__sum'] or 0
+        if total is None:
+            total = 0
         return total
+    
+    @classmethod
+    def get_total_cost(cls, month=None, year=None):
+        """Get the total cost of accessories sold in a specific month and year."""
+        total = 0
+        if month:
+            total = cls.objects.filter(
+                date_sold__month=month, date_sold__year=year).aggregate(
+                    total_cost=models.Sum(F('total') * F('cost')))['total_cost'] or 0
+        else:
+            total = cls.objects.filter(date_sold__year=year).aggregate(
+                total_cost=models.Sum(F('total') * F('cost')))['total_cost'] or 0
+        if total is None:
+            total = 0
+        return total
+    
+    @classmethod
+    def get_revenue(cls, month=None, year=None):
+        """Get the total revenue from accessories sold in a specific month and year."""
+        total = 0
+        if month:
+            total = cls.objects.filter(
+                date_sold__month=month, date_sold__year=year).aggregate(
+                    total_revenue=models.Sum(F('total') * F('price_sold')))['total_revenue'] or 0
+        else:
+            total = cls.objects.filter(date_sold__year=year).aggregate(
+                total_revenue=models.Sum(F('total') * F('price_sold')))['total_revenue'] or 0
+        if total is None:
+            total = 0
+        return total
+    
+    @classmethod
+    def get_profit(cls, month=None, year=None):
+        """Get the total profit from accessories sold in a specific month and year."""
+        cost = cls.get_total_cost(month, year)
+        revenue = cls.get_revenue(month, year)
+        profit = revenue - cost
+        if profit is None:
+            profit = 0
+        return profit

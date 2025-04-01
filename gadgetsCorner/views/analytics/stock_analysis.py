@@ -1,13 +1,13 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from ..models.user_profile import UserProfile
-from ..models.main_storage import MainStorage
-from ..models.accessories import Accessory_Sales
-from ..models.appliances import Appliance_Sales
-from ..models.daily_expenses import DailyExpenses
+from ...models.user_profile import UserProfile
+from ...models.main_storage import MainStorage
+from ...models.accessories import Accessory_Sales
+from ...models.appliances import Appliance_Sales
+from ...models.daily_expenses import DailyExpenses
 from django.contrib.auth.models import Group
 from django.utils import timezone
-from ..data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
+from ...data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
 from gadgetsCorner.models.sales_target import SalesTarget
 
 
@@ -73,7 +73,6 @@ def admin_stock_analysis(request):
         current_sales = MainStorageAnalysis().total_sold(
             month=current_month, year=current_year)
         if last_month_achieved:
-            last_month_achieved = last_month_achieved.achieved
             target = SalesTarget.create_sales_target(target=last_month_achieved,
                                                       month=current_month,
                                                       year=current_year)
