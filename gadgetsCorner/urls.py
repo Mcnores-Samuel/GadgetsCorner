@@ -1,18 +1,14 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-
-from .views.data_io import data_updates
-
+from .views.data_io import data_updates, sales_register
 from .views.auth import registration_view
-
-from .views.analytics import data_for_charts, sales_register
+from .views.analytics import data_for_charts
 from .views import (central_display, home_page, user_dashboard, search_and_filters)
 from .views.analytics.stock_analysis import (get_source_stock, get_yearly_product_sales, admin_stock_analysis)
 from .views.feedback import feedback
 from .views.data_io.add_to_stock import add_to_stock, add_accessaries, add_appliances
 from .views.pending_sales import total_pending_sales, revert_to_stock, pending_sales
 from .views.defects import defects
-from  .views import revenues
 from .views.system_routine_updates import system_routine_update
 from .views.data_io.daily_expenses import add_daily_expense
 from gadgetsCorner.views.accounting.urls import urlpatterns as accounting_urls
@@ -37,7 +33,6 @@ urlpatterns += [
     path('uploadBulkSales/', sales_register.uploadBulkSales, name='uploadBulkSales'),
     path('accessary_sales/', sales_register.accessary_sales, name='accessary_sales'),
     path('appliance_sales/', sales_register.appliance_sales, name='appliance_sales'),
-    path('revenues/', revenues.revenues, name='revenues'),
     path('revert_to_stock/', revert_to_stock, name='revert_to_stock'),
     path('pending_sales/', pending_sales, name='pending_sales'),
     path('add_daily_expense/', add_daily_expense, name='add_daily_expense'),
@@ -65,9 +60,6 @@ urlpatterns += [
     path('get_yearly_sales_total/', data_for_charts.get_yearly_sales_total, name='get_yearly_sales_total'),
     #system email and notifications auto updates
     path('system_routine_update/', system_routine_update, name='system_routine_update'),
-    # Revenue analysis and concurent operations
-    path('updateCreditPrices/', revenues.updateCreditPrices, name='updateCreditPrices'),
-    path('calculateCreditRevenue/', revenues.calculateCreditRevenue, name='calculateCreditRevenue'),
     # reseting user password
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/reset_form.html'), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/reset_done.html'), name='password_reset_done'),

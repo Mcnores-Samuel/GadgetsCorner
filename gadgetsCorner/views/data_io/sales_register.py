@@ -190,8 +190,22 @@ def accessary_sales(request):
     if request.user.is_staff and request.user.is_superuser:
         if request.method == 'POST':
             accessory_name = request.POST.get('item')
-            model = str(accessory_name).split('(')[1].replace(')', '')
-            accessory_name = str(accessory_name).split('(')[0]
+            model = ""
+            try:
+                model = str(accessory_name).split('(')[1].replace(')', '')
+                accessory_name = str(accessory_name).split('(')[0]
+            except IndexError:
+                messages.error(
+                    request,
+                    'Invalid accessory name or model, should be in the format "Accessory Name(Model)"'
+                )
+                return redirect('uploadBulkSales')
+            if not model:
+                messages.error(request, 'Invalid accessory name or model, please check and try again')
+                return redirect('uploadBulkSales')
+            if not accessory_name:
+                messages.error(request, 'Invalid accessory name or model, please check and try again')
+                return redirect('uploadBulkSales')
             quantity = int(request.POST.get('quantity'))
             price_sold = request.POST.get('selling_price')
             if quantity <= 0:
