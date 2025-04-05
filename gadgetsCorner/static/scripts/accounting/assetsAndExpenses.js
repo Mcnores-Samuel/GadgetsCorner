@@ -13,7 +13,7 @@ $(document).ready(function () {
         success(data) {
             loader.hide();
             let total = Object.values(data)[0];
-            dest.html(`MK${formatValue(total)}`);
+            dest.html(`MWK${formatValue(total)}`);
         },
         });
     }

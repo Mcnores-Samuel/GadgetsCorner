@@ -25,6 +25,7 @@ phone sales program.
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.db.models import Sum
 
 
 sales_type = (
@@ -112,3 +113,26 @@ class MainStorage(models.Model):
             stock_out_date__month=month, stock_out_date__year=year,
             in_stock=False, sold=True, pending=False, missing=False,
             assigned=True).count()
+    
+    @classmethod
+    def total_cost(cls):
+        total = 0
+        total = cls.objects.filter(
+            in_stock=True, sold=False, pending=False, cost__gt=0,
+            assigned=True).aggregate(
+            total_cost=Sum('cost'))
+        if total['total_cost'] is None:
+            return 0
+        return total['total_cost']
+    
+    @classmethod
+    def total_revenue(cls):
+        total = 0
+        total = cls.objects.filter(
+            in_stock=False, sold=True, pending=False, assigned=True,
+            cost__gt=0, price__gt=0, stock_out_date__month=timezone.now().month,
+            stock_out_date__year=timezone.now().year).aggregate(
+            total_revenue=Sum('price'))
+        if total['total_revenue'] is None:
+            return 0
+        return total['total_revenue']

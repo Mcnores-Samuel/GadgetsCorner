@@ -67,6 +67,7 @@ class SalesTarget(models.Model):
         """Get the progress of sales for a specific month and year."""
         try:
             sales_target = cls.objects.get(month=month, year=year)
-            return sales_target.achieved / sales_target.target * 100
+            target_progress = (sales_target.achieved * 100) / sales_target.target
+            return round(target_progress, 2)
         except cls.DoesNotExist:
             return None

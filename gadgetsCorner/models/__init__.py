@@ -4,3 +4,6 @@ from .feedback import Feedback
 from .notifications import Notifications
 from .accessories import Accessories
 from .refarbished_devices import RefarbishedDevices
+from .appliances import Appliances
+from .assets import FixedAssets
+from .liabilities import Liability

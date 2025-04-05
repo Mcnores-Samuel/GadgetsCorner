@@ -51,6 +51,15 @@ class Accessories(models.Model):
         db_table = 'accessories'
         verbose_name = 'Accessory'
         verbose_name_plural = 'Accessories'
+    
+    @classmethod
+    def total_cost(cls):
+        """Returns the total cost of all devices."""
+        total = cls.objects.aggregate(
+            total_cost=Sum(F('cost_per_item') * F('total')))
+        if total['total_cost'] is None:
+            return 0
+        return total['total_cost']
 
 
 class Accessory_Sales(models.Model):

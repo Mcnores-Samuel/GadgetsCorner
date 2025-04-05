@@ -9,6 +9,8 @@
 <script src="{% static 'scripts/accounting/previous_revenue.js' %}" defer></script>
 <script src="{% static 'scripts/accounting/indicators.js' %}" defer></script>
 <script src="{% static 'scripts/accounting/revenueBySalesType.js' %}" defer></script>
+<script type="module" src="{% static 'scripts/accounting/assetsAndExpenses.js' %}" defer></script>
+<script type="module" src="{% static 'scripts/accounting/formatValue.js' %}" defer></script>
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -38,6 +40,11 @@
                 <a class="nav-link fw-bold" href="">Debt and Equity</a>
             </li> -->
         </ul>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-warning" role="status" id="loader">
+        <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
     <br>
     <div class="row gy-3">
@@ -79,11 +86,113 @@
         </div>
     </div>
     <br>
-    <div class="d-flex justify-content-center">
-        <div class="spinner-border text-warning" role="status" id="loader">
-        <span class="visually-hidden">Loading...</span>
+    <section class="charts_by_chartjs">
+        <div class="row gy-3">
+            <div class="col-md-4 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center">
+                        <p class="text-muted fw-bold">Net Worth</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="networthLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="networth"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center d-flex justify-content-center gap-4">
+                        <p class="fw-bold text-muted">Total Assets value</p>
+                        <div data-bs-toggle="tooltip" title="Add Assets">
+                            <span class="material-icons btn btn-sm" data-bs-target="#AssetsModal" data-bs-toggle="modal">
+                                add_circle
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="totalAssetsLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="totalAssets"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center d-flex justify-content-center gap-4">
+                        <p class="fw-bold text-muted">Total Liabilities</p>
+                        <div data-bs-toggle="tooltip" title="Add Liabilities">
+                            <span class="material-icons btn btn-sm" data-bs-target="#LiabilitiesModal" data-bs-toggle="modal">
+                                add_circle
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="totalLiabilitiesLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="totalLiabilities"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center">
+                        <p class="text-muted fw-bold">Cost Of Available Stock</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="availableStockcostLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="availableStockCost"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center d-flex justify-content-center gap-4">
+                        <p class="fw-bold text-muted">Total Expenses</p>
+                        <div
+                        data-bs-toggle="tooltip"
+                        title="Add Expenses">
+                        <span class="material-icons btn btn-sm" data-bs-target="#viewExpensesModal" data-bs-toggle="modal">
+                            add_circle
+                        </span>
+                    </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="expenseLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="totalExpense"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+    <br>
     <section class="yearly_analysis">
         <div class="row gy-3">
             <div class="col-md-6 col-12">
@@ -259,4 +368,144 @@
         background-color: #f2f2f2;
     }
 </style>
+<!-- Modal to add assets -->
+<div class="modal fade" id="AssetsModal" tabindex="-1" aria-labelledby="AssetsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-muted" id="AssetsModalLabel">Add Assets</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add_assets' %}" method="post" id="addAssetsForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="assetName" class="form-label">Asset Name</label>
+                        <input type="text" class="form-control" id="assetName" name="assetName" placeholder="Asset Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="assetDescription" name="assetDescription" placeholder="Description of the asset">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetLife" class="form-label">Useful Life</label>
+                        <input type="number" class="form-control" id="assetLife" name="assetLife" placeholder="Useful life of the asset in years or months">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetCost" class="form-label">Cost price</label>
+                        <input type="text" class="form-control" id="assetCost" name="assetCost" placeholder="Cost price of the asset">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetDate" class="form-label">Date Purchased</label>
+                        <input type="date" class="form-control" id="assetDate" name="assetDate">
+                    </div>
+                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to add liabilities -->
+<div class="modal fade" id="LiabilitiesModal" tabindex="-1" aria-labelledby="LiabilitiesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-muted" id="LiabilitiesModalLabel">Add Liabilities</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add_liability' %}" method="post" id="AddLiabilityForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="liabilityType" class="form-label">Liability Type</label>
+                        <select name="liabilityType" id="liabilityType" class="form-select">
+                            <option value="0">Select Liability Type</option>
+                            <option value="current">Current Liability</option>
+                            <option value="non_current">Non Current Liability</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityCreditor" class="form-label">Creditor</label>
+                        <input type="text" class="form-control" id="liabilityCreditor" name="liabilityCreditor" placeholder="Creditor">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityAmount" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="liabilityAmount" name="liabilityAmount" placeholder="Amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="liabilityDescription" name="liabilityDescription" placeholder="Description i.e. what the liability is for">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityInterestRate" class="form-label">Interest Rate</label>
+                        <input type="number" class="form-control" id="liabilityInterestRate" name="liabilityInterestRate" placeholder="Interest Rate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityeffectiveDate" class="form-label">Effective Date</label>
+                        <input type="date" class="form-control" id="liabilityeffectiveDate" name="liabilityeffectiveDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityDueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="liabilityDueDate" name="liabilityDueDate">
+                    </div>
+                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewExpensesModal" tabindex="-1" aria-labelledby="viewExpensesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="viewExpensesModalLabel">Expenses  
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'expenses' %}" method="post">
+                    {% csrf_token %}
+                    <label for="category">Category</label>
+                    <input type="text" name="category" id="category" class="form-control" required
+                    placeholder="Enter the category of the expense", list="categories">
+                    <datalist id="categories">
+                        <option value="Rent/Lease">
+                        <option value="Utilities">
+                        <option value="Salaries">
+                        <option value="Internet and Communication">
+                        <option value="Transport">
+                        <option value="Maintenance and Repairs">
+                        <option value="Taxes">
+                        <option value="Insurance">
+                        <option value="Advertising">
+                        <option value="Advertising Materials">
+                        <option value="Promotions and Discounts">
+                        <option value="Customer Retention Costs">
+                        <option value="Professional Services">
+                        <option value="Bank Charges">
+                        <option value="Office Supplies">
+                        <option value="Subscriptions">
+                        <option value="Fuel Costs">
+                        <option value="Food Expenses">
+                        <option value="Damage Costs">
+                    </datalist>
+                    <br>
+                    <label for="description" class="">Description</label>
+                    <input type="text" name="description" id="description" class="form-control" required
+                    placeholder="Name or describe the money usage type">
+                    <br>
+                    <label for="amount" class="">Amount</label>
+                    <input type="number" name="amount" id="amount" class="form-control" required
+                    placeholder="Enter the amount spent">
+                    <br>
+                    <label for="date" class="">Date</label>
+                    <input type="datetime-local" name="date" id="date" class="form-control" required>
+                    <br>
+                    <button type="submit" class="btn common-bg w-100 fw-bold">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
