@@ -16,7 +16,6 @@ class DailyExpenses(models.Model):
     """
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)

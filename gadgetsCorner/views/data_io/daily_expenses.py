@@ -30,12 +30,17 @@ def add_daily_expense(request):
     """
     if request.user.is_staff and request.user.is_superuser:
         user = request.user
-        data = DailyExpenses.objects.all()
         if request.method == 'POST':
-            name = request.POST.get('name')
+            category = request.POST.get('category')
+            description = request.POST.get('description')
+            date = request.POST.get('date')
             amount = request.POST.get('amount')
             DailyExpenses.objects.create(
-                added_by=user, name=name, amount=amount, date=timezone.now())
-            messages.success(request, '{} spent on {} has been added to the daily expenses.'.format(amount, name))
+                added_by=user,
+                category=category,
+                description=description,
+                date=date,
+                amount=amount)
+            messages.success(request, '{} spent on {} has been added to the daily expenses.'.format(amount, category))
         return redirect('dashboard')
     return redirect('dashboard')

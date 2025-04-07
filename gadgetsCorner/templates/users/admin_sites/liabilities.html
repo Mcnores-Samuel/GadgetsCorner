@@ -1,0 +1,208 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'styles/agent_stock_mobile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="text-center fw-bold common-bg w-100 rounded d-flex justify-content-between align-items-center p-2">
+        <span class="text-center">liabilities</span>
+        <div data-bs-toggle="tooltip" title="Add Liabilities">
+            <span class="btn btn-sm fw-bold bg-secondary" data-bs-target="#LiabilitiesModal" data-bs-toggle="modal">
+                Add
+            </span>
+        </div>
+    </div>
+    <br>
+    {% bootstrap_messages %}
+    {% if liabilities %}
+        <div class="row g-3">
+            {% for liability in liabilities %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow rounded">
+                        <div class="card-body">
+                            <p class="card-title text-muted text-center fw-bold">{{ liability.name }}</p>
+                            <p class="text-center">{{ liability.description }}</span></p>
+                            <p class="card-text"><strong class="text-info">Liability Type:</strong>  <span>{{ liability.type }}</span></p>
+                            <p class="card-text"><strong class="text-info">Effective Date:</strong>  <span>{{ liability.effective_date }}</span></p>
+                            <p class="card-text"><strong class="text-info">Due Date:</strong>  <span>{{ liability.due_date }}</span></p>
+                            <p class="card-text"><strong class="text-info">Creditor:</strong>  <span>{{ liability.creditor }}</span></p>
+                            <p class="card-text"><strong class="text-info">Amount:</strong>  <span>{{ liability.amount }}</span></p>
+                            {% if liability.is_paid %}
+                                <p class="card-text"><strong class="text-info">Status:</strong>  <span class="text-success">Paid</span></p>
+                            {% else %}
+                                <button type="button" class="btn btn-sm btn-success fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#liabilityPaidModal{{ liability.id }}">
+                                    Mark as Paid
+                                </button>
+
+                                <!-- Paid Modal -->
+                                <div class="modal fade" id="liabilityPaidModal{{ liability.id }}" tabindex="-1" aria-labelledby="liabilityPaidModalLabel{{ liability.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-header text-center fw-bold common-bg">Mark liability {{ liability.name }} as paid</h6>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Marking this liability as paid will update its status. Are you sure you want to proceed?</p>
+                                                <form action="{% url 'mark_as_paid' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="liabilityId" value="{{ liability.id }}">
+                                                    <button type="submit" class="btn btn-success w-100 fw-bold">Mark as Paid</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <button type="button" class="btn btn-sm common-bg fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#liabilityUpdateModal{{ liability.id }}">
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#liabilityDeleteModal{{ liability.id }}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Update Modal -->
+                <div class="modal fade" id="liabilityUpdateModal{{ liability.id }}" tabindex="-1" aria-labelledby="liabilityUpdateModalLabel{{ liability.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Update liability {{ liability.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'update_liability' %}" method="post" id="AddLiabilityForm">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="liabilityId" value="{{ liability.id }}">
+                                    <div class="mb-3">
+                                        <label for="liabilityType" class="form-label">Liability Type</label>
+                                        <select name="liabilityType" id="liabilityType" class="form-select" value="{{ liability.type }}">
+                                            <option value="{{ liability.type }}"> {{ liability.type }}</option>
+                                            <option value="current">Current Liability</option>
+                                            <option value="non_current">Non Current Liability</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="liabilityCreditor" class="form-label">Creditor</label>
+                                        <input type="text" class="form-control" id="liabilityCreditor" name="liabilityCreditor" placeholder="Creditor" value="{{ liability.creditor }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="liabilityAmount" class="form-label">Amount</label>
+                                        <input type="text" class="form-control" id="liabilityAmount" name="liabilityAmount" value="{{ liability.amount }}" placeholder="Amount you owe">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="liabilityDescription" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="liabilityDescription" name="liabilityDescription" placeholder="Description i.e. what the liability is for" value="{{ liability.description }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="liabilityInterestRate" class="form-label">Interest Rate</label>
+                                        <input type="number" class="form-control" id="liabilityInterestRate" name="liabilityInterestRate" placeholder="Interest Rate" value="{{ liability.interest_rate }}">
+                                    </div>
+                                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="liabilityDeleteModal{{ liability.id }}" tabindex="-1" aria-labelledby="liabilityDeleteModalLabel{{ liability.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Delete liability {{ liability.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="fw-bold text-center text-muted">Deleting this liability will permanently remove it from the system. Are you sure you want to proceed?</p>
+                                <form action="{% url 'delete_liability' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="liabilityId" value="{{ liability.id }}">
+                                    <button type="submit" class="btn btn-danger w-100 fw-bold">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No liabilities available.
+        </div>
+    {% endif %}
+    <br>
+    <div class="container w-100">
+        <div class="pagination container-fluid w-100 d-flex justify-content-center">
+            <span class="step-links w-100 d-flex justify-content-around">
+                {% if liabilities.has_previous %}
+                    <a href="?page=1" class="btn common-bg btn-sm">first</a>
+                    <a href="?page={{ liabilities.previous_page_number }}" class="btn common-bg btn-sm">previous</a>
+                {% endif %}
+                <span class="current fw-bold">
+                    Page {{ liabilities.number }} of {{ liabilities.paginator.num_pages }}.
+                </span>
+                {% if liabilities.has_next %}
+                    <a href="?page={{ liabilities.next_page_number }}" class="btn common-bg btn-sm">next</a>
+                    <a href="?page={{ liabilities.paginator.num_pages }}" class="btn common-bg btn-sm">last</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+<!-- Modal to add liabilities -->
+<div class="modal fade" id="LiabilitiesModal" tabindex="-1" aria-labelledby="LiabilitiesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-muted" id="LiabilitiesModalLabel">Add Liabilities</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add_liability' %}" method="post" id="AddLiabilityForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="liabilityType" class="form-label">Liability Type</label>
+                        <select name="liabilityType" id="liabilityType" class="form-select">
+                            <option value="0">Select Liability Type</option>
+                            <option value="current">Current Liability</option>
+                            <option value="non_current">Non Current Liability</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityCreditor" class="form-label">Creditor</label>
+                        <input type="text" class="form-control" id="liabilityCreditor" name="liabilityCreditor" placeholder="Creditor">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityAmount" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="liabilityAmount" name="liabilityAmount" placeholder="Amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="liabilityDescription" name="liabilityDescription" placeholder="Description i.e. what the liability is for">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityInterestRate" class="form-label">Interest Rate</label>
+                        <input type="number" class="form-control" id="liabilityInterestRate" name="liabilityInterestRate" placeholder="Interest Rate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityeffectiveDate" class="form-label">Effective Date</label>
+                        <input type="datetime-local" class="form-control" id="liabilityeffectiveDate" name="liabilityeffectiveDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="liabilityDueDate" class="form-label">Due Date</label>
+                        <input type="datetime-local" class="form-control" id="liabilityDueDate" name="liabilityDueDate">
+                    </div>
+                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

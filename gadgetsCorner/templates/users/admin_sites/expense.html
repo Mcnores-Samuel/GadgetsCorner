@@ -1,0 +1,170 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'styles/agent_stock_mobile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="text-center fw-bold common-bg w-100 rounded d-flex justify-content-between align-items-center p-2">
+        <span class="text-center">expenses</span>
+        <div data-bs-toggle="tooltip" title="Add Expenses">
+            <span class="btn btn-sm fw-bold bg-secondary" data-bs-target="#viewExpensesModal" data-bs-toggle="modal">
+                Add
+            </span>
+        </div>
+    </div>
+    <br>
+    {% bootstrap_messages %}
+    {% if expenses %}
+        <div class="row g-3">
+            {% for expense in expenses %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow rounded">
+                        <div class="card-body">
+                            <p class="card-title text-muted text-center fw-bold">{{ expense.category }}</p>
+                            <p class="text-center">{{ expense.description }}</span></p>
+                            <p class="card-text"><strong class="text-info">Amount:</strong>  <span>{{ expense.amount }}</span></p>
+                            <p class="card-text"><strong class="text-info">Date:</strong>  <span>{{ expense.date }}</span></p>
+                            <button type="button" class="btn btn-sm common-bg fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#expenseUpdateModal{{ expense.id }}">
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#expenseDeleteModal{{ expense.id }}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Update Modal -->
+                <div class="modal fade" id="expenseUpdateModal{{ expense.id }}" tabindex="-1" aria-labelledby="expenseUpdateModalLabel{{ expense.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Update expense {{ expense.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'update_expense' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="expenseId" value="{{ expense.id }}">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Category</label>
+                                        <input type="text" class="form-control" id="category" name="category" value="{{ expense.category }}" placeholder="Name of the expense">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="description" name="description" value="{{ expense.description }}" placeholder="Description of the expense">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="amount" class="form-label">Amount</label>
+                                        <input type="text" class="form-control" id="amount" name="amount" value="{{ expense.amount }}" placeholder="Cost price of the expense">
+                                    </div>
+                                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="expenseDeleteModal{{ expense.id }}" tabindex="-1" aria-labelledby="expenseDeleteModalLabel{{ expense.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Delete expense {{ expense.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="fw-bold text-center text-muted">Deleting this expense will permanently remove it from the system. Are you sure you want to proceed?</p>
+                                <form action="{% url 'delete_expense' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="expenseId" value="{{ expense.id }}">
+                                    <button type="submit" class="btn btn-danger w-100 fw-bold">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No expenses available.
+        </div>
+    {% endif %}
+    <br>
+    <div class="container w-100">
+        <div class="pagination container-fluid w-100 d-flex justify-content-center">
+            <span class="step-links w-100 d-flex justify-content-around">
+                {% if expenses.has_previous %}
+                    <a href="?page=1" class="btn common-bg btn-sm">first</a>
+                    <a href="?page={{ expenses.previous_page_number }}" class="btn common-bg btn-sm">previous</a>
+                {% endif %}
+                <span class="current fw-bold">
+                    Page {{ expenses.number }} of {{ expenses.paginator.num_pages }}.
+                </span>
+                {% if expenses.has_next %}
+                    <a href="?page={{ expenses.next_page_number }}" class="btn common-bg btn-sm">next</a>
+                    <a href="?page={{ expenses.paginator.num_pages }}" class="btn common-bg btn-sm">last</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+<!-- Modal to add expenses -->
+<div class="modal fade" id="viewExpensesModal" tabindex="-1" aria-labelledby="viewExpensesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="viewExpensesModalLabel">Expenses</h5> 
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'expenses' %}" method="post">
+                    {% csrf_token %}
+                    <label for="category">Category</label>
+                    <input type="text" name="category" id="category" class="form-control" required
+                    placeholder="Enter the category of the expense", list="categories">
+                    <datalist id="categories">
+                        <option value="Rent/Lease">
+                        <option value="Utilities">
+                        <option value="Salaries">
+                        <option value="Internet and Communication">
+                        <option value="Transport">
+                        <option value="Maintenance and Repairs">
+                        <option value="Taxes">
+                        <option value="Insurance">
+                        <option value="Advertising">
+                        <option value="Advertising Materials">
+                        <option value="Promotions and Discounts">
+                        <option value="Customer Retention Costs">
+                        <option value="Professional Services">
+                        <option value="Bank Charges">
+                        <option value="Office Supplies">
+                        <option value="Subscriptions">
+                        <option value="Fuel Costs">
+                        <option value="Food Expenses">
+                        <option value="Damage Costs">
+                    </datalist>
+                    <br>
+                    <label for="description" class="">Description</label>
+                    <input type="text" name="description" id="description" class="form-control" required
+                    placeholder="Name or describe the money usage type">
+                    <br>
+                    <label for="amount" class="">Amount</label>
+                    <input type="number" name="amount" id="amount" class="form-control" required
+                    placeholder="Enter the amount spent">
+                    <br>
+                    <label for="date" class="">Date</label>
+                    <input type="datetime-local" name="date" id="date" class="form-control" required>
+                    <br>
+                    <button type="submit" class="btn common-bg w-100 fw-bold">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

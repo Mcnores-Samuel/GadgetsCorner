@@ -1,0 +1,162 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'styles/agent_stock_mobile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="text-center fw-bold common-bg w-100 rounded d-flex justify-content-between align-items-center p-2">
+        <span class="text-center">Assets</span>
+        <div data-bs-toggle="tooltip" title="Add Assets">
+            <span class="btn btn-sm fw-bold bg-secondary" data-bs-target="#AssetsModal" data-bs-toggle="modal">
+                Add
+            </span>
+        </div>
+    </div>
+    <br>
+    {% bootstrap_messages %}
+    {% if assets %}
+        <div class="row g-3">
+            {% for asset in assets %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow rounded">
+                        <div class="card-body">
+                            <p class="card-title text-muted text-center fw-bold">{{ asset.name }}</p>
+                            <p class="text-center">{{ asset.description }}</span></p>
+                            <p class="card-text"><strong class="text-info">Date purchased:</strong>  <span>{{ asset.date_purchased }}</span></p>
+                            <p class="card-text"><strong class="text-info">cost:</strong>  <span>{{ asset.cost }}</span></p>
+                            <button type="button" class="btn btn-sm common-bg fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#assetUpdateModal{{ asset.id }}">
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger fw-bold mt-2 w-100" data-bs-toggle="modal" data-bs-target="#assetDeleteModal{{ asset.id }}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Update Modal -->
+                <div class="modal fade" id="assetUpdateModal{{ asset.id }}" tabindex="-1" aria-labelledby="assetUpdateModalLabel{{ asset.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Update Asset {{ asset.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'update_asset' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="assetId" value="{{ asset.id }}">
+                                    <div class="mb-3">
+                                        <label for="assetName" class="form-label">Asset Name</label>
+                                        <input type="text" class="form-control" id="assetName" name="assetName" value="{{ asset.name }}" placeholder="Name of the asset">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="assetDescription" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="assetDescription" name="assetDescription" value="{{ asset.description }}" placeholder="Description of the asset">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="assetLife" class="form-label">Useful Life</label>
+                                        <input type="number" class="form-control" id="assetLife" name="assetLife" value="{{ asset.useful_life }}" placeholder="Useful life of the asset">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="assetCost" class="form-label">Cost price</label>
+                                        <input type="text" class="form-control" id="assetCost" name="assetCost" value="{{ asset.cost }}" placeholder="Cost price of the asset">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="assetDate" class="form-label">Date Purchased</label>
+                                        <input type="datetime-local" class="form-control" id="assetDate" name="assetDate" value="{{ asset.date_purchased }}">
+                                    </div>
+                                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="assetDeleteModal{{ asset.id }}" tabindex="-1" aria-labelledby="assetDeleteModalLabel{{ asset.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-header text-center fw-bold common-bg">Delete Asset {{ asset.name }}</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="fw-bold text-center text-muted">Deleting this asset will permanently remove it from the system. Are you sure you want to proceed?</p>
+                                <form action="{% url 'delete_asset' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="assetId" value="{{ asset.id }}">
+                                    <button type="submit" class="btn btn-danger w-100 fw-bold">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No assets available.
+        </div>
+    {% endif %}
+    <br>
+    <div class="container w-100">
+        <div class="pagination container-fluid w-100 d-flex justify-content-center">
+            <span class="step-links w-100 d-flex justify-content-around">
+                {% if assets.has_previous %}
+                    <a href="?page=1" class="btn common-bg btn-sm">first</a>
+                    <a href="?page={{ assets.previous_page_number }}" class="btn common-bg btn-sm">previous</a>
+                {% endif %}
+                <span class="current fw-bold">
+                    Page {{ assets.number }} of {{ assets.paginator.num_pages }}.
+                </span>
+                {% if assets.has_next %}
+                    <a href="?page={{ assets.next_page_number }}" class="btn common-bg btn-sm">next</a>
+                    <a href="?page={{ assets.paginator.num_pages }}" class="btn common-bg btn-sm">last</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+<!-- Modal to add assets -->
+<div class="modal fade" id="AssetsModal" tabindex="-1" aria-labelledby="AssetsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-muted" id="AssetsModalLabel">Add Assets</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add_assets' %}" method="post" id="addAssetsForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="assetName" class="form-label">Asset Name</label>
+                        <input type="text" class="form-control" id="assetName" name="assetName" placeholder="Asset Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="assetDescription" name="assetDescription" placeholder="Description of the asset">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetLife" class="form-label">Useful Life</label>
+                        <input type="number" class="form-control" id="assetLife" name="assetLife" placeholder="Useful life of the asset in years or months">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetCost" class="form-label">Cost price</label>
+                        <input type="text" class="form-control" id="assetCost" name="assetCost" placeholder="Cost price of the asset">
+                    </div>
+                    <div class="mb-3">
+                        <label for="assetDate" class="form-label">Date Purchased</label>
+                        <input type="datetime-local" class="form-control" id="assetDate" name="assetDate">
+                    </div>
+                    <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

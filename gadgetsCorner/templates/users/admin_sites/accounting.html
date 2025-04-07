@@ -90,32 +90,15 @@
         <div class="row gy-3">
             <div class="col-md-4 col-12">
                 <div class="card bg-light">
-                    <div class="card-header text-center">
-                        <p class="text-muted fw-bold">Net Worth</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border text-warning" role="status" id="networthLoader">
-                            <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <h3 class="fw-bold text-muted" id="networth"></h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card bg-light">
-                    <div class="card-header text-center d-flex justify-content-center gap-4">
-                        <p class="fw-bold text-muted">Total Assets value</p>
+                    <div class="card-header text-center d-flex justify-content-between gap-4 align-items-center">
+                        <span class="fw-bold text-muted">Total Assets value</span>
                         <div data-bs-toggle="tooltip" title="Add Assets">
                             <span class="btn btn-sm fw-bold common-bg" data-bs-target="#AssetsModal" data-bs-toggle="modal">
                                 Add
                             </span>
                         </div>
                         <div data-bs-toggle="tooltip" title="View Assets">
-                            <a href="http://">
+                            <a href="{% url 'assets_view' %}">
                                 <span class="btn btn-sm fw-bold common-bg" data-bs-target="#viewAssetsModal" data-bs-toggle="modal">
                                     View
                                 </span>
@@ -136,15 +119,15 @@
             </div>
             <div class="col-md-4 col-12">
                 <div class="card bg-light">
-                    <div class="card-header text-center d-flex justify-content-center gap-4">
-                        <p class="fw-bold text-muted">Total Liabilities</p>
+                    <div class="card-header text-center d-flex justify-content-between gap-4 align-items-center">
+                        <span class="fw-bold text-muted">Total Liabilities</span>
                         <div data-bs-toggle="tooltip" title="Add Liabilities">
                             <span class="btn btn-sm fw-bold common-bg" data-bs-target="#LiabilitiesModal" data-bs-toggle="modal">
                                 Add
                             </span>
                         </div>
                         <div data-bs-toggle="tooltip" title="View Liabilities">
-                            <a href="http://">
+                            <a href="{% url 'liabilities_view' %}">
                                 <span class="btn btn-sm fw-bold common-bg" data-bs-target="#viewLiabilitiesModal" data-bs-toggle="modal">
                                     View
                                 </span>
@@ -163,34 +146,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-12">
+            <div class="col-md-4 col-12">
                 <div class="card bg-light">
-                    <div class="card-header text-center">
-                        <p class="text-muted fw-bold">Cost Of Available Stock</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border text-warning" role="status" id="availableStockcostLoader">
-                            <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <h3 class="fw-bold text-muted" id="availableStockCost"></h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-12">
-                <div class="card bg-light">
-                    <div class="card-header text-center d-flex justify-content-center gap-4">
-                        <p class="fw-bold text-muted">Total Expenses</p>
+                    <div class="card-header text-center d-flex justify-content-between gap-4 align-items-center">
+                        <span class="fw-bold text-muted">Total Expenses</span>
                         <div data-bs-toggle="tooltip" title="Add Expenses">
                             <span class="btn btn-sm fw-bold common-bg" data-bs-target="#viewExpensesModal" data-bs-toggle="modal">
                                 Add
                             </span>
                         </div>
                         <div data-bs-toggle="tooltip" title="View Expenses">
-                            <a href="http://">
+                            <a href="{% url 'expense_view' %}">
                                 <span class="btn btn-sm fw-bold common-bg" data-bs-target="#viewExpensesModal" data-bs-toggle="modal">
                                     View
                                 </span>
@@ -205,6 +171,40 @@
                         </div>
                         <div class="d-flex justify-content-center">
                             <h3 class="fw-bold text-muted" id="totalExpense"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center">
+                        <p class="text-muted fw-bold">Net Worth</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="networthLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="networth"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card bg-light">
+                    <div class="card-header text-center">
+                        <p class="text-muted fw-bold">Cost Of Available Stock</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-warning" role="status" id="availableStockcostLoader">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h3 class="fw-bold text-muted" id="availableStockCost"></h3>
                         </div>
                     </div>
                 </div>
@@ -416,7 +416,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="assetDate" class="form-label">Date Purchased</label>
-                        <input type="date" class="form-control" id="assetDate" name="assetDate">
+                        <input type="datetime-local" class="form-control" id="assetDate" name="assetDate">
                     </div>
                     <button type="submit" class="btn btn-sm common-bg w-100 fw-bold">Add</button>
                 </form>

@@ -488,20 +488,47 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title fw-bold" id="viewExpensesModalLabel">Expenses  
-                                <span><a href="{{ admin_url }}gadgetsCorner/dailyexpenses/" class="btn common-bg">View Expenses</a></span></h5>
+                            <h5 class="modal-title fw-bold" id="viewExpensesModalLabel">Expenses</h5> 
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body bg-dark">
-                            <form action="{% url 'add_daily_expense' %}" method="post">
+                        <div class="modal-body">
+                            <form action="{% url 'expenses' %}" method="post">
                                 {% csrf_token %}
-                                <label for="name" class="text-light">Description</label>
-                                <input type="text" name="name" id="name" class="form-control bg-dark text-light" required
+                                <label for="category">Category</label>
+                                <input type="text" name="category" id="category" class="form-control" required
+                                placeholder="Enter the category of the expense", list="categories">
+                                <datalist id="categories">
+                                    <option value="Rent/Lease">
+                                    <option value="Utilities">
+                                    <option value="Salaries">
+                                    <option value="Internet and Communication">
+                                    <option value="Transport">
+                                    <option value="Maintenance and Repairs">
+                                    <option value="Taxes">
+                                    <option value="Insurance">
+                                    <option value="Advertising">
+                                    <option value="Advertising Materials">
+                                    <option value="Promotions and Discounts">
+                                    <option value="Customer Retention Costs">
+                                    <option value="Professional Services">
+                                    <option value="Bank Charges">
+                                    <option value="Office Supplies">
+                                    <option value="Subscriptions">
+                                    <option value="Fuel Costs">
+                                    <option value="Food Expenses">
+                                    <option value="Damage Costs">
+                                </datalist>
+                                <br>
+                                <label for="description" class="">Description</label>
+                                <input type="text" name="description" id="description" class="form-control" required
                                 placeholder="Name or describe the money usage type">
                                 <br>
-                                <label for="amount" class="text-light">Amount</label>
-                                <input type="number" name="amount" id="amount" class="form-control bg-dark text-light" required
+                                <label for="amount" class="">Amount</label>
+                                <input type="number" name="amount" id="amount" class="form-control" required
                                 placeholder="Enter the amount spent">
+                                <br>
+                                <label for="date" class="">Date</label>
+                                <input type="datetime-local" name="date" id="date" class="form-control" required>
                                 <br>
                                 <button type="submit" class="btn common-bg w-100 fw-bold">Submit</button>
                             </form>

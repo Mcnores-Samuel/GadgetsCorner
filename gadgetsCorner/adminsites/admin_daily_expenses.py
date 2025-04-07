@@ -6,9 +6,9 @@ class DailyExpensesAdmin(admin.ModelAdmin):
     """This class represents the DailyExpensesAdmin model.
     It is used to customize the admin interface for the DailyExpenses model.
     """
-    list_display = ('added_by', 'name', 'amount', 'date')
+    list_display = ('added_by', 'amount', 'date')
     list_filter = ('date',)
-    search_fields = ('name', 'amount', 'date')
+    search_fields = ('amount', 'date')
     ordering = ('-id',)
 
     list_per_page = 50

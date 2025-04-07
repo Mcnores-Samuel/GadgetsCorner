@@ -12,10 +12,12 @@ from .views.defects import defects
 from .views.system_routine_updates import system_routine_update
 from .views.data_io.daily_expenses import add_daily_expense
 from gadgetsCorner.views.accounting.urls import urlpatterns as accounting_urls
+from gadgetsCorner.views.data_io.urls import urlpatterns as data_io_urls
 import itertools
 
 
-urlpatterns = list(itertools.chain(accounting_urls))
+urlpatterns = list(itertools.chain(
+    accounting_urls, data_io_urls))
 
 
 urlpatterns += [
