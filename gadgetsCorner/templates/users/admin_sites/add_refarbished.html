@@ -1,0 +1,80 @@
+{% extends 'users/admin_sites/main.html' %}
+{% load plus_r %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/loading-message.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% bootstrap_messages %}
+    <div class="common-bg">
+        <h1 class="text-center fw-bold">Add Refarbished Devices</h1>
+        <p class="text-center fw-bold">Please enter the Device name and the quantity to add to stock</p>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active fw-bold" aria-current="page" href="{% url 'add_refarbished' %}">Refarbished</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_to_stock' %}">New Phones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_accessaries' %}">Accessaries</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_appliances' %}">Appliances</a>
+        </li>
+    </ul>
+    <hr>
+    <div class="w-100 d-flex justify-content-center">
+    <form action="" method="post" class="shadow-lg p-3 mb-5 rounded stock_form">
+            {% csrf_token %}
+            <p>
+                <label for="item" class="fw-bold">Device Name:</label>
+                <input type="text" name="name" class="form-control" placeholder="Enter Device Name / item"
+                list="name_list", id="item">
+            </p>
+            <datalist id="name_list">
+                {% for name in names %}
+                <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </datalist>
+            <p>
+                <label for="model" class="fw-bold">Model:</label>
+                <input type="text" name="model" class="form-control" placeholder="Enter model"
+                list="model_list" id="model">
+            </p>
+            <datalist id="model_list">
+                {% for model in models %}
+                <option value="{{ model }}">{{ model }}</option>
+                {% endfor %}
+            </datalist>
+            <p>
+                <label for="quantity" class="fw-bold">Quantity:</label>
+                <input type="number" name="quantity" class="form-control" placeholder="Enter quantity"
+                min="0">
+            </p>
+            <p>
+                <label for="id_cost_price" class="fw-bold">Cost price:</label>
+                <input type="number" name="cost_price" class="form-control" placeholder="Enter cost price"
+                id="id_cost_price" min="0">
+            </p>
+            <button type="submit" class="btn common-bg w-100 fw-bold" id="submit">submit</button>
+        </form>
+    </div>
+</div>
+<style>
+    .stock_form {
+        width: 50%;
+    }
+
+    @media (max-width: 768px) {
+        .stock_form {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
