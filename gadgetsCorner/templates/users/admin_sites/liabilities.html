@@ -17,6 +17,20 @@
             </span>
         </div>
     </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link fw-bold active" aria-current="page" href="{% url 'liabilities_view' %}">Liabilities</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'assets_view' %}">Assets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" href="{% url 'expense_view' %}">Expenses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'accounting' %}">Accounting</a>
+        </li>
+    </ul>
     <br>
     {% bootstrap_messages %}
     {% if liabilities %}
