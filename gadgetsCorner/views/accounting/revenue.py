@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from gadgetsCorner.models.main_storage import MainStorage
 from gadgetsCorner.models.accessories import Accessory_Sales
 from gadgetsCorner.models.appliances import Appliance_Sales
+from gadgetsCorner.models.refarbished_devices import RefarbishedDevicesSales
 from django.utils import timezone
 from django.db.models import Sum
 import calendar
@@ -27,6 +28,9 @@ def current_year_revenue(request):
     appl_cost = Appliance_Sales.get_total_cost(year=current_year)
     appl_revenue = Appliance_Sales.get_revenue(year=current_year)
     total_appliances_sold = Appliance_Sales.get_total_sold(year=current_year)
+    refarb_cost = RefarbishedDevicesSales.get_total_cost(year=current_year)
+    refarb_revenue = RefarbishedDevicesSales.get_revenue(year=current_year)
+    total_refarbished_sold = RefarbishedDevicesSales.get_total_sold(year=current_year)
 
     if data is None:
         return JsonResponse({'error': 'Invalid request.'})
@@ -62,10 +66,10 @@ def current_year_revenue(request):
 
     context = {
         'year': current_year,
-        'total_calculated': total + total_accessories_sold + total_appliances_sold,
-        'both_price_and_cost': t_items_wbps + total_accessories_sold + total_appliances_sold,
-        'revenue': revenue_for_itwbps['total_revenue'] + access_revenue + appl_revenue,
-        'cost': revenue_for_itwbps['total_cost'] + access_cost + appl_cost,
+        'total_calculated': total + total_accessories_sold + total_appliances_sold + total_refarbished_sold,
+        'both_price_and_cost': t_items_wbps + total_accessories_sold + total_appliances_sold + total_refarbished_sold,
+        'revenue': revenue_for_itwbps['total_revenue'] + access_revenue + appl_revenue + refarb_revenue,
+        'cost': revenue_for_itwbps['total_cost'] + access_cost + appl_cost + refarb_cost,
         'cost_only': total_items_with_cost_only,
         'revenue_for_itwco': revenue_for_itwco['total_revenue'],
         'cost_for_itwco': revenue_for_itwco['total_cost'],
@@ -124,6 +128,13 @@ def revenue_by_category(request):
             'total_revenue': Appliance_Sales.get_revenue(year=current_year)
         }
     )
+    revenueByCategory.append(
+        {
+            'category': 'Refarbished Devices',
+            'total_cost': RefarbishedDevicesSales.get_total_cost(year=current_year),
+            'total_revenue': RefarbishedDevicesSales.get_revenue(year=current_year)
+        }
+    )
     return JsonResponse(revenueByCategory, safe=False)
 
 
@@ -158,6 +169,8 @@ def calculateCashRevenue(request):
                     month=months.index(month)+1, year=timezone.now().year
                 ) + Appliance_Sales.get_revenue(
                     month=months.index(month)+1, year=timezone.now().year
+                ) + RefarbishedDevicesSales.get_revenue(
+                    month=months.index(month)+1, year=timezone.now().year
                 )
                 items = MainStorage.objects.filter(
                     in_stock=False, sold=True, pending=False, missing=False, cost__gt=0, price__gt=0,
@@ -190,6 +203,8 @@ def lastyearBycurrentMonth(request):
                 month=i, year=last_year
             ) + Appliance_Sales.get_revenue(
                 month=i, year=last_year
+            ) + RefarbishedDevicesSales.get_revenue(
+                month=i, year=last_year
             )
             group_by_month[timezone.datetime(last_year, i, 1).strftime('%B')] = total
         return JsonResponse(group_by_month)
@@ -218,6 +233,8 @@ def revenue_growth(request):
         current_year_revenue += Accessory_Sales.get_revenue(
             year=current_year
         ) + Appliance_Sales.get_revenue(
+            year=current_year
+        ) + RefarbishedDevicesSales.get_revenue(
             year=current_year
         )
         last_year_revenue = sum([item.price for item in last_year_data])
@@ -254,11 +271,15 @@ def average_order_value(request):
             month=current_month, year=current_year
         ) + Appliance_Sales.get_revenue(
             month=current_month, year=current_year
+        ) + RefarbishedDevicesSales.get_revenue(
+            month=current_month, year=current_year
         )
         total_orders = data.count()
         total_orders += Accessory_Sales.get_total_sold(
             month=current_month, year=current_year
         ) + Appliance_Sales.get_total_sold(
+            month=current_month, year=current_year
+        ) + RefarbishedDevicesSales.get_total_sold(
             month=current_month, year=current_year
         )
         if total_orders == 0:

@@ -8,6 +8,8 @@ from gadgetsCorner.views.data_io.liability_view import (
 from gadgetsCorner.views.data_io.expense_view import (
     expense_view, update_expense, delete_expense
 )
+from gadgetsCorner.views.data_io import sales_register
+from gadgetsCorner.views.data_io import add_refarbished
 
 urlpatterns = [
     path('assets_view/', assets_view, name='assets_view'),
@@ -20,4 +22,6 @@ urlpatterns = [
     path('expense_view/', expense_view, name='expense_view'),
     path('update_expense/', update_expense, name='update_expense'),
     path('delete_expense/', delete_expense, name='delete_expense'),
+    path('refarbished_sales/', sales_register.refarbished_sales, name='refarbished_sales'),
+    path('add_refarbished/', add_refarbished.add_refarbished, name='add_refarbished'),
 ]

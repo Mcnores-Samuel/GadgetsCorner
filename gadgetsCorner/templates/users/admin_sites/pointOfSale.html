@@ -70,9 +70,10 @@
             <button class="btn btn-sm common-bg" type="submit">Search</button>
         </form>
         <div>
-          <button type="button" class="btn common-bg" data-bs-toggle="modal" data-bs-target="#AccessariesModal">Accessories</button>
-          <button type="button" class="btn common-bg" data-bs-toggle="modal" data-bs-target="#applianceSalesModal">Appliances</button>
-          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#helpModal">Help</button>
+          <button type="button" class="btn common-bg fw-bold" data-bs-toggle="modal" data-bs-target="#AccessariesModal">Accessories</button>
+          <button type="button" class="btn common-bg fw-bold" data-bs-toggle="modal" data-bs-target="#applianceSalesModal">Appliances</button>
+          <button type="button" class="btn common-bg fw-bold" data-bs-toggle="modal" data-bs-target="#refurbishedDeviceSalesModal">Refurbished</button>
+          <button type="button" class="btn btn-info fw-bold" data-bs-toggle="modal" data-bs-target="#helpModal">Help</button>
         </div>
     </div>
 </nav>
@@ -212,6 +213,41 @@
         </form>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Refurbished Device Sales Modal -->
+<div class="modal fade" id="refurbishedDeviceSalesModal" tabindex="-1" aria-labelledby="refurbishedDeviceSalesLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header bg-secondary text-light">
+              <h5 class="modal-title" id="refurbishedDeviceSalesLabel">Refurbished Device Sales</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form action="{% url 'refarbished_sales' %}" method="post">
+                  {% csrf_token %}
+                  <p>
+                      <label for="name" class="fw-bold">Device Name:</label>
+                      <input type="text" name="name" class="form-control" list="item_list" required>
+                  </p>
+                  <datalist id="item_list">
+                      {% for refarb_name in refarbished %}
+                      <option>{{ refarb_name }}</option>
+                      {% endfor %}
+                  </datalist>
+                  <p>
+                      <label for="quantity" class="fw-bold">Quantity:</label>
+                      <input type="number" name="quantity" class="form-control" min="0" required>
+                  </p>
+                  <p>
+                      <label for="id_selling_price" class="fw-bold">Selling price:</label>
+                      <input type="number" name="selling_price" class="form-control" min="0" required>
+                  </p>
+                  <button type="submit" class="btn common-bg w-100">Submit</button>
+              </form>
+          </div>
+      </div>
   </div>
 </div>
 

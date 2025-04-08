@@ -39,6 +39,11 @@
         width: 50%;
     }
 
+    .input_container {
+        display: flex;
+        gap: 12px;
+    }
+
     @media screen and (max-width: 768px) {
         .data_container {
             flex-direction: column;
@@ -56,37 +61,43 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <div class="container common-bg p-2 rounded">
-        <p class="text-center fw-bold">Add Stock: Total Scanned: <span  id="total"></span></p>
+    <div class="container common-bg rounded">
+        <h6 class="text-center fw-bold">Add Stock: Total Scanned: <span  id="total"></span></h6>
         <p class="text-center fw-bold">Please enter the Imei numbers and fill in the fields that follows with complete and accurate details</p>
-        <a href="{% url 'add_accessaries' %}" class="btn bg-secondary fw-bold">Add Accessaries</a>
-        <a href="{% url 'add_appliances' %}" class="btn bg-secondary fw-bold">Add Appliances</a>
     </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link fw-bold active " aria-current="page" href="{% url 'add_to_stock' %}">New Phones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" href="{% url 'add_refarbished' %}">Refarbished</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_accessaries' %}">Accessaries</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_appliances' %}">Appliances</a>
+        </li>
+    </ul>
 
     <hr>
     <div class="data_container">
         <div class="form_container">
             <form action="" method="post" class="shadow-lg p-3 mb-5 rounded" id="stock_form">
                 {% csrf_token %}
-                <p>
-                    <label for="id_device_imei" class="text-light">Device imei:</label>
-                    <input type="text" name="device_imei" class="form-control" placeholder="Enter IMEI number"
+                <div class="input_container">
+                    <input type="text" name="device_imei" class="form-control" placeholder="Enter IMEI number 1"
                     required="" minlength="15" maxlength="15"
                     autofocus="autofocus" id="id_device_imei">
-                </p>
-                <p>
-                    <label for="id_device_imei_2" class="text-light">Device imei 2:</label>
                     <input type="text" name="device_imei_2" class="form-control" placeholder="Enter IMEI number 2"
                     required="" minlength="15" maxlength="15" id="id_device_imei_2">
-                </p>
+                </div>
                 <hr class="text-danger" style="height: 15px;">
                 <p>
-                    <label for="id_cost_price" class="text-light">Cost price:</label>
                     <input type="text" name="cost_price" class="form-control" placeholder="Enter cost price"
                     id="id_cost_price">
                 </p>
                 <p>
-                    <label for="id_name" class="text-light">Name:</label>
                     <input type="text" name="name" class="form-control" placeholder="Enter phone name"
                     list="phone_list" id="id_name">   
                 </p>
@@ -96,8 +107,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_model" class="text-light">Model:</label>
-                    <input type="text" name="model" class="form-control" placeholder="Enter model"
+                    <input type="text" name="model" class="form-control" placeholder="Enter model name of the phone"
                     list="model_list" id="id_model">
                 </p>
                 <datalist id="model_list">
@@ -106,8 +116,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_category" class="text-light">Category</label>
-                    <input type="text" name="category" class="form-control" placeholder="Enter category"
+                    <input type="text" name="category" class="form-control" placeholder="Enter category eg. Tecno or Itel"
                     id="id_category" list="category_list">
                 </p>
                 <datalist id="category_list">
@@ -116,8 +125,7 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_spec" class="text-light">Spec</label>
-                    <input type="text" name="spec" class="form-control" placeholder="Enter spec"
+                    <input type="text" name="spec" class="form-control" placeholder="Enter spec i.e 128+4, 256+8"
                     id="id_spec" list="spec_list">
                 </p>
                 <datalist id="spec_list">
@@ -126,10 +134,14 @@
                     {% endfor %}
                 </datalist>
                 <p>
-                    <label for="id_supplier" class="text-light">Supplier:</label>
                     <input type="text" name="supplier" class="form-control"
-                    placeholder="Enter supplier" id="id_supplier">
+                    placeholder="Enter supplier" id="id_supplier" list="supplier_list">
                 </p>
+                <datalist id="supplier_list">
+                    {% for supplier in suppliers %}
+                    <option>{{ supplier }}</option>
+                    {% endfor %}
+                </datalist>
                 <button type="button" class="btn btn-sm common-bg w-100 fw-bold" id="submit">submit</button>
             </form>
         </div>

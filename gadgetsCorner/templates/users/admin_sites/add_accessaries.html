@@ -11,12 +11,24 @@
 <div class="container">
     {% bootstrap_messages %}
     <div class="loading-target"></div>
-    <div class="container common-bg p-2 rounded">
-        <p class="text-center fw-bold">Add Accessaries</p>
+    <div class="container common-bg rounded">
+        <h6 class="text-center fw-bold">Add Accessaries</h6>
         <p class="text-center fw-bold">Please enter the Accessary name and the quantity to add to stock</p>
-        <a href="{% url 'add_to_stock' %}" class="btn bg-secondary">Add Phones</a>
-        <a href="{% url 'add_appliances' %}" class="btn bg-secondary">Add Appliances</a>
     </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link fw-bold active" aria-current="page" href="{% url 'add_accessaries' %}">Accessaries</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_appliances' %}">Appliances</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{% url 'add_to_stock' %}">New Phones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" href="{% url 'add_refarbished' %}">Refarbished</a>
+        </li>
+    </ul>
     <hr>
     <form action="" method="post" class=" shadow-lg p-3 mb-5 rounded w-50 mx-auto">
         {% csrf_token %}

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from ...data_analysis_engine.admin_panel.mainstorage_analysis import MainStorageAnalysis
 from ...models.accessories import Accessories
 from ...models.appliances import Appliances
+from gadgetsCorner.models.refarbished_devices import RefarbishedDevicesSales
 
 
 def get_daily_sales_json(request):
@@ -41,9 +42,16 @@ def get_main_stock_analysis(request):
             pending=False, issue=False)
         accessaries = Accessories.objects.all()
         appliances = Appliances.objects.all()
+        refarbished = RefarbishedDevicesSales.objects.all()
+
 
         total = 0
         stock = {}
+
+        for item in refarbished:
+            stock[item.name + f"({item.model})"] = item.total
+            total += item.total
+        
         for item in appliances:
             stock[item.name + f"({item.model})"] = item.total
             total += item.total

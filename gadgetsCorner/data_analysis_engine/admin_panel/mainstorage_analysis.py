@@ -2,6 +2,7 @@
 from ...models.main_storage import MainStorage
 from ...models.accessories import Accessory_Sales
 from ...models.appliances import Appliance_Sales
+from gadgetsCorner.models.refarbished_devices import RefarbishedDevicesSales
 from ...models.daily_expenses import DailyExpenses
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -24,6 +25,12 @@ class MainStorageAnalysis:
         
         accessories = Accessory_Sales.objects.filter(
             date_sold__date=day)
+        
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__date=day)
+        for refarbished_item in refarbished:
+            sales[f"{refarbished_item.name}({refarbished_item.model})".lower().capitalize()] = sales.get(
+                f"{refarbished_item.name}({refarbished_item.model})".lower().capitalize(), 0) + refarbished_item.total
 
         for accessory in accessories:
             sales[f"{accessory.item}({accessory.model})".lower().capitalize()] = sales.get(
@@ -51,6 +58,13 @@ class MainStorageAnalysis:
         data_set = MainStorage.objects.filter(
             stock_out_date__range=[monday, sunday],
             sold=True, in_stock=False)
+        
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__range=[monday, sunday])
+        for refarbished_item in refarbished:
+            item = {f"{refarbished_item.name}({refarbished_item.model})": refarbished_item.total}
+            days[week_days[refarbished_item.date_sold.weekday()]].append(item)
+            item = {}
         
         accessories = Accessory_Sales.objects.filter(
             date_sold__range=[monday, sunday])
@@ -86,6 +100,13 @@ class MainStorageAnalysis:
             total += 1
             sales[f"{data.stock_out_date}"] = sales.get(f"{data.stock_out_date}", 0) + 1
 
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        for refarbished_item in refarbished:
+            total += refarbished_item.total
+            sales[f"{refarbished_item.date_sold.date()}"] = sales.get(f"{refarbished_item.date_sold.date()}", 0) + refarbished_item.total
+
         accessories = Accessory_Sales.objects.filter(
             date_sold__month=current_month,
             date_sold__year=current_year)
@@ -119,6 +140,11 @@ class MainStorageAnalysis:
             sales[month] = total
 
         for month in months:
+            data = RefarbishedDevicesSales.objects.filter(
+                date_sold__month=months.index(month)+1,
+                date_sold__year=timezone.now().date().year)
+            for item in data:
+                sales[month] += item.total
             data = Accessory_Sales.objects.filter(
                 date_sold__month=months.index(month)+1,
                 date_sold__year=timezone.now().date().year)
@@ -167,7 +193,14 @@ class MainStorageAnalysis:
         appliances = Appliance_Sales.objects.filter(
             date_sold__month=current_month,
             date_sold__year=current_year)
+        
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        
         total = 0
+        for refarbished_item in refarbished:
+            total += refarbished_item.price_sold * refarbished_item.total
         for phone in phones:
             total += phone.price
         for accessory in accessories:
@@ -194,6 +227,9 @@ class MainStorageAnalysis:
         daily_expenses = DailyExpenses.objects.filter(
             date__month=current_month,
             date__year=current_year)
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
         
         total = 0
         for phone in phones:
@@ -202,6 +238,8 @@ class MainStorageAnalysis:
             total += accessory.profit
         for appliance in appliances:
             total += appliance.profit
+        for refarbished_item in refarbished:
+            total += refarbished_item.profit
         for expense in daily_expenses:
             total -= expense.amount
         return total
@@ -218,6 +256,14 @@ class MainStorageAnalysis:
         accessories = Accessory_Sales.objects.filter(
             date_sold__month=current_month,
             date_sold__year=current_year)
+        
+        appliances = Appliance_Sales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
+        
+        refarbished = RefarbishedDevicesSales.objects.filter(
+            date_sold__month=current_month,
+            date_sold__year=current_year)
         total = 0
         for phone in phones:
             if phone.price < phone.cost:
@@ -225,6 +271,13 @@ class MainStorageAnalysis:
         for accessory in accessories:
             if accessory.cost> accessory.price_sold:
                 total += (accessory.cost * accessory.total) - (accessory.price_sold * accessory.total)
+        
+        for appliance in appliances:
+            if appliance.cost > appliance.price_sold:
+                total += (appliance.cost * appliance.total) - (appliance.price_sold * appliance.total)
+        for refarbished_item in refarbished:
+            if refarbished_item.cost > refarbished_item.price_sold:
+                total += (refarbished_item.cost * refarbished_item.total) - (refarbished_item.price_sold * refarbished_item.total)
         return total
     
     def total_sold(self, month, year):
@@ -232,5 +285,6 @@ class MainStorageAnalysis:
         phones = MainStorage.get_total_sold(month, year)
         accessories = Accessory_Sales.get_total_sold(month, year)
         appliances = Appliance_Sales.get_total_sold(month, year)
-        total = phones + accessories + appliances
+        refarbished = RefarbishedDevicesSales.get_total_sold(month, year)
+        total = phones + accessories + appliances + refarbished
         return total

@@ -41,16 +41,19 @@ def add_to_stock(request):
         model_names = set()
         category_names = set()
         spec_names = set()
+        supplier_names = set()
         for phone in data:
             if phone.name is not None:
                 phone_names.add(phone.name)
                 model_names.add(phone.phone_type)
                 category_names.add(phone.category)
                 spec_names.add(phone.spec)
+                supplier_names.add(phone.supplier)
         sorted_phone_list = sorted(list(phone_names))
         sorted_model_list = sorted(list(model_names))
         sorted_category_list = sorted(list(category_names))
         sorted_spec_list = sorted(list(spec_names))
+        sorted_supplier_list = sorted(list(supplier_names))
         if request.method == 'POST':
             data = json.loads(request.POST.get('data'))
             name = request.POST.get('name')
@@ -78,7 +81,8 @@ def add_to_stock(request):
             return JsonResponse({'status': 200, 'data': already_exists})
     return render(request, 'users/admin_sites/add_to_stock.html',
                   {'phone_names': sorted_phone_list, 'models': sorted_model_list,
-                   'categories': sorted_category_list, 'specs': sorted_spec_list})
+                   'categories': sorted_category_list, 'specs': sorted_spec_list,
+                   'suppliers': sorted_supplier_list})
 
 
 @login_required

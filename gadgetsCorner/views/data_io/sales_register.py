@@ -16,6 +16,7 @@ from webpush import send_user_notification
 from os import environ
 from ...models.accessories import Accessories, Accessory_Sales
 from ...models.appliances import Appliances, Appliance_Sales
+from gadgetsCorner.models.refarbished_devices import RefarbishedDevices, RefarbishedDevicesSales
 
 
 @login_required
@@ -117,14 +118,19 @@ def uploadBulkSales(request):
     """
     acceessories = Accessories.objects.all()
     appliances = Appliances.objects.all()
+    refarbished = RefarbishedDevices.objects.all()
     acceessories_set = set()
     appliances_set = set()
+    refarbished_set = set()
+    for device in refarbished:
+        refarbished_set.add(f"{device.name}({device.model})")
     for accessory in acceessories:
         acceessories_set.add(f"{accessory.item}({accessory.model})")
     for appliance in appliances:
         appliances_set.add(f"{appliance.name}({appliance.model})")
     acceessories_list = sorted(list(acceessories_set))
     appliances_list = sorted(list(appliances_set))
+    refarbished_list = sorted(list(refarbished_set))
     if request.method == 'POST' and request.user.is_staff and request.user.is_superuser:
         data = request.POST.get('data', None)
         date = request.POST.get('date', None)
@@ -159,7 +165,9 @@ def uploadBulkSales(request):
             return JsonResponse({'status': 200, 'not_in_stock': not_in_stock})
         else:
             return JsonResponse({'status': 400, 'error': 'No data received'})
-    return render(request, 'users/admin_sites/pointOfSale.html', {'accessories': acceessories_list, 'appliances': appliances_list})
+    return render(request, 'users/admin_sites/pointOfSale.html',
+                  {'accessories': acceessories_list, 'appliances': appliances_list,
+                   'refarbished': refarbished_list})
 
 
 @login_required
@@ -300,6 +308,77 @@ def appliance_sales(request):
                 messages.error(request, 'Insufficient stock, please check the quantity and try again')
             except Appliances.DoesNotExist:
                 messages.error(request, 'Invalid appliance name or model, please check and try again')
+                return redirect('uploadBulkSales')
+        return redirect('uploadBulkSales')
+    return redirect('uploadBulkSales')
+
+
+@login_required
+def refarbished_sales(request):
+    """
+    The `salesRegister` view function is a Django view responsible for
+    handling the sales register of agents.
+
+    Functionality:
+    - Checks if the user is authenticated and is an agent. Only agents are allowed
+      to access this view.
+    - Renders the sales register page for agents to view their sales records.
+
+    Parameters:
+    - request: The HTTP request object containing user information.
+
+    Returns:
+    - If the user is not authenticated or is not an agent, it returns a 403 Forbidden
+      response.
+    - If the agent is authenticated, it renders the sales register page.
+
+    Usage:
+    Agents access this view to view their sales records.
+    It ensures that only agents are able to access this view.
+    """
+    if request.user.is_staff and request.user.is_superuser:
+        if request.method == 'POST':
+            device_name = request.POST.get('name')
+            model = ""
+            try:
+                model = str(device_name).split('(')[1].replace(')', '')
+                device_name = str(device_name).split('(')[0]
+            except IndexError:
+                messages.error(
+                    request,
+                    'Invalid device name or model, should be in the format "Device Name(Model)"'
+                )
+                return redirect('uploadBulkSales')
+            quantity = int(request.POST.get('quantity'))
+            price_sold = request.POST.get('selling_price')
+            if quantity <= 0:
+                messages.error(request, 'Quantity must be greater than 0, please check and try again')
+                return redirect('uploadBulkSales')
+            try:
+                item = RefarbishedDevices.objects.filter(name=device_name, model=model).first()
+                if item is None:
+                    messages.error(request, 'Invalid device name or model, please check and try again')
+                    return redirect('uploadBulkSales')
+                if item.total >= int(quantity):
+                    item.previous_total = item.total
+                    item.total -= int(quantity)
+                    item.date_modified = timezone.now()
+                    sales = RefarbishedDevicesSales()
+                    sales.name = item
+                    sales.model = model
+                    sales.total = int(quantity)
+                    sales.cost = item.cost
+                    sales.price_sold = int(price_sold)
+                    sales.profit = (int(price_sold) - item.cost) * int(quantity)
+                    sales.date_sold = timezone.now()
+                    sales.sold_by = request.user
+                    sales.save()
+                    item.save()
+                    messages.success(request, 'Successfully sold {} of {}(s)'.format(quantity, item.name))
+                    return redirect('uploadBulkSales')
+                messages.error(request, 'Insufficient stock, please check the quantity and try again')
+            except MainStorage.DoesNotExist:
+                messages.error(request, 'Invalid device name or model, please check and try again')
                 return redirect('uploadBulkSales')
         return redirect('uploadBulkSales')
     return redirect('uploadBulkSales')
