@@ -8,6 +8,16 @@
     transition: all 0.5s ease-in-out;
 }
 
+img {
+    width: 100%;
+    height: auto;
+    border-radius: 100%;
+}
+
+.logo-img {
+    padding-left: 10px;
+}
+
 
 body {
     background: white;
@@ -62,6 +72,7 @@ body {
 .wrapper .sidebar ul li {
     padding: 3px 3px;
     border-bottom: 1px solid #636e72;
+    padding-left: 12px;
 }
 
 .wrapper .sidebar ul li:hover {

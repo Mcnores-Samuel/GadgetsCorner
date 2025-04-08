@@ -99,8 +99,10 @@ class MainStorage(models.Model):
         indexes = [
             models.Index(fields=['device_imei', 'phone_type', 'in_stock', 'assigned'])
         ]
-        verbose_name = 'New Phones Storage'
-        verbose_name_plural = 'SmartPhones storage'
+        verbose_name = 'New Phones'
+        verbose_name_plural = 'New Phones'
+        ordering = ['-entry_date']
+        
 
     def __str__(self):
         """String representation of the phone data model"""
